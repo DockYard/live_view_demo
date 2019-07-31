@@ -1,4 +1,6 @@
 defmodule LiveViewDemoWeb.ClockLive do
+  @moduledoc "Initial LiveView example"
+
   use Phoenix.LiveView
   import Calendar.Strftime
 

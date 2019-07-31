@@ -44,7 +44,12 @@ defmodule LiveViewDemo.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:calendar, "~> 0.17.6"}
+      {:calendar, "~> 0.17.6"},
+
+      # testing
+      # =======
+      {:credo, "~> 1.1", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.6", only: [:dev, :test], runtime: false}
     ]
   end
 
