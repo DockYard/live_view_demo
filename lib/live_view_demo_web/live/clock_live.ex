@@ -2,6 +2,8 @@ defmodule LiveViewDemoWeb.ClockLive do
   use Phoenix.LiveView
   import Calendar.Strftime
 
+  require Logger
+
   def render(assigns) do
     ~L"""
     <div>
@@ -18,6 +20,11 @@ defmodule LiveViewDemoWeb.ClockLive do
 
   def handle_info(:tick, socket) do
     {:noreply, put_date(socket)}
+  end
+
+  def handle_event("boom", "", socket) do
+    Logger.info("BOOM!")
+    {:noreply, socket}
   end
 
   defp put_date(socket) do
