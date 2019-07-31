@@ -1,6 +1,6 @@
-defmodule LiveViewDemo do
+defmodule TypoKart do
   @moduledoc """
-  LiveViewDemo keeps the contexts that define your domain
+  TypoKart keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

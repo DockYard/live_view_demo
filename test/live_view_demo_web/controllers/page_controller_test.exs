@@ -1,5 +1,5 @@
-defmodule LiveViewDemoWeb.PageControllerTest do
-  use LiveViewDemoWeb.ConnCase
+defmodule TypoKartWeb.PageControllerTest do
+  use TypoKartWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

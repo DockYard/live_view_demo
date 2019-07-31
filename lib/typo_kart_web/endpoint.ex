@@ -1,7 +1,7 @@
-defmodule LiveViewDemoWeb.Endpoint do
+defmodule TypoKartWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :live_view_demo
 
-  socket "/socket", LiveViewDemoWeb.UserSocket,
+  socket "/socket", TypoKartWeb.UserSocket,
     websocket: true,
     longpoll: false
 
@@ -44,5 +44,5 @@ defmodule LiveViewDemoWeb.Endpoint do
     key: "_live_view_demo_key",
     signing_salt: "pIQrFsE9"
 
-  plug LiveViewDemoWeb.Router
+  plug TypoKartWeb.Router
 end

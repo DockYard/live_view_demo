@@ -1,4 +1,4 @@
-defmodule LiveViewDemoWeb.ClockLive do
+defmodule TypoKartWeb.ClockLive do
   use Phoenix.LiveView
   import Calendar.Strftime
 

@@ -1,3 +1,3 @@
-defmodule LiveViewDemoWeb.PageViewTest do
-  use LiveViewDemoWeb.ConnCase, async: true
+defmodule TypoKartWeb.PageViewTest do
+  use TypoKartWeb.ConnCase, async: true
 end

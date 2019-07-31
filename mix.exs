@@ -1,4 +1,4 @@
-defmodule LiveViewDemo.MixProject do
+defmodule TypoKart.MixProject do
   use Mix.Project
 
   def project do
@@ -19,7 +19,7 @@ defmodule LiveViewDemo.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {LiveViewDemo.Application, []},
+      mod: {TypoKart.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
