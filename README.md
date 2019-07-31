@@ -1,14 +1,30 @@
-# (App Name Here)
+# TypoKart
 
-This is my entry in [Phoenix Phrenzy](https://phoenixphrenzy.com), showing off what [Phoenix](https://phoenixframework.org/) and [LiveView](https://github.com/phoenixframework/phoenix_live_view) can do.
+The Typo~Krat~Kart project is an attempt to develop a fun typing game in elixir using LiveView, themed as a multi-player kart racing game. We have no idea how this will turn out, but as long as it's fun then who cares! Contributors to the starting line.
 
-![App Name Here preview](assets/static/images/preview.gif "App Name Here")
+The goal of the project will be to enable focused opportunities for people in the Seattle area to collaborate on writing Elixir and LiveView code coming from different skill levels over the next two months.
 
-# Phrenzy Instructions
+## MVP Primary Development Objectives
 
-Fork this repo and start build an application! See [Phoenix Phrenzy](https://phoenixphrenzy.com) for details.
+More detailed requirements will be worked out as part of an [upcoming session](https://github.com/elixir-sea/typo_kart/wiki/In-Person-Availability#upcoming-sessions). Issues will be created to represent pieces of work that anybody can assign and work on.
 
-Note: for development, you'll need Elixir, Erlang and Node.js. If you use the [asdf version manager](https://github.com/asdf-vm/asdf) and install the [relevant plugins](https://asdf-vm.com/#/plugins-all?id=plugin-list), you can install the versions specified in `.tool-versions` with `asdf install`.
+  * Build out a procedural course generator. Given a random seed, develop a racing course with twists and turns that creates a loop.
+
+  * Develop mechanics for getting around the map that involves typing. This will involve controlling acceleration and velocity based on typing speed, with some dynamic handicapping to keep the game fun for people of different skill levels.
+
+* Add components to the game that allow players to interact with each other in destructive ways. Make the game fun.
+
+## Development Instructions
+
+For development, you'll need Elixir, Erlang and Node.js. If you use the [asdf version manager](https://github.com/asdf-vm/asdf) and install the [relevant plugins](https://asdf-vm.com/#/plugins-all?id=plugin-list), you can install the versions specified in `.tool-versions` with `asdf install`.
+
+## Contributing
+
+Anyone in the Seattle area can be a contributor. Ask in the #seattle or the #typo_kart channel in the [Elixir-Lang slack group](https://elixir-slackin.herokuapp.com/).
+
+We are using a simple Pull Request model. Create a new branch based on master for you additions and then create a PR against master.
+
+Pull requests require a code review from at least one other contributor, but then can be merged to master by anyone. The goal is to get new features into master as quickly as possible, so the reviewer should just merge once approved.
 
 ## LiveView Documentation
 
