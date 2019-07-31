@@ -20,5 +20,5 @@ defmodule TypoKartWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :live_view_demo
+  use Gettext, otp_app: :typo_kart
 end

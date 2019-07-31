@@ -31,7 +31,7 @@ defmodule TypoKartWeb do
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/live_view_demo_web/templates",
+        root: "lib/typo_kart_web/templates",
         namespace: TypoKartWeb
 
       # Import convenience functions from controllers

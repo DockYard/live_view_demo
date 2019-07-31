@@ -1,5 +1,5 @@
 defmodule TypoKartWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :live_view_demo
+  use Phoenix.Endpoint, otp_app: :typo_kart
 
   socket "/socket", TypoKartWeb.UserSocket,
     websocket: true,
@@ -13,7 +13,7 @@ defmodule TypoKartWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :live_view_demo,
+    from: :typo_kart,
     gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
@@ -41,7 +41,7 @@ defmodule TypoKartWeb.Endpoint do
   # Set :encryption_salt if you would also like to encrypt it.
   plug Plug.Session,
     store: :cookie,
-    key: "_live_view_demo_key",
+    key: "_typo_kart_key",
     signing_salt: "pIQrFsE9"
 
   plug TypoKartWeb.Router

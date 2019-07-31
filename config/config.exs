@@ -7,11 +7,11 @@
 # General application configuration
 use Mix.Config
 
-config :live_view_demo,
+config :typo_kart,
   ecto_repos: [TypoKart.Repo]
 
 # Configures the endpoint
-config :live_view_demo, TypoKartWeb.Endpoint,
+config :typo_kart, TypoKartWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "dummy_val_for_dev_env",
   render_errors: [view: TypoKartWeb.ErrorView, accepts: ~w(html json)],

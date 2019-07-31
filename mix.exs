@@ -3,7 +3,7 @@ defmodule TypoKart.MixProject do
 
   def project do
     [
-      app: :live_view_demo,
+      app: :typo_kart,
       version: "0.1.0",
       elixir: "~> 1.9.1",
       elixirc_paths: elixirc_paths(Mix.env()),
