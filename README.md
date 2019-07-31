@@ -10,6 +10,18 @@ Fork this repo and start build an application! See [Phoenix Phrenzy](https://pho
 
 Note: for development, you'll need Elixir, Erlang and Node.js. If you use the [asdf version manager](https://github.com/asdf-vm/asdf) and install the [relevant plugins](https://asdf-vm.com/#/plugins-all?id=plugin-list), you can install the versions specified in `.tool-versions` with `asdf install`.
 
+## LiveView Documentation
+
+Since LiveView isn't yet published to hex, there are no hosted docs yet. I find it useful to have the HTML documentation
+so here are the instructions for compiling the docs locally:
+
+```bash
+git clone git@github.com:phoenixframework/phoenix_live_view.git
+cd phoenix_live_view
+mix deps.get
+env MIX_ENV=docs mix docs
+open doc/index.html
+```
 
 ## Deployment
 
