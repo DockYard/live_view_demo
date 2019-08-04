@@ -7,9 +7,6 @@
 # General application configuration
 use Mix.Config
 
-config :typo_kart,
-  ecto_repos: [TypoKart.Repo]
-
 # Configures the endpoint
 config :typo_kart, TypoKartWeb.Endpoint,
   url: [host: "localhost"],

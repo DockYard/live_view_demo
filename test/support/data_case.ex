@@ -16,23 +16,11 @@ defmodule TypoKart.DataCase do
 
   using do
     quote do
-      alias TypoKart.Repo
-
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
       import TypoKart.DataCase
     end
-  end
-
-  setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(TypoKart.Repo)
-
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(TypoKart.Repo, {:shared, self()})
-    end
-
-    :ok
   end
 
   @doc """
