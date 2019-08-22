@@ -27,6 +27,28 @@ select {
   width: auto;
 }
 
+.mainBlue {
+  background-color: #5bbac9;
+}
+
+.blueButton {
+  background-color: #5bbac9;
+  height: 40px;
+  width: 100px;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.whiteText {
+  color: #ffffff;
+  font-size: 1em;
+}
+
+.mainBG {
+  background-color: #f1f4fa;
+}
+
 /* Alerts and form errors */
 .alert {
   padding: 15px;
