@@ -23,7 +23,6 @@ How you deploy your app is up to you. A couple of the easiest options are:
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
   * Install Node.js dependencies with `cd assets && npm install`
   * Start Phoenix endpoint with `mix phx.server`
 
