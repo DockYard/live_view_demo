@@ -9,15 +9,14 @@ defmodule LiveViewDemo.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      LiveViewDemoWeb.Endpoint
-      # Starts a worker by calling: LiveViewDemo.Worker.start_link(arg)
-      # {LiveViewDemo.Worker, arg},
+      LiveViewDemoWeb.Endpoint,
+      {GameOfLife.Universe.Supervisor, []},
+      {Registry, [keys: :unique, name: :gol_registry]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: LiveViewDemo.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(children, strategy: :one_for_one, name: LiveViewDemo.Supervisor)
   end
 
   # Tell Phoenix to update the endpoint configuration
