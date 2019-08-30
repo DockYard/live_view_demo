@@ -1,3 +1,3 @@
-defmodule LiveViewDemoWeb.LayoutViewTest do
-  use LiveViewDemoWeb.ConnCase, async: true
+defmodule GameOfLifeWeb.LayoutViewTest do
+  use GameOfLifeWeb.ConnCase, async: true
 end

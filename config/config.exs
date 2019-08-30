@@ -8,11 +8,11 @@
 use Mix.Config
 
 # Configures the endpoint
-config :live_view_demo, LiveViewDemoWeb.Endpoint,
+config :game_of_life, GameOfLifeWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "dummy_val_for_dev_env",
-  render_errors: [view: LiveViewDemoWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: LiveViewDemo.PubSub, adapter: Phoenix.PubSub.PG2],
+  render_errors: [view: GameOfLifeWeb.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: GameOfLife.PubSub, adapter: Phoenix.PubSub.PG2],
   live_view: [
     signing_salt: "euS614eNODQtaWgU/sQtkDL7cKxPORPp"
   ]

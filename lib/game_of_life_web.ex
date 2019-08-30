@@ -31,7 +31,7 @@ defmodule GameOfLifeWeb do
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/live_view_demo_web/templates",
+        root: "lib/game_of_life_web/templates",
         namespace: GameOfLifeWeb
 
       # Import convenience functions from controllers
