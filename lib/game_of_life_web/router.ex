@@ -1,5 +1,5 @@
-defmodule LiveViewDemoWeb.Router do
-  use LiveViewDemoWeb, :router
+defmodule GameOfLifeWeb.Router do
+  use GameOfLifeWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -14,7 +14,7 @@ defmodule LiveViewDemoWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", LiveViewDemoWeb do
+  scope "/", GameOfLifeWeb do
     pipe_through :browser
 
     get "/", PageController, :index

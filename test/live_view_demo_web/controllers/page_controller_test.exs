@@ -1,5 +1,5 @@
-defmodule LiveViewDemoWeb.PageControllerTest do
-  use LiveViewDemoWeb.ConnCase
+defmodule GameOfLifeWeb.PageControllerTest do
+  use GameOfLifeWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

@@ -1,3 +1,3 @@
-defmodule LiveViewDemoWeb.PageViewTest do
-  use LiveViewDemoWeb.ConnCase, async: true
+defmodule GameOfLifeWeb.PageViewTest do
+  use GameOfLifeWeb.ConnCase, async: true
 end

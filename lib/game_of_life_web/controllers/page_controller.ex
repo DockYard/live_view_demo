@@ -1,5 +1,5 @@
-defmodule LiveViewDemoWeb.PageController do
-  use LiveViewDemoWeb, :controller
+defmodule GameOfLifeWeb.PageController do
+  use GameOfLifeWeb, :controller
 
   def index(conn, _params) do
     render(conn, "index.html")

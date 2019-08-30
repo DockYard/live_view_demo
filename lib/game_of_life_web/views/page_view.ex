@@ -1,3 +1,3 @@
-defmodule LiveViewDemoWeb.PageView do
-  use LiveViewDemoWeb, :view
+defmodule GameOfLifeWeb.PageView do
+  use GameOfLifeWeb, :view
 end
