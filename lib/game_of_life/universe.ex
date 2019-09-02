@@ -29,6 +29,8 @@ defmodule GameOfLife.Universe do
   def info(name, generation), do: GenServer.call(via_tuple(name), {:info, generation})
   def info(name), do: GenServer.call(via_tuple(name), :info)
 
+  def render(name), do: GenServer.call(via_tuple(name), :render)
+
   ## Server
 
   @impl true
@@ -66,6 +68,13 @@ defmodule GameOfLife.Universe do
   end
 
   @impl true
+  def handle_call(:render, __from, state) do
+    cells = each_cell(state, &Cell.info/3)
+
+    {:reply, render_cells(cells), state}
+  end
+
+  @impl true
   def handle_cast(:crash, _state), do: raise("💥kaboom💥")
 
   ## Utils
@@ -76,6 +85,20 @@ defmodule GameOfLife.Universe do
         GameOfLife.Cell.Supervisor.start_child(name, {x, y})
       end)
     end)
+  end
+
+  def render_cells(cells) do
+    Enum.map(cells, fn row ->
+      Enum.map(row, fn %{alive: alive} ->
+        case alive do
+          nil -> "-"
+          false -> "X"
+          true -> "0"
+        end
+      end)
+      |> Enum.join(" ")
+    end)
+    |> Enum.join()
   end
 
   defp print_universe(cells) do
