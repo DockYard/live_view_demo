@@ -14,8 +14,6 @@ defmodule GameOfLife.Cell do
 
   def tick(universe_name, position, generation), do: GenServer.call(via_tuple(universe_name, position), {:tick, generation})
 
-  def crash(universe_name, position), do: GenServer.cast(via_tuple(universe_name, position), :crash)
-
   def info(universe_name, position, generation), do: GenServer.call(via_tuple(universe_name, position), {:info, generation})
 
   def alive?(universe_name, position, generation) do
@@ -25,6 +23,8 @@ defmodule GameOfLife.Cell do
       nil
     end
   end
+
+  def crash(universe_name, position), do: GenServer.cast(via_tuple(universe_name, position), :crash)
 
   ## Server
 
