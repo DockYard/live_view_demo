@@ -44,7 +44,6 @@ defmodule GameOfLife.Universe do
   def handle_call(:tick, _from, %{generation: generation} = state) do
     state = Map.put(state, :generation, generation + 1)
     cells = each_cell(state, &Cell.tick/3)
-    print_universe(cells, state)
 
     {:reply, cells, state}
   end
@@ -52,7 +51,6 @@ defmodule GameOfLife.Universe do
   @impl true
   def handle_call(:info, _from, state) do
     cells = each_cell(state, &Cell.info/3)
-    print_universe(cells, state)
 
     {:reply, cells, state}
   end
@@ -60,7 +58,6 @@ defmodule GameOfLife.Universe do
   @impl true
   def handle_call({:info, generation}, _from, state) do
     cells = each_cell(Map.put(state, :generation, generation), &Cell.info/3)
-    print_universe(cells, Map.put(state, :generation, generation))
 
     {:reply, cells, state}
   end
@@ -73,45 +70,19 @@ defmodule GameOfLife.Universe do
   defp initialize_cells(%{name: name, dimensions: {width, height}}) do
     Enum.flat_map(0..(height - 1), fn y ->
       Enum.map(0..(width - 1), fn x ->
-        Task.async(fn ->
-          {:ok, result} = GameOfLife.Cell.Supervisor.start_child(name, {x, y})
-          result
-        end)
+        {:ok, result} = GameOfLife.Cell.Supervisor.start_child(name, {x, y})
+        result
       end)
     end)
-    |> Task.yield_many()
   end
 
   defp each_cell(%{name: name, dimensions: {width, height}, generation: generation}, f) do
     Enum.flat_map(0..(height - 1), fn y ->
       Enum.map(0..(width - 1), fn x ->
-        Task.async(fn -> f.(name, {x, y}, generation) end)
+        {{x, y}, f.(name, {x, y}, generation)}
       end)
     end)
-    |> Task.yield_many()
-    |> Enum.map(fn {_task, {:ok, res}} -> res end)
-    |> Enum.sort(fn %{position: {x1, y1}}, %{position: {x2, y2}} ->
-      y1 < y2 || (y1 == y2 && x1 < x2)
-    end)
-  end
-
-  defp print_universe(cells, %{name: name, generation: generation, dimensions: {width, height}}) do
-    IO.puts("#{name} - gen #{generation}")
-
-    Enum.each(0..(height - 1), fn y ->
-      Enum.each(0..(width - 1), fn x ->
-        cell = Enum.find(cells, fn %{position: {cell_x, cell_y}} -> cell_x == x && cell_y == y end)
-
-        case cell.alive do
-          nil -> "-"
-          false -> "X"
-          true -> "0"
-        end
-        |> IO.write()
-      end)
-
-      IO.puts("")
-    end)
+    |> Map.new()
   end
 
   defp via_tuple(name), do: {:via, Registry, {:gol_registry, tuple(name)}}
