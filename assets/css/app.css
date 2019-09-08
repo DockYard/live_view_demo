@@ -2,3 +2,32 @@
 
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.universe {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.cell-row {
+    display: flex;
+}
+
+.cell {
+    width: 10px;
+    height: 10px;
+}
+
+.cell.alive {
+    background: rgb(255, 68, 0);
+}
+
+.cell.dead {
+    background: #eee;
+}
