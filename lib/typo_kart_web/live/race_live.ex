@@ -13,9 +13,7 @@ defmodule TypoKartWeb.RaceLive do
   def mount(_session, socket) do
     if connected?(socket), do: :timer.send_interval(1000, self(), :tick)
 
-    cur_char_num = 5
-
-    {:ok, assign(socket, alpha: 42, status_class: "", data: text_data(cur_char_num))}
+    {:ok, assign(socket, alpha: 42, status_class: "", data: text_data(0))}
   end
 
   def handle_info(:tick, socket) do

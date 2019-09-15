@@ -11,6 +11,7 @@
 }
 #av-car {
   fill: lightslategrey;
+  display: none;
 }
 #av-car.error {
   fill: red;
