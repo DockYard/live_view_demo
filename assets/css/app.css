@@ -1,4 +1,42 @@
 /* This file is for your main application css. */
 
-@import "./phoenix.css";
+/* @import "./phoenix.css"; */
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
+
+.map text {
+  stroke: rgb(77, 71, 71);
+  font-size: 24pt;
+  letter-spacing: 4px;
+  font-family: sans-serif;
+}
+#av-car {
+  fill: lightslategrey;
+}
+#av-car.error {
+  fill: red;
+}
+#dot {
+  display: none;
+}
+.map {
+  width: 60%;
+  margin: auto;
+}
+.before-text {
+  fill: darkgreen;
+  fill-opacity: 0.5;
+}
+.after-text {
+  fill: lightgrey;
+  stroke: darkgrey;
+}
+.cur-text {
+  fill: black;
+  stroke: black;
+  stroke-width: 2;
+}
+
+.cur-text.error {
+  fill: red;
+  stroke: red;
+}
