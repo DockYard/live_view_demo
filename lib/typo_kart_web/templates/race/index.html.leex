@@ -1,6 +1,6 @@
 <div class="map" data-current-char="<%= @data.cur_char_num %>" phx-keyup="key" phx-target="window">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0, 0, 1000, 1000">
-    <g id="Layer_1" transform="<%= map_transform(@cur_char_num, @cur_char_rotation, @map_angle) %>">
+    <g id="Layer_1" transform="<%= map_transform(@cur_char_rotation) %>">
       <path id="thepath" d="M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z" fill-opacity="0" stroke="#d3d3d3" stroke-width="1"/>
       <text>
         <textPath id="thetext" href="#thepath"><tspan class="before-text"><%= String.slice(@data.full_text, @data.before_text_range) %></tspan><tspan phx-hook="CurrentText" class="cur-text <%= @status_class %>"><%= if (" " == @data.cur_text and "error" == @status_class), do: "_", else: String.slice(@data.full_text, @data.cur_text_range) %></tspan><tspan class="after-text"><%= String.slice(@data.full_text, @data.after_text_range) %></tspan></textPath>
