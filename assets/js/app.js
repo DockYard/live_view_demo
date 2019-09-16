@@ -15,8 +15,46 @@ import "phoenix_html"
 //
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
-
+import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 
-let liveSocket = new LiveSocket("/live")
+const Hooks = {}
+
+function getTextPath() {
+  return document.getElementById('thetext')
+}
+
+function getCurCharNum(){
+  const map = document.querySelector('div.map')
+  return +map.getAttribute('data-current-char')
+}
+
+Hooks.CurrentText = {
+  adjustRotation() {
+    const textPath = getTextPath()
+    const currentCharNum = getCurCharNum()
+    const point = textPath.getStartPositionOfChar(currentCharNum)
+    const charRotation = textPath.getRotationOfChar(currentCharNum)
+    const mapTransform = document.getElementById('Layer_1')
+      .transform
+      .baseVal
+      .getItem(1)
+
+    this.pushEvent('adjust_rotation', {
+      currentCharPoint: {
+        x: point.x, y: point.y
+      },
+      currentCharRotation: charRotation,
+      mapAngle: mapTransform.angle
+    })
+  },
+  updated() {
+    this.adjustRotation()
+  },
+  mounted() {
+    this.adjustRotation()
+  }
+}
+
+let liveSocket = new LiveSocket("/live", Socket, { hooks: Hooks })
 liveSocket.connect()
