@@ -3,19 +3,20 @@ defmodule GameOfLife.Universe do
   require Logger
 
   @moduledoc """
-  GameOfLife.Universe.Supervisor.start_child("u1", {5, 5})
+  GameOfLife.Universe.start_link("u1", {5, 5})
   GameOfLife.Universe.tick("u1")
   GameOfLife.Universe.info("u1", 0)
   """
 
   alias GameOfLife.Cell
+  alias GameOfLife.Universe.Template
 
   ## Client
 
-  def start_link(%{name: name, dimensions: {_width, _height} = dimensions}) do
+  def start_link(%{name: name, template: template, dimensions: {_width, _height} = dimensions}) do
     GenServer.start_link(
       __MODULE__,
-      %{name: name, dimensions: dimensions, generation: 0},
+      %{name: name, dimensions: dimensions, template: template, generation: 0},
       name: via_tuple(name)
     )
   end
@@ -67,10 +68,33 @@ defmodule GameOfLife.Universe do
 
   ## Utils
 
-  defp initialize_cells(%{name: name, dimensions: {width, height}}) do
+  defp initialize_cells(%{name: name, dimensions: {width, height}, template: :random}) do
     Enum.flat_map(0..(height - 1), fn y ->
       Enum.map(0..(width - 1), fn x ->
-        {:ok, result} = GameOfLife.Cell.Supervisor.start_child(name, {x, y})
+        {:ok, result} =
+          GameOfLife.Cell.Supervisor.start_child(%{
+            universe_name: name,
+            position: {x, y},
+            alive: Enum.random([true, false])
+          })
+
+        result
+      end)
+    end)
+  end
+
+  defp initialize_cells(%{name: name, dimensions: {width, height}, template: template}) do
+    live_cells = Template.initial_state(template)
+
+    Enum.flat_map(0..(height - 1), fn y ->
+      Enum.map(0..(width - 1), fn x ->
+        {:ok, result} =
+          GameOfLife.Cell.Supervisor.start_child(%{
+            universe_name: name,
+            position: {x, y},
+            alive: Enum.member?(live_cells, {x, y})
+          })
+
         result
       end)
     end)

@@ -8,7 +8,6 @@ defmodule GameOfLife.Application do
   def start(_type, _args) do
     children = [
       GameOfLifeWeb.Endpoint,
-      {GameOfLife.Universe.Supervisor, []},
       {Registry, [keys: :unique, name: :gol_registry]}
     ]
 

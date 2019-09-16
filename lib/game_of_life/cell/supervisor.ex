@@ -7,9 +7,7 @@ defmodule GameOfLife.Cell.Supervisor do
 
   def init(_arg), do: DynamicSupervisor.init(strategy: :one_for_one)
 
-  def start_child(universe_name, position) do
-    DynamicSupervisor.start_child(via_tuple(universe_name), {Cell, %{universe_name: universe_name, position: position}})
-  end
+  def start_child(%{universe_name: universe_name} = state), do: DynamicSupervisor.start_child(via_tuple(universe_name), {Cell, state})
 
   defp via_tuple(universe_name), do: {:via, Registry, {:gol_registry, tuple(universe_name)}}
 
