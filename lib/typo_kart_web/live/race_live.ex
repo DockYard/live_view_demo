@@ -20,10 +20,15 @@ defmodule TypoKartWeb.RaceLive do
       :ok,
       assign(
         socket,
-        status_class: "",
-        cur_char_num: cur_char_num,
-        cur_char_rotation: cur_char_rotation,
-        data: text_data(cur_char_num)
+        Keyword.merge(
+          [
+            status_class: "",
+            full_text: @full_text,
+            cur_char_num: cur_char_num,
+            cur_char_rotation: cur_char_rotation,
+          ],
+          text_ranges(cur_char_num, @full_text)
+        )
       )
     }
   end
@@ -34,13 +39,12 @@ defmodule TypoKartWeb.RaceLive do
 
   def handle_event("key", %{"key" => key}, %{
     assigns: %{
-      data: %{
-        cur_text: cur_text,
-        cur_text_range: cur_char_num.._
-      }
+      full_text: full_text,
+      cur_text: cur_text,
+      cur_text_range: cur_char_num.._
     }
   } = socket) when key == cur_text do
-    {:noreply, assign(socket, status_class: "", data: text_data(cur_char_num + 1))}
+    {:noreply, assign(socket, Keyword.merge([status_class: ""], text_ranges(cur_char_num + 1, full_text)))}
   end
 
   def handle_event("key", _, socket) do
@@ -56,12 +60,10 @@ defmodule TypoKartWeb.RaceLive do
 
   def handle_event(_, _, socket), do: {:noreply, socket}
 
-  defp text_data(cur_char_num), do: %{
-      full_text: @full_text,
+  defp text_ranges(cur_char_num, full_text), do: [
       before_text_range: (if cur_char_num == 0, do: -1..0, else: 0..(cur_char_num - 1)),
-      cur_char_num: cur_char_num,
       cur_text_range: cur_char_num..cur_char_num,
-      cur_text: String.slice(@full_text, cur_char_num..cur_char_num),
-      after_text_range: (cur_char_num + 1)..(String.length(@full_text) - 1)
-    }
+      cur_text: String.slice(full_text, cur_char_num..cur_char_num),
+      after_text_range: (cur_char_num + 1)..(String.length(full_text) - 1)
+    ]
 end
