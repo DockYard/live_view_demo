@@ -4,6 +4,28 @@ defmodule TypoKartWeb.RaceLive do
 
   require Logger
 
+  # See: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
+  @ignored_key_codes [
+    8,  # Backspace
+    13, # Enter
+    16, # Shift
+    17, # Control
+    18, # Alt
+    20, # Caps Lock
+    27, # Esc
+    33, # PageUp
+    34, # PageDown
+    35, # End
+    36, # Home
+    37, # ArrowLeft
+    38, # ArrowUp
+    39, # ArrowRight
+    40, # ArrowDown
+    46, # Delete
+    45, # Insert
+    93, # Meta
+  ]
+
   @full_text "Two households, both alike in dignity, In fair Verona, where we lay our scene,"
 
   def render(assigns) do
@@ -60,9 +82,12 @@ defmodule TypoKartWeb.RaceLive do
     }
   end
 
-  def handle_event("key", _, socket) do
-    {:noreply, assign(socket, status_class: "error")}
-  end
+  def handle_event("key", %{"keyCode" => keyCode}, socket)
+    when keyCode in @ignored_key_codes,
+    do: {:noreply, socket}
+
+  def handle_event("key", _, socket),
+    do: {:noreply, assign(socket, status_class: "error")}
 
   def handle_event("adjust_rotation", %{
     "currentCharPoint" => cur_char_point,
