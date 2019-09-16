@@ -35,10 +35,6 @@ Hooks.CurrentText = {
     const currentCharNum = getCurCharNum()
     const point = textPath.getStartPositionOfChar(currentCharNum)
     const charRotation = textPath.getRotationOfChar(currentCharNum)
-    const mapTransform = document.getElementById('Layer_1')
-      .transform
-      .baseVal
-      .getItem(1)
 
     this.pushEvent('adjust_rotation', {
       currentCharPoint: {
