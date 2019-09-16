@@ -44,7 +44,20 @@ defmodule TypoKartWeb.RaceLive do
       cur_text_range: cur_char_num.._
     }
   } = socket) when (key == cur_text) or (key == "_" and cur_text == " ") do
-    {:noreply, assign(socket, Keyword.merge([status_class: ""], text_ranges(cur_char_num + 1, full_text)))}
+    next_char_num = cur_char_num + 1
+    {
+      :noreply,
+      assign(
+        socket,
+        Keyword.merge(
+          [
+            status_class: "",
+            cur_char_num: next_char_num
+          ],
+          text_ranges(next_char_num, full_text)
+        )
+      )
+    }
   end
 
   def handle_event("key", _, socket) do
