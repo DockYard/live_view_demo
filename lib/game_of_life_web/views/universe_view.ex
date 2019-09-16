@@ -1,7 +1,9 @@
 defmodule GameOfLifeWeb.UniverseView do
   use GameOfLifeWeb, :view
 
-  def render_cells(cells, {width, height}) do
+  alias GameOfLife.Universe.Generation
+
+  def render_generation(%Generation{cells: cells}, {width, height}) do
     Enum.map(0..(height - 1), fn y ->
       content_tag(:div, class: "cell-row") do
         Enum.map(0..(width - 1), fn x ->

@@ -10,22 +10,9 @@ defmodule GameOfLifeWeb.UniverseLive do
   def mount(_session, socket) do
     if connected?(socket), do: :timer.send_interval(500, self(), :tick)
 
-    # template = :random
-    # socket =
-    #   assign(socket,
-    #     universe: rand_bytes(),
-    #     template: template,
-    #     dimensions: {8, 8}
-    #   )
-
-    template = :pulsar
-
-    socket =
-      assign(socket,
-        universe: rand_bytes(),
-        template: template,
-        dimensions: Template.dimensions(template)
-      )
+    socket = assign(socket, universe: rand_bytes(), template: :random, dimensions: {8, 8})
+    # socket = assign(socket, universe: rand_bytes(), template: :beacon, dimensions: Template.dimensions(:beacon))
+    # socket = assign(socket, universe: rand_bytes(), template: :pulsar, dimensions: Template.dimensions(:pulsar))
 
     Universe.start_link(%{
       name: socket.assigns.universe,
@@ -33,12 +20,12 @@ defmodule GameOfLifeWeb.UniverseLive do
       template: socket.assigns.template
     })
 
-    {:ok, put_cells(socket, &Universe.info/1)}
+    {:ok, put_generation(socket, &Universe.info/1)}
   end
 
-  def handle_info(:tick, socket), do: {:noreply, put_cells(socket, &Universe.tick/1)}
+  def handle_info(:tick, socket), do: {:noreply, put_generation(socket, &Universe.tick/1)}
 
-  defp put_cells(socket, f), do: assign(socket, cells: f.(socket.assigns.universe))
+  defp put_generation(socket, f), do: assign(socket, generation: f.(socket.assigns.universe))
 
   defp rand_bytes, do: :crypto.strong_rand_bytes(16)
 end
