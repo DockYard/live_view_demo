@@ -13,7 +13,19 @@ defmodule TypoKartWeb.RaceLive do
   def mount(_session, socket) do
     if connected?(socket), do: :timer.send_interval(1000, self(), :tick)
 
-    {:ok, assign(socket, alpha: 42, status_class: "", map_angle: 0, cur_char_num: 0, cur_char_rotation: 150, data: text_data(0))}
+    cur_char_num = 0
+    cur_char_rotation = 150
+
+    {
+      :ok,
+      assign(
+        socket,
+        status_class: "",
+        cur_char_num: cur_char_num,
+        cur_char_rotation: cur_char_rotation,
+        data: text_data(cur_char_num)
+      )
+    }
   end
 
   def handle_info(:tick, socket) do
@@ -37,11 +49,9 @@ defmodule TypoKartWeb.RaceLive do
 
   def handle_event("adjust_rotation", %{
     "currentCharPoint" => cur_char_point,
-    "currentCharRotation" => cur_char_rotation,
-    "mapAngle" => map_angle
+    "currentCharRotation" => cur_char_rotation
     }, socket) do
-    #IO.puts("DEBUG: init_rotations")
-    {:noreply, assign(socket, cur_char_point: cur_char_point, cur_char_rotation: cur_char_rotation, map_angle: map_angle )}
+    {:noreply, assign(socket, cur_char_point: cur_char_point, cur_char_rotation: cur_char_rotation )}
   end
 
   def handle_event(_, _, socket), do: {:noreply, socket}

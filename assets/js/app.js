@@ -44,8 +44,7 @@ Hooks.CurrentText = {
       currentCharPoint: {
         x: point.x, y: point.y
       },
-      currentCharRotation: charRotation,
-      mapAngle: mapTransform.angle
+      currentCharRotation: charRotation
     })
   },
   updated() {
