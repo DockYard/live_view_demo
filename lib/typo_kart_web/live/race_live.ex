@@ -1,6 +1,5 @@
 defmodule TypoKartWeb.RaceLive do
   use Phoenix.LiveView
-  import Calendar.Strftime
 
   require Logger
 
@@ -33,7 +32,11 @@ defmodule TypoKartWeb.RaceLive do
   end
 
   def mount(_session, socket) do
-    if connected?(socket), do: :timer.send_interval(1000, self(), :tick)
+    # Reminder: mount() is called twice, once for the static HTML mount,
+    # and again when the websocket is mounted.
+    # We can test whether it's the latter case with:
+    #
+    # connected?(socket)
 
     cur_char_num = 0
     cur_char_rotation = 150
@@ -53,10 +56,6 @@ defmodule TypoKartWeb.RaceLive do
         )
       )
     }
-  end
-
-  def handle_info(:tick, socket) do
-    {:noreply, assign(socket, alpha: 43)}
   end
 
   def handle_event("key", %{"key" => key}, %{
