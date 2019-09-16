@@ -24,9 +24,8 @@
   margin: auto;
 }
 .before-text {
-  fill: white;
-  fill-opacity: 0.5;
-  stroke-width: 0.5;
+  fill: orange;
+  stroke: orange;
 }
 .after-text {
   fill: lightgrey;
@@ -42,4 +41,21 @@
 .cur-text.error {
   fill: red;
   stroke: red;
+}
+
+/*
+      <path id="theotherpath" d="<%= @map.path %>" fill-opacity="0" stroke="#d3d3d3" stroke-width="50"/>
+      <path id="thepath" d="<%= @map.path %>" fill-opacity="0" stroke="lightslategrey" stroke-width="45"/>
+      */
+.map path {
+  fill-opacity: 0;
+}
+#thepath {
+  stroke: #ecf1f8;
+  stroke-width: 45;
+}
+
+#theotherpath {
+  stroke: #d3d3d3;
+  stroke-width: 50;
 }
