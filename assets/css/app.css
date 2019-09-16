@@ -24,12 +24,14 @@
   margin: auto;
 }
 .before-text {
-  fill: darkgreen;
+  fill: white;
   fill-opacity: 0.5;
+  stroke-width: 0.5;
 }
 .after-text {
   fill: lightgrey;
   stroke: darkgrey;
+  stroke-width: 2;
 }
 .cur-text {
   fill: black;
