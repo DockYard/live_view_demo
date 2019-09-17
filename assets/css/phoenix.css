@@ -27,6 +27,33 @@ select {
   width: auto;
 }
 
+/* SQL LAB */
+
+.sql-lab-text-area {
+  min-height: 150px;
+  min-width: 400px;
+  border: 1px solid #c291e6;
+  border-radius: 4px;
+  font-size: 0.8em;
+  background-color: #ffffff;
+}
+
+.sql-lab-text-area:focus {
+  border-color: #b159f0;
+}
+
+.sql-error {
+  color: #a94442;
+  background-color: #f2dede;
+  border: 1px solid #a94442;
+  padding-left: 10px;
+  padding-top: 5px;
+  min-height: 35px;
+  border-radius: 2px;
+}
+
+/* USED STYLES */
+
 .mainBlue {
   background-color: #5bbac9;
 }
@@ -38,6 +65,20 @@ select {
   border-radius: 5px;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  padding-top: 8px;
+  color: #ffffff;
+  border: 0px;
+  padding: 0;
+}
+
+.blueButton:hover {
+  background-color: #6bc8d6;
+}
+
+.blueButton:hover{
+  opacity: 0.7;
+  cursor: pointer;
 }
 
 .whiteText {
@@ -45,9 +86,72 @@ select {
   font-size: 1em;
 }
 
+.chartContainer {
+  background-color: #ffffff;
+  height: 400px;
+  width: 400px;
+  border-radius: 5px;
+}
+
+.listContainer {
+  background-color: #8f93d9;
+  height: 400px;
+  width: 400px;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.listInsideContainer {
+  background-color: #e9e9f5;
+  height: 350px;
+  width: 350px;
+  border-radius: 5px;
+  align-self: center;
+}
+
 .mainBG {
   background-color: #f1f4fa;
 }
+
+.flex-one {
+  flex: 1;
+}
+
+.test-border {
+  border-style: solid;
+  border-width: 1;
+  border-color: red;
+}
+
+.centerItems {
+  align-content: center;
+  align-items: center;
+}
+
+.mainContainer {
+  max-width: 80.0rem;
+  padding: 0 10.0rem;
+  width: 100%;
+  flex: 1;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.table-row {
+  justify-content: space-around;
+  border-style: solid;
+  border-width: 2px;
+  border-color:#bd97e8;
+}
+
+/* END OF USED STYLES */
 
 /* Alerts and form errors */
 .alert {

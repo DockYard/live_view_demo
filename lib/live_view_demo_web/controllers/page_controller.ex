@@ -1,7 +1,10 @@
 defmodule LiveViewDemoWeb.PageController do
   use LiveViewDemoWeb, :controller
 
-  def index(conn, _params) do
-    render(conn, "index.html")
+  def index(conn, params) do
+    IO.inspect("INSIDE INDEX PAGE")
+    render(conn, "index.html", result: 45)
   end
+
+  def sumbit_file
 end

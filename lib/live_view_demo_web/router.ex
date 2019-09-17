@@ -17,8 +17,9 @@ defmodule LiveViewDemoWeb.Router do
   scope "/", LiveViewDemoWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", MainDashboard
     live "/dashboard", MainDashboard
+    live "/sql-lab", SqlLab
   end
 
   # Other scopes may use custom stacks.
