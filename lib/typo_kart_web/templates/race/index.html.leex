@@ -1,18 +1,14 @@
 <div class="map" data-current-char="<%= @cur_char_num %>" phx-keyup="key" phx-target="window">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="<%= @map.view_box %>">
     <g id="Layer_1" transform="<%= map_transform(@map, @cur_char_rotation) %>">
-      <path id="theotherpath" d="<%= @map.path %>"/>
-      <path id="thepath" d="<%= @map.path %>"/>
+      <path class="course" id="theotherpath" d="<%= @map.path %>"/>
+      <path class="course" id="thepath" d="<%= @map.path %>"/>
       <text dy="10">
         <textPath id="thetext" href="#thepath"><tspan class="before-text"><%= String.slice(@map.full_text, @before_text_range) %></tspan><tspan phx-hook="CurrentText" class="cur-text <%= @status_class %>"><%= if (" " == @cur_text), do: "_", else: String.slice(@map.full_text, @cur_text_range) %></tspan><tspan class="after-text"><%= String.slice(@map.full_text, @after_text_range) %></tspan></textPath>
       </text>
-      <g id="av-car" class="<%= @status_class %>" transform="translate(0,0) scale(.07)">
-        <path d="M544 192h-16L419.22 56.02A64.025 64.025 0 0 0 369.24 32H155.33c-26.17 0-49.7 15.93-59.42 40.23L48 194.26C20.44 201.4 0 226.21 0 256v112c0 8.84 7.16 16 16 16h48c0 53.02 42.98 96 96 96s96-42.98 96-96h128c0 53.02 42.98 96 96 96s96-42.98 96-96h48c8.84 0 16-7.16 16-16v-80c0-53.02-42.98-96-96-96zM160 432c-26.47 0-48-21.53-48-48s21.53-48 48-48 48 21.53 48 48-21.53 48-48 48zm72-240H116.93l38.4-96H232v96zm48 0V96h89.24l76.8 96H280zm200 240c-26.47 0-48-21.53-48-48s21.53-48 48-48 48 21.53 48 48-21.53 48-48 48z"/>
+      <g id="marker-player-1" class="marker player-1" transform="<%= marker_transform(@map, @cur_char_rotation, @cur_char_point, @marker_rotation_offset, @marker_translate_offset_x, @marker_translate_offset_y) %>">
+        <path d="M416 128V32c0-17.67-14.33-32-32-32H32C14.33 0 0 14.33 0 32v96c0 17.67 14.33 32 32 32h352c17.67 0 32-14.33 32-32zm32-64v128c0 17.67-14.33 32-32 32H256c-35.35 0-64 28.65-64 64v32c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h64c17.67 0 32-14.33 32-32V352c0-17.67-14.33-32-32-32v-32h160c53.02 0 96-42.98 96-96v-64c0-35.35-28.65-64-64-64z"/>
       </g>
-      <circle id="dot" cx="0" cy="0" r="3" fill="red"/>
-      <!--
-      <circle id="dot2" cx="20" cy="20" r="3" fill="black"/>
-      -->
     </g>
   </svg>
 </div>

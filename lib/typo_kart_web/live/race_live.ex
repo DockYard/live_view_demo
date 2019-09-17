@@ -44,7 +44,9 @@ defmodule TypoKartWeb.RaceLive do
       initial_rotation: 150,
       base_translate_x: 250,
       base_translate_y: 250,
-      view_box: "0, 0, 1000, 1000"
+      view_box: "0, 0, 1000, 1000",
+      marker_center_offset_x: 20,
+      marker_center_offset_y: 20
     }
 
     initial_char_num = 0
@@ -59,6 +61,10 @@ defmodule TypoKartWeb.RaceLive do
             map: map,
             cur_char_num: initial_char_num,
             cur_char_rotation: map.initial_rotation,
+            cur_char_point: [0,0],
+            marker_rotation_offset: 90,
+            marker_translate_offset_x: -8,
+            marker_translate_offset_y: 24
           ],
           text_ranges(initial_char_num, map.full_text)
         )
@@ -97,10 +103,10 @@ defmodule TypoKartWeb.RaceLive do
     do: {:noreply, assign(socket, status_class: "error")}
 
   def handle_event("adjust_rotation", %{
-    "currentCharPoint" => cur_char_point,
+    "currentCharPoint" => %{ "x" => cur_char_x, "y" => cur_char_y },
     "currentCharRotation" => cur_char_rotation
     }, socket) do
-    {:noreply, assign(socket, cur_char_point: cur_char_point, cur_char_rotation: cur_char_rotation )}
+    {:noreply, assign(socket, cur_char_point: [cur_char_x, cur_char_y], cur_char_rotation: cur_char_rotation )}
   end
 
   def handle_event(_, _, socket), do: {:noreply, socket}

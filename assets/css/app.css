@@ -9,16 +9,6 @@
   letter-spacing: 4px;
   font-family: sans-serif;
 }
-#av-car {
-  fill: lightslategrey;
-  display: none;
-}
-#av-car.error {
-  fill: red;
-}
-#dot {
-  display: none;
-}
 .map {
   width: 60%;
   margin: auto;
@@ -43,12 +33,11 @@
   stroke: red;
 }
 
-/*
-      <path id="theotherpath" d="<%= @map.path %>" fill-opacity="0" stroke="#d3d3d3" stroke-width="50"/>
-      <path id="thepath" d="<%= @map.path %>" fill-opacity="0" stroke="lightslategrey" stroke-width="45"/>
-      */
-.map path {
+.map path.course {
   fill-opacity: 0;
+}
+.map g.marker {
+  fill-opacity: 1;
 }
 #thepath {
   stroke: #ecf1f8;
