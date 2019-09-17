@@ -10,13 +10,16 @@ defmodule GameOfLife.Universe do
 
   alias GameOfLife.Cell
   alias GameOfLife.Universe.Template
+  alias GameOfLife.Universe.Generation
+  alias GameOfLife.Universe.Dimensions
+  alias GameOfLife.Cell.Position
 
   ## Client
 
-  def start_link(%{name: name, template: template, dimensions: {_width, _height} = dimensions}) do
+  def start_link(%{name: name, template: template, dimensions: %Dimensions{} = dimensions}) do
     GenServer.start_link(
       __MODULE__,
-      %{name: name, dimensions: dimensions, template: template, generation: 0},
+      %{name: name, dimensions: dimensions, template: template},
       name: via_tuple(name)
     )
   end
@@ -27,7 +30,7 @@ defmodule GameOfLife.Universe do
 
   def tick(name), do: GenServer.call(via_tuple(name), :tick)
 
-  def info(name, generation), do: GenServer.call(via_tuple(name), {:info, generation})
+  def info(name, generation_num), do: GenServer.call(via_tuple(name), {:info, generation_num})
   def info(name), do: GenServer.call(via_tuple(name), :info)
 
   ## Server
@@ -36,31 +39,24 @@ defmodule GameOfLife.Universe do
   def init(%{name: name} = state) do
     GameOfLife.Cell.Supervisor.start_link(name)
 
-    initialize_cells(state)
+    generation = %Generation{cells: initialize_cells(state)}
 
-    {:ok, state}
+    {:ok, add_generation(state, generation)}
   end
 
   @impl true
-  def handle_call(:tick, _from, %{generation: generation} = state) do
-    state = Map.put(state, :generation, generation + 1)
-    cells = each_cell(state, &Cell.tick/3)
+  def handle_call(:tick, _from, state) do
+    generation = %Generation{cells: each_cell(state, &Cell.tick/1)}
 
-    {:reply, cells, state}
+    {:reply, generation, add_generation(state, generation)}
   end
 
   @impl true
-  def handle_call(:info, _from, state) do
-    cells = each_cell(state, &Cell.info/3)
-
-    {:reply, cells, state}
-  end
+  def handle_call(:info, _from, state), do: {:reply, get_generation(state), state}
 
   @impl true
-  def handle_call({:info, generation}, _from, state) do
-    cells = each_cell(Map.put(state, :generation, generation), &Cell.info/3)
-
-    {:reply, cells, state}
+  def handle_call({:info, generation_num}, _from, state) do
+    {:reply, get_generation(state, generation_num), state}
   end
 
   @impl true
@@ -68,45 +64,75 @@ defmodule GameOfLife.Universe do
 
   ## Utils
 
-  defp initialize_cells(%{name: name, dimensions: {width, height}, template: :random}) do
+  defp initialize_cells(%{name: name, dimensions: %Dimensions{width: width, height: height}, template: :random}) do
     Enum.flat_map(0..(height - 1), fn y ->
       Enum.map(0..(width - 1), fn x ->
-        {:ok, result} =
-          GameOfLife.Cell.Supervisor.start_child(%{
-            universe_name: name,
-            position: {x, y},
-            alive: Enum.random([true, false])
-          })
+        Task.async(fn ->
+          position = %Position{x: x, y: y}
+          alive = Enum.random([true, false])
 
-        result
+          GameOfLife.Cell.Supervisor.start_child(%{universe_name: name, position: position, alive: alive})
+
+          {position, alive}
+        end)
       end)
     end)
+    |> Task.yield_many()
+    |> Enum.map(fn {task, res} -> res || Task.shutdown(task, :brutal_kill) end)
+    |> Enum.map(fn {:ok, res} -> res end)
+    |> Map.new()
   end
 
-  defp initialize_cells(%{name: name, dimensions: {width, height}, template: template}) do
+  defp initialize_cells(%{name: name, dimensions: %Dimensions{width: width, height: height}, template: template}) do
     live_cells = Template.initial_state(template)
 
     Enum.flat_map(0..(height - 1), fn y ->
       Enum.map(0..(width - 1), fn x ->
-        {:ok, result} =
-          GameOfLife.Cell.Supervisor.start_child(%{
-            universe_name: name,
-            position: {x, y},
-            alive: Enum.member?(live_cells, {x, y})
-          })
+        Task.async(fn ->
+          position = %Position{x: x, y: y}
+          alive = Enum.member?(live_cells, position)
 
-        result
+          GameOfLife.Cell.Supervisor.start_child(%{universe_name: name, position: position, alive: alive})
+
+          {position, alive}
+        end)
       end)
     end)
+    |> Task.yield_many()
+    |> Enum.map(fn {task, res} -> res || Task.shutdown(task, :brutal_kill) end)
+    |> Enum.map(fn {:ok, res} -> res end)
+    |> Map.new()
   end
 
-  defp each_cell(%{name: name, dimensions: {width, height}, generation: generation}, f) do
+  defp each_cell(%{name: name, dimensions: %Dimensions{width: width, height: height}} = state, f) do
+    generation = get_generation(state)
+
     Enum.flat_map(0..(height - 1), fn y ->
       Enum.map(0..(width - 1), fn x ->
-        {{x, y}, f.(name, {x, y}, generation)}
+        Task.async(fn ->
+          position = %Position{x: x, y: y}
+          result = f.(%{universe_name: name, position: position, generation: generation})
+
+          {position, result}
+        end)
       end)
     end)
+    |> Task.yield_many()
+    |> Enum.map(fn {task, res} -> res || Task.shutdown(task, :brutal_kill) end)
+    |> Enum.map(fn {:ok, res} -> res end)
     |> Map.new()
+  end
+
+  defp add_generation(state, generation) do
+    history = Map.get(state, :history, [])
+
+    Map.put(state, :history, history ++ [generation])
+  end
+
+  defp get_generation(state, generation_num \\ -1) do
+    state
+    |> Map.get(:history)
+    |> Enum.at(generation_num)
   end
 
   defp via_tuple(name), do: {:via, Registry, {:gol_registry, tuple(name)}}

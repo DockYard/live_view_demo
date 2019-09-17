@@ -1,61 +1,48 @@
 defmodule GameOfLife.Cell do
   use GenServer
+
   require Logger
+
+  alias GameOfLife.Universe.Generation
+  alias GameOfLife.Cell.Position
 
   ## Client
 
-  def start_link(%{universe_name: universe_name, position: position} = state) do
+  def start_link(%{universe_name: universe_name, position: %Position{} = position} = state) do
     GenServer.start_link(__MODULE__, state, name: via_tuple(universe_name, position))
   end
 
-  def tick(universe_name, position, generation), do: GenServer.call(via_tuple(universe_name, position), {:tick, generation})
-
-  def info(universe_name, position, generation), do: GenServer.call(via_tuple(universe_name, position), {:info, generation})
-
-  def alive?(universe_name, position, generation) do
-    if exists?(universe_name, position) do
-      GenServer.call(via_tuple(universe_name, position), {:alive, generation})
-    else
-      nil
-    end
+  def tick(%{universe_name: universe_name, position: %Position{} = position, generation: %Generation{} = generation}) do
+    GenServer.call(via_tuple(universe_name, position), {:tick, generation})
   end
 
-  def crash(universe_name, position), do: GenServer.cast(via_tuple(universe_name, position), :crash)
+  def info(%{universe_name: universe_name, position: %Position{} = position}) do
+    GenServer.call(via_tuple(universe_name, position), :info)
+  end
 
   ## Server
 
   @impl true
-  def init(%{alive: alive} = state), do: {:ok, Map.put(state, :history, [alive])}
+  def init(state), do: {:ok, state}
 
   @impl true
-  def handle_call({:tick, generation}, _from, %{universe_name: universe_name, position: position, history: history} = state) do
-    alive = cell_state(state, generation - 1)
-    history = history ++ [alive]
+  def handle_call({:tick, generation}, _from, state) do
+    alive = cell_state(state, generation)
+    state = Map.put(state, :alive, alive)
 
-    {:reply, %{universe_name: universe_name, position: position, alive: alive}, Map.put(state, :history, history)}
+    {:reply, alive, state}
   end
 
   @impl true
-  def handle_call({:info, generation}, _from, %{universe_name: universe_name, position: position, history: history} = state) do
-    alive = Enum.at(history, generation)
-
-    {:reply, %{universe_name: universe_name, position: position, alive: alive}, state}
-  end
-
-  @impl true
-  def handle_call({:alive, generation}, _from, %{history: history} = state) do
-    {:reply, Enum.at(history, generation), state}
-  end
-
-  @impl true
-  def handle_cast(:crash, _state), do: raise("💥crash💥")
+  def handle_call(:info, _from, state), do: {:reply, state, state}
 
   ## Utils
 
   defp cell_state(%{alive: alive} = state, generation) do
-    live_neighbor_count = state |> neighbor_states(generation) |> Enum.count(& &1)
-
-    cell_state(%{alive: alive, live_neighbor_count: live_neighbor_count})
+    cell_state(%{
+      alive: alive,
+      live_neighbor_count: live_neighbor_count(state, generation)
+    })
   end
 
   defp cell_state(%{alive: true, live_neighbor_count: 2}), do: true
@@ -63,24 +50,23 @@ defmodule GameOfLife.Cell do
   defp cell_state(%{alive: false, live_neighbor_count: 3}), do: true
   defp cell_state(_), do: false
 
-  defp neighbor_states(%{universe_name: universe_name, position: {x, y}}, generation) do
-    [
-      alive?(universe_name, {x - 1, y - 1}, generation),
-      alive?(universe_name, {x, y - 1}, generation),
-      alive?(universe_name, {x + 1, y - 1}, generation),
-      alive?(universe_name, {x - 1, y}, generation),
-      alive?(universe_name, {x + 1, y}, generation),
-      alive?(universe_name, {x - 1, y + 1}, generation),
-      alive?(universe_name, {x, y + 1}, generation),
-      alive?(universe_name, {x + 1, y + 1}, generation)
-    ]
+  defp live_neighbor_count(%{position: position}, generation) do
+    position
+    |> neighbor_states(generation)
+    |> Enum.count(& &1)
   end
 
-  defp exists?(name, position) do
-    :gol_registry
-    |> Registry.lookup(tuple(name, position))
-    |> Enum.empty?()
-    |> Kernel.!()
+  defp neighbor_states(%Position{x: x, y: y}, generation) do
+    [
+      Generation.alive?(generation, %Position{x: x - 1, y: y - 1}),
+      Generation.alive?(generation, %Position{x: x, y: y - 1}),
+      Generation.alive?(generation, %Position{x: x + 1, y: y - 1}),
+      Generation.alive?(generation, %Position{x: x - 1, y: y}),
+      Generation.alive?(generation, %Position{x: x + 1, y: y}),
+      Generation.alive?(generation, %Position{x: x - 1, y: y + 1}),
+      Generation.alive?(generation, %Position{x: x, y: y + 1}),
+      Generation.alive?(generation, %Position{x: x + 1, y: y + 1})
+    ]
   end
 
   defp via_tuple(universe_name, position), do: {:via, Registry, {:gol_registry, tuple(universe_name, position)}}
