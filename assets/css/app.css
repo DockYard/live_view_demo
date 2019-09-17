@@ -32,7 +32,7 @@
     background: #eee;
 }
 
-.form-control {
+.form-input {
     margin: 0;
 }
 
@@ -50,4 +50,8 @@
 
 .middle {
     vertical-align: middle;
+}
+
+.help-text {
+    font-size: 14px;
 }

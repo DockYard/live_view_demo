@@ -10,11 +10,13 @@ defmodule GameOfLifeWeb.UniverseLive do
   end
 
   def mount(_session, socket) do
-    socket = if connected?(socket), do: set_timer(socket, 6), else: socket
+    socket = assign(socket, universe: rand_bytes(), speed: 10)
 
-    # socket = assign(socket, universe: rand_bytes(), template: :random, dimensions: %Dimensions{width: 8, height: 8})
-    socket = assign(socket, universe: rand_bytes(), template: :beacon, dimensions: Template.dimensions(:beacon))
-    # socket = assign(socket, universe: rand_bytes(), template: :pulsar, dimensions: Template.dimensions(:pulsar))
+    # socket = assign(socket, template: :random, dimensions: %Dimensions{width: 8, height: 8})
+    socket = assign(socket, template: :beacon, dimensions: Template.dimensions(:beacon))
+    # socket = assign(socket, template: :pulsar, dimensions: Template.dimensions(:pulsar))
+
+    if connected?(socket), do: schedule_tick(socket)
 
     Universe.start_link(%{
       name: socket.assigns.universe,
@@ -25,24 +27,20 @@ defmodule GameOfLifeWeb.UniverseLive do
     {:ok, put_generation(socket, &Universe.info/1)}
   end
 
-  def handle_info(:tick, socket), do: {:noreply, put_generation(socket, &Universe.tick/1)}
+  def handle_info(:tick, socket) do 
+    schedule_tick(socket)
+    {:noreply, put_generation(socket, &Universe.tick/1)}
+  end
 
   def handle_event("update_speed", %{"speed" => speed}, socket) do
-    {:noreply, set_timer(socket, String.to_integer(speed))}
+    {:noreply, assign(socket, speed: String.to_integer(speed))}
   end
 
   defp put_generation(socket, f), do: assign(socket, generation: f.(socket.assigns.universe))
 
   defp rand_bytes, do: :crypto.strong_rand_bytes(16)
 
-  defp set_timer(socket, speed) do
-    if Map.has_key?(socket.assigns, :timer_ref) do
-      :timer.cancel(socket.assigns.timer_ref)
-    end
-
-    # `send_interval` needs an Integer, not a Float
-    {:ok, tref} = :timer.send_interval(trunc(2000 / speed), self(), :tick)
-
-    assign(socket, timer_ref: tref)
+  defp schedule_tick(socket) do
+    Process.send_after(self(), :tick, trunc(1000 / socket.assigns.speed))
   end
 end

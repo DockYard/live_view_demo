@@ -2,9 +2,16 @@
   <h1>It's time for... the Game... of... LIFE!</h1>
 
   <form action="#" phx-change="update_speed">
-    <label class="form-label inline middle">Slower</label>
-    <input type="range" id="speed" class="form-control slider middle" name="speed" min="1" max="11" value="" step="1">
-    <label class="form-label inline middle">Faster</label>
+    <div class="form-control">
+      <label class="form-label inline middle">Slower</label>
+
+      <input type="range" id="speed" class="form-input slider middle"
+        name="speed" min="1" max="20" value=<%= @speed %> step="1">
+
+      <label class="form-label inline middle">Faster</label>
+    </div>
+
+    <p class="help-text">Current speed: <%= @speed %>fps</p>
   </form>
 
   <div class="universe">
