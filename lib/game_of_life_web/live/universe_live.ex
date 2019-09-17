@@ -8,7 +8,7 @@ defmodule GameOfLifeWeb.UniverseLive do
   end
 
   def mount(_session, socket) do
-    if connected?(socket), do: :timer.send_interval(500, self(), :tick)
+    socket = if connected?(socket), do: set_timer(socket, 6), else: socket
 
     # template = :random
     # socket =
@@ -38,7 +38,22 @@ defmodule GameOfLifeWeb.UniverseLive do
 
   def handle_info(:tick, socket), do: {:noreply, put_cells(socket, &Universe.tick/1)}
 
+  def handle_event("update_speed", %{"speed" => speed}, socket) do
+    {:noreply, set_timer(socket, String.to_integer(speed))}
+  end
+
   defp put_cells(socket, f), do: assign(socket, cells: f.(socket.assigns.universe))
 
   defp rand_bytes, do: :crypto.strong_rand_bytes(16)
+
+  defp set_timer(socket, speed) do
+    if Map.has_key?(socket.assigns, :timer_ref) do
+      :timer.cancel(socket.assigns.timer_ref)
+    end
+
+    # `send_interval` needs an Integer, not a Float
+    {:ok, tref} = :timer.send_interval(trunc(2000 / speed), self(), :tick)
+
+    assign(socket, timer_ref: tref)
+  end
 end

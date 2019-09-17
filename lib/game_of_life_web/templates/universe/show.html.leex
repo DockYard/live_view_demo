@@ -1,7 +1,13 @@
-    <div id="universe-page">
-      <h1>It's time for... the Game... of... LIFE!</h1>
+<div id="universe-page">
+  <h1>It's time for... the Game... of... LIFE!</h1>
 
-      <div class="universe">
-        <%= render_cells(@cells, @dimensions) %>
-      </div>
-    </div>
+  <form action="#" phx-change="update_speed">
+    <label class="form-label inline middle">Slower</label>
+    <input type="range" id="speed" class="form-control slider middle" name="speed" min="1" max="11" value="" step="1">
+    <label class="form-label inline middle">Faster</label>
+  </form>
+
+  <div class="universe">
+    <%= render_cells(@cells, @dimensions) %>
+  </div>
+</div>

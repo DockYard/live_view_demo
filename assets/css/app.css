@@ -31,3 +31,23 @@
 .cell.dead {
     background: #eee;
 }
+
+.form-control {
+    margin: 0;
+}
+
+.form-label {
+    margin: 0;
+}
+
+.form-control.slider {
+    margin: 0 10px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.middle {
+    vertical-align: middle;
+}
