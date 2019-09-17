@@ -4,6 +4,7 @@ defmodule GameOfLife.Cell do
   require Logger
 
   alias GameOfLife.Universe.Generation
+  alias GameOfLife.Cell.Position
 
   ## Client
 
@@ -55,16 +56,16 @@ defmodule GameOfLife.Cell do
     |> Enum.count(& &1)
   end
 
-  defp neighbor_states({x, y}, generation) do
+  defp neighbor_states(%Position{x: x, y: y}, generation) do
     [
-      Generation.alive?(generation, {x - 1, y - 1}),
-      Generation.alive?(generation, {x, y - 1}),
-      Generation.alive?(generation, {x + 1, y - 1}),
-      Generation.alive?(generation, {x - 1, y}),
-      Generation.alive?(generation, {x + 1, y}),
-      Generation.alive?(generation, {x - 1, y + 1}),
-      Generation.alive?(generation, {x, y + 1}),
-      Generation.alive?(generation, {x + 1, y + 1})
+      Generation.alive?(generation, %Position{x: x - 1, y: y - 1}),
+      Generation.alive?(generation, %Position{x: x, y: y - 1}),
+      Generation.alive?(generation, %Position{x: x + 1, y: y - 1}),
+      Generation.alive?(generation, %Position{x: x - 1, y: y}),
+      Generation.alive?(generation, %Position{x: x + 1, y: y}),
+      Generation.alive?(generation, %Position{x: x - 1, y: y + 1}),
+      Generation.alive?(generation, %Position{x: x, y: y + 1}),
+      Generation.alive?(generation, %Position{x: x + 1, y: y + 1})
     ]
   end
 
