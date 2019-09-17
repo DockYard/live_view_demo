@@ -13,10 +13,16 @@
   width: 60%;
   margin: auto;
 }
+.orange {
+  fill: orange;
+  stroke: orange;
+}
+/*
 .before-text {
   fill: orange;
   stroke: orange;
 }
+*/
 .after-text {
   fill: lightgrey;
   stroke: darkgrey;

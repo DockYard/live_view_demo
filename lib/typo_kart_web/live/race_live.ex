@@ -1,7 +1,11 @@
 defmodule TypoKartWeb.RaceLive do
   use Phoenix.LiveView
 
-  alias TypoKart.CourseMap
+  alias TypoKart.{
+    CourseMap,
+    Game,
+    Player
+  }
 
   require Logger
 
@@ -38,6 +42,15 @@ defmodule TypoKartWeb.RaceLive do
     #
     # connected?(socket)
 
+    game = %Game{
+      players: [
+        %Player{
+          color: "orange",
+          label: "P1"
+        }
+      ]
+    }
+
     map = %CourseMap{
       full_text: "Two households, both alike in dignity, In fair Verona, where we lay our scene,",
       path: "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z",
@@ -59,6 +72,7 @@ defmodule TypoKartWeb.RaceLive do
           [
             status_class: "",
             map: map,
+            game: game,
             cur_char_num: initial_char_num,
             cur_char_rotation: map.initial_rotation,
             cur_char_point: [0,0],
