@@ -67,14 +67,19 @@ defmodule GameOfLife.Universe do
   defp initialize_cells(%{name: name, dimensions: %Dimensions{width: width, height: height}, template: :random}) do
     Enum.flat_map(0..(height - 1), fn y ->
       Enum.map(0..(width - 1), fn x ->
-        position = %Position{x: x, y: y}
-        alive = Enum.random([true, false])
+        Task.async(fn ->
+          position = %Position{x: x, y: y}
+          alive = Enum.random([true, false])
 
-        GameOfLife.Cell.Supervisor.start_child(%{universe_name: name, position: position, alive: alive})
+          GameOfLife.Cell.Supervisor.start_child(%{universe_name: name, position: position, alive: alive})
 
-        {position, alive}
+          {position, alive}
+        end)
       end)
     end)
+    |> Task.yield_many()
+    |> Enum.map(fn {task, res} -> res || Task.shutdown(task, :brutal_kill) end)
+    |> Enum.map(fn {:ok, res} -> res end)
     |> Map.new()
   end
 
