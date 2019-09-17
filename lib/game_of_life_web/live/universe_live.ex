@@ -12,8 +12,8 @@ defmodule GameOfLifeWeb.UniverseLive do
   def mount(_session, socket) do
     socket = assign(socket, universe: rand_bytes(), speed: 10)
 
-    # socket = assign(socket, template: :random, dimensions: %Dimensions{width: 8, height: 8})
-    socket = assign(socket, template: :beacon, dimensions: Template.dimensions(:beacon))
+    socket = assign(socket, template: :random, dimensions: %Dimensions{width: 16, height: 8})
+    # socket = assign(socket, template: :beacon, dimensions: Template.dimensions(:beacon))
     # socket = assign(socket, template: :pulsar, dimensions: Template.dimensions(:pulsar))
 
     if connected?(socket), do: schedule_tick(socket)
@@ -28,8 +28,12 @@ defmodule GameOfLifeWeb.UniverseLive do
   end
 
   def handle_info(:tick, socket) do 
-    schedule_tick(socket)
-    {:noreply, put_generation(socket, &Universe.tick/1)}
+    socket =
+      socket
+      |> put_generation(&Universe.tick/1)
+      |> schedule_tick()
+
+    {:noreply, socket}
   end
 
   def handle_event("update_speed", %{"speed" => speed}, socket) do
@@ -42,5 +46,6 @@ defmodule GameOfLifeWeb.UniverseLive do
 
   defp schedule_tick(socket) do
     Process.send_after(self(), :tick, trunc(1000 / socket.assigns.speed))
+    socket
   end
 end
