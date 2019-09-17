@@ -8,15 +8,15 @@ defmodule GameOfLife.Cell do
 
   ## Client
 
-  def start_link(%{universe_name: universe_name, position: position} = state) do
+  def start_link(%{universe_name: universe_name, position: %Position{} = position} = state) do
     GenServer.start_link(__MODULE__, state, name: via_tuple(universe_name, position))
   end
 
-  def tick(%{universe_name: universe_name, position: position, generation: %Generation{} = generation}) do
+  def tick(%{universe_name: universe_name, position: %Position{} = position, generation: %Generation{} = generation}) do
     GenServer.call(via_tuple(universe_name, position), {:tick, generation})
   end
 
-  def info(%{universe_name: universe_name, position: position}) do
+  def info(%{universe_name: universe_name, position: %Position{} = position}) do
     GenServer.call(via_tuple(universe_name, position), :info)
   end
 

@@ -30,7 +30,7 @@ defmodule GameOfLife.Universe do
 
   def tick(name), do: GenServer.call(via_tuple(name), :tick)
 
-  def info(name, generation), do: GenServer.call(via_tuple(name), {:info, generation})
+  def info(name, generation_num), do: GenServer.call(via_tuple(name), {:info, generation_num})
   def info(name), do: GenServer.call(via_tuple(name), :info)
 
   ## Server
@@ -55,8 +55,8 @@ defmodule GameOfLife.Universe do
   def handle_call(:info, _from, state), do: {:reply, get_generation(state), state}
 
   @impl true
-  def handle_call({:info, generation}, _from, state) do
-    {:reply, get_generation(state, generation), state}
+  def handle_call({:info, generation_num}, _from, state) do
+    {:reply, get_generation(state, generation_num), state}
   end
 
   @impl true
@@ -124,10 +124,10 @@ defmodule GameOfLife.Universe do
     Map.put(state, :history, history ++ [generation])
   end
 
-  defp get_generation(state, generation \\ -1) do
+  defp get_generation(state, generation_num \\ -1) do
     state
     |> Map.get(:history)
-    |> Enum.at(generation)
+    |> Enum.at(generation_num)
   end
 
   defp via_tuple(name), do: {:via, Registry, {:gol_registry, tuple(name)}}
