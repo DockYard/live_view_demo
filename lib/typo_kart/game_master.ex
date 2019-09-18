@@ -29,13 +29,4 @@ defmodule TypoKart.GameMaster do
   def new_game(%Game{} = game \\ %Game{}) do
     GenServer.call(__MODULE__, {:new_game, game})
   end
-
-  #def handle_cast(:new_game, _from, state) do
-
-
-  #end
-
-  #def handle_cast(:update_game, _from, state) do
-
-  #end
 end
