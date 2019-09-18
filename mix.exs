@@ -40,7 +40,8 @@ defmodule TypoKart.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:calendar, "~> 0.17.6"}
+      {:calendar, "~> 0.17.6"},
+      {:uuid, "~> 1.1"}
     ]
   end
 end
