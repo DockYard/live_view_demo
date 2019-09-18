@@ -3,7 +3,8 @@ defmodule TypoKart.GameMasterTest do
 
   alias TypoKart.{
     Game,
-    GameMaster
+    GameMaster,
+    Player
   }
 
   test "initializes" do
@@ -16,6 +17,30 @@ defmodule TypoKart.GameMasterTest do
     assert %{
       games: %{
         ^id => %Game{}
+      }
+    } = GameMaster.state()
+  end
+
+  test "creates a game with some initialization" do
+    assert id = GameMaster.new_game(%Game{
+      players: [
+        %Player{
+          label: "foo",
+          color: "orange"
+        }
+      ]
+    })
+
+    assert %{
+      games: %{
+        ^id => %Game{
+          players: [
+            %Player{
+              label: "foo",
+              color: "orange"
+            }
+          ]
+        }
       }
     } = GameMaster.state()
   end
