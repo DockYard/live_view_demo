@@ -9,7 +9,8 @@ defmodule TypoKart.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      TypoKartWeb.Endpoint
+      TypoKartWeb.Endpoint,
+      TypoKart.GameMaster
       # Starts a worker by calling: TypoKart.Worker.start_link(arg)
       # {TypoKart.Worker, arg},
     ]
