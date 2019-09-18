@@ -4,7 +4,6 @@ defmodule TypoKart.GameMasterTest do
   alias TypoKart.GameMaster
 
   test "initializes" do
-    assert {:ok, _pid} = GameMaster.start_link()
-    assert %{games: []} = GameMaster.state()
+    assert %{games: %{}} = GameMaster.state()
   end
 end

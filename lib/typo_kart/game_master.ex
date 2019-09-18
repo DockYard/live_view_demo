@@ -7,7 +7,7 @@ defmodule TypoKart.GameMaster do
 
   def init(_init \\ nil) do
     {:ok, %{
-      games: []
+      games: %{}
     }}
   end
 
