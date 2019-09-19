@@ -3,12 +3,14 @@
 
   <form action="#" phx-change="update_speed">
     <div class="form-control">
-      <label class="form-label inline middle">Slower</label>
+      <%= label class: "form-label inline middle" do %>Slower<% end %>
 
-      <input type="range" id="speed" class="form-input slider middle"
-        name="speed" min="1" max="20" value=<%= @speed %> step="1">
+      <%= range_input :universe, :speed,
+        class: "form-input slider middle",
+        min: "1", max: "20", step: "1",
+        value: @speed %>
 
-      <label class="form-label inline middle">Faster</label>
+      <%= label class: "form-label inline middle" do %>Faster<% end %>
     </div>
 
     <p class="help-text">Current speed: <%= @speed %>fps</p>

@@ -36,7 +36,7 @@ defmodule GameOfLifeWeb.UniverseLive do
     {:noreply, socket}
   end
 
-  def handle_event("update_speed", %{"speed" => speed}, socket) do
+  def handle_event("update_speed", %{"universe" => %{ "speed" => speed }}, socket) do
     {:noreply, assign(socket, speed: String.to_integer(speed))}
   end
 
