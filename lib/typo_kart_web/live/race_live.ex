@@ -5,6 +5,7 @@ defmodule TypoKartWeb.RaceLive do
     CourseMap,
     Game,
     Path,
+    PathChar,
     Player
   }
 
@@ -85,30 +86,7 @@ defmodule TypoKartWeb.RaceLive do
             marker_translate_offset_x: -8,
             marker_translate_offset_y: 24
           ],
-          text_ranges(Enum.at(game.players,0).cur_char, Enum.at(map.paths,0).text)
-        )
-      )
-    }
-  end
-
-  def handle_event("key", %{"key" => key}, %{
-    assigns: %{
-      map: %{full_text: full_text},
-      cur_text: cur_text,
-      cur_text_range: cur_char_num.._
-    }
-  } = socket) when (key == cur_text) or (key == "_" and cur_text == " ") do
-    next_char_num = cur_char_num + 1
-    {
-      :noreply,
-      assign(
-        socket,
-        Keyword.merge(
-          [
-            status_class: "",
-            cur_char_num: next_char_num
-          ],
-          text_ranges(next_char_num, full_text)
+          text_ranges(Enum.at(game.players,0).cur_path_char.char, Enum.at(map.paths,0).text)
         )
       )
     }
@@ -117,6 +95,22 @@ defmodule TypoKartWeb.RaceLive do
   def handle_event("key", %{"keyCode" => keyCode}, socket)
     when keyCode in @ignored_key_codes,
     do: {:noreply, socket}
+
+  def handle_event("key", %{"key" => key}, %{
+      assigns: %{
+        map: map,
+        game: game,
+        player: player
+      }
+    } = socket) do
+    case advance(map, game, player, key) do
+      {:ok, game} ->
+        {:noreply, assign(socket, status_class: "", game: game)}
+
+      _ ->
+        {:noreply, assign(socket, status_class: "error")}
+    end
+  end
 
   def handle_event("key", _, socket),
     do: {:noreply, assign(socket, status_class: "error")}
@@ -136,4 +130,24 @@ defmodule TypoKartWeb.RaceLive do
       cur_text: String.slice(full_text, cur_char_num..cur_char_num),
       after_text_range: (cur_char_num + 1)..(String.length(full_text) - 1)
     ]
+
+  @spec advance(CourseMap.t(), Game.t(), integer(), binary()) :: {:ok, Game.t()} | :error
+  def advance(%CourseMap{} = map, %Game{} = game, player, key)
+  when is_integer(player) and is_binary(key) do
+    # TODO: make this function test whether the current key
+    with %Player{cur_path_char: %PathChar{path: cur_path, char: cur_char}} <- Enum.at(game.players, player),
+      %{text: text} <- Enum.at(map.paths, cur_path) do
+      case String.slice(text, cur_char..cur_char) do
+        x when key == x or (key == "_" and x == " ") -> {:ok, game}
+
+        bad ->
+          Logger.debug("BAD Key: player=#{player}, key=#{key}, cur_path=#{cur_path}, cur_char=#{cur_char}, cur_text=\"#{bad}\"")
+          :error
+      end
+    else
+      bad ->
+        Logger.debug("ERROR: #{inspect(bad)}")
+        :error
+    end
+  end
 end
