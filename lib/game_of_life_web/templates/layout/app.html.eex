@@ -15,8 +15,8 @@
             <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
           </ul>
         </nav>
-        <a href="http://phoenixframework.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
+        <a href="/">
+          <img class="header-logo" src="<%= Routes.static_path(@conn, "/images/phoenix-white.png") %>" alt="Game of Life Logo"/>
         </a>
       </section>
     </header>

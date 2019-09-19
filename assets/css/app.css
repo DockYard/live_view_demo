@@ -9,6 +9,23 @@
     padding: 0;
 }
 
+body {
+    background: #000;
+}
+
+header {
+    background-image: radial-gradient( circle at 50% 50%, #F67938 29%, #EF4734 120%);
+    border: 0;
+}
+
+.header-logo {
+    height: 50px;
+}
+
+.container {
+    padding-top: 5px;
+}
+
 .universe {
     align-items: center;
     display: flex;
@@ -20,6 +37,8 @@
 }
 
 .cell {
+    border: 1px solid #000;
+    box-sizing: content-box;
     width: 10px;
     height: 10px;
 }
@@ -29,5 +48,5 @@
 }
 
 .cell.dead {
-    background: #eee;
+    background: rgb(50, 50, 50);
 }
