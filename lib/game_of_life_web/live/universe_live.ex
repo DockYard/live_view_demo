@@ -12,7 +12,7 @@ defmodule GameOfLifeWeb.UniverseLive do
   def mount(_session, socket) do
     socket = assign(socket, universe: rand_bytes(), speed: 10)
 
-    socket = assign(socket, template: :random, dimensions: %Dimensions{width: 16, height: 8})
+    socket = assign(socket, template: :random, dimensions: %Dimensions{width: 16, height: 16})
     # socket = assign(socket, template: :beacon, dimensions: Template.dimensions(:beacon))
     # socket = assign(socket, template: :pulsar, dimensions: Template.dimensions(:pulsar))
 

@@ -1,7 +1,7 @@
 <div id="universe-page">
   <h1>It's time for... the Game... of... LIFE!</h1>
 
-  <form action="#" phx-change="update_speed">
+  <%= form_tag "#", phx_change: "update_speed" do %>
     <div class="form-control">
       <%= label class: "form-label inline middle" do %>Slower<% end %>
 
@@ -14,7 +14,7 @@
     </div>
 
     <p class="help-text">Current speed: <%= @speed %>fps</p>
-  </form>
+  <% end %>
 
   <div class="universe">
     <%= render_generation(@generation, @dimensions) %>
