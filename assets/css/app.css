@@ -45,12 +45,12 @@
 .map g.marker {
   fill-opacity: 1;
 }
-#thepath {
+path.primary {
   stroke: #ecf1f8;
   stroke-width: 45;
 }
 
-#theotherpath {
+path.secondary {
   stroke: #d3d3d3;
   stroke-width: 50;
 }

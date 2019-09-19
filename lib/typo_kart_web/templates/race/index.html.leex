@@ -1,11 +1,15 @@
-<div class="map" data-current-char="<%= @cur_char_num %>" phx-keyup="key" phx-target="window">
+<div class="map" data-current-char="<%= Enum.at(@game.players, @player).cur_char %>" phx-keyup="key" phx-target="window">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="<%= @map.view_box %>">
     <g id="Layer_1" transform="<%= map_transform(@map, @cur_char_rotation) %>">
-      <path class="course" id="theotherpath" d="<%= @map.path %>"/>
-      <path class="course" id="thepath" d="<%= @map.path %>"/>
-      <text dy="10">
-        <textPath id="thetext" href="#thepath"><tspan class="before-text"><%= String.slice(@map.full_text, @before_text_range) %></tspan><tspan phx-hook="CurrentText" class="cur-text <%= @status_class %>"><%= if (" " == @cur_text), do: "_", else: String.slice(@map.full_text, @cur_text_range) %></tspan><tspan class="after-text"><%= String.slice(@map.full_text, @after_text_range) %></tspan></textPath>
-      </text>
+      <%= for path <- @map.paths, reduce: 1  do %>
+        <% cur -> %>
+        <path class="course secondary path-<%= cur %>" d="<%= path.d %>"/>
+        <path class="course primary path-<%= cur %>" id= "primary-path-<%= cur %>" d="<%= path.d %>"/>
+        <text dy="10">
+          <textPath class="current" href="#primary-path-<%= cur %>"><tspan class="before-text"><%= String.slice(path.text, @before_text_range) %></tspan><tspan phx-hook="CurrentText" class="cur-text <%= @status_class %>"><%= if (" " == @cur_text), do: "_", else: String.slice(path.text, @cur_text_range) %></tspan><tspan class="after-text"><%= String.slice(path.text, @after_text_range) %></tspan></textPath>
+        </text>
+          <% cur + 1 %>
+      <% end %>
 
       <%= for player <- @game.players, reduce: 1 do %>
         <% cur -> %>

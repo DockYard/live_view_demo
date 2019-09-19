@@ -21,7 +21,7 @@ import LiveSocket from "phoenix_live_view"
 const Hooks = {}
 
 function getTextPath() {
-  return document.getElementById('thetext')
+  return document.querySelector('textPath.current')
 }
 
 function getCurCharNum(){

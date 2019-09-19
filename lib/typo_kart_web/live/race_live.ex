@@ -4,6 +4,7 @@ defmodule TypoKartWeb.RaceLive do
   alias TypoKart.{
     CourseMap,
     Game,
+    Path,
     Player
   }
 
@@ -52,17 +53,21 @@ defmodule TypoKartWeb.RaceLive do
     }
 
     map = %CourseMap{
-      full_text: "Two households, both alike in dignity, In fair Verona, where we lay our scene,",
-      path: "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z",
       initial_rotation: 150,
       base_translate_x: 250,
       base_translate_y: 250,
       view_box: "0, 0, 1000, 1000",
       marker_center_offset_x: 20,
-      marker_center_offset_y: 20
+      marker_center_offset_y: 20,
+      paths: [
+        %Path{
+          text: "Two households, both alike in dignity, In fair Verona, where we lay our scene,",
+          d: "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z",
+        }
+      ]
     }
 
-    initial_char_num = 0
+    player = 0
 
     {
       :ok,
@@ -73,14 +78,14 @@ defmodule TypoKartWeb.RaceLive do
             status_class: "",
             map: map,
             game: game,
-            cur_char_num: initial_char_num,
+            player: player,
             cur_char_rotation: map.initial_rotation,
             cur_char_point: [0,0],
             marker_rotation_offset: 90,
             marker_translate_offset_x: -8,
             marker_translate_offset_y: 24
           ],
-          text_ranges(initial_char_num, map.full_text)
+          text_ranges(Enum.at(game.players,0).cur_char, Enum.at(map.paths,0).text)
         )
       )
     }
