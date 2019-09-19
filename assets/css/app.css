@@ -2,3 +2,110 @@
 
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
+
+.ball-animation {
+    -webkit-animation: autoHideAnimation 2000ms forwards; 
+    animation: autoHideAnimation 2000ms forwards;
+}
+
+@keyframes autoHideAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes autoHideAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.path-animation {
+    fill: none;
+    /* width of path */
+    stroke: lightsalmon;
+    stroke-width: 14;
+    /* dashes with gap of 1000 */
+    stroke-dasharray: 1400;
+    /* starting point of the stroke: offset */
+    stroke-dashoffset: 1400;
+    stroke-linecap: round;
+    animation: pathAnimation 3000ms normal forwards;
+}
+
+@keyframes pathAnimation {
+    from {
+      stroke-dashoffset: 1400;
+      /* stroke-width: 14; */
+      /* fill: black;
+      width: 100%; */
+    }
+    to {
+      stroke-dashoffset: 0;
+      /* stroke-width: 1; */
+      /* fill: red;
+      width: 0%; */
+    }
+}
+
+.test-animation {
+    fill: black;
+    /* width of path */
+    stroke: lightsalmon;
+    stroke-width: 24;
+    /* dashes with gap of 1000 */
+    stroke-dasharray: 1400;
+    /* starting point of the stroke: offset */
+    stroke-dashoffset: 1400;
+    stroke-linecap: round;
+    animation: testAnimation 2800ms normal forwards;
+    offset-path: path('M 10,150 L 70,10 L 130,150 z')
+}
+
+@keyframes testAnimation {
+    from {
+      fill: black;
+      offset-path: path('M 0,0 L 0,0 L 0,0 z')
+    }
+    to {
+      fill: red;
+      offset-path: path('M 10,150 L 70,10 L 130,150 z')
+    }
+}
+
+@-webkit-keyframes testAnimation {
+    from {
+      stroke-dashoffset: 1400;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+}
+
+.ball-motion-animation {
+    animation: move 1800ms normal forwards;
+}
+
+@keyframes move {
+    0% {
+        offset-distance: 0%;
+    }
+    100% {
+        offset-distance: 100%;
+    }
+}
+
+@-webkit-keyframes move {
+    0% {
+        offset-distance: 0%;
+    }
+    100% {
+        offset-distance: 100%;
+    }
+}

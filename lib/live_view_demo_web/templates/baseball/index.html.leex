@@ -1,0 +1,39 @@
+<button phx-hook="ToggleContent">
+    HOVER
+</button>
+
+<div id="content">
+    CONTENT
+</div>
+<br>
+
+<div style="width: 250px; height: 250px; position: relative; border: 1px solid #ddd;">
+    <%#
+        angle: in-coming direction,
+        distanceX: ball land location on Xaxis,
+        distanceY: ball land location on Yaxis,
+        speed: ball travel speed 
+    %>
+
+    <%= for item <- @feed_msgs do %>
+
+        <svg style="position: absolute" width="250" height="250" xmlns="http://www.w3.org/2000/svg"> 
+            <polygon fill="red" width="250" height="250">
+                <animate attributeName="points"
+                         dur="<%= item.pitch.speed %>ms"
+                         fill="freeze"
+                         from="<%= item.pitch.distanceX + 10 %>,0 125,0 <%= item.pitch.distanceX - 10 %>,0"
+                         to="<%= item.pitch.distanceX - 10 %>,0 <%= item.pitch.distanceX %>,<%= item.pitch.distanceY %> <%= item.pitch.distanceX - 20 %>,<%= item.pitch.distanceY %>"
+                />
+            </polygon>
+        </svg>
+
+        <div class="ball-motion-animation" style="position: absolute; offset-path: path('M <%= item.pitch.distanceX %>, 0 L <%= item.pitch.distanceX - 15 %>, <%= item.pitch.distanceY %>'); z-index: 1000; animation-duration: <%= item.pitch.speed %>ms">
+            <div style="background-color: <%= item.pitch.ball_color %>; width: 20px; height: 20px; border-radius: 50%; margin-top: -10px; z-index: 1005">
+                <%= item.pitch.pitch_number %>
+            </div>
+        </div>
+
+    <% end %>  
+
+</div>
