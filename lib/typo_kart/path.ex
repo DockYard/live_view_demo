@@ -1,8 +1,8 @@
 defmodule TypoKart.Path do
-  defstruct d: "", text: ""
+  defstruct d: "", chars: ''
 
   @type t :: %__MODULE__{
     d: binary(),
-    text: binary()
+    chars: charlist()
   }
 end
