@@ -10,7 +10,7 @@ use Mix.Config
 # Configures the endpoint
 config :game_of_life, GameOfLifeWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "dummy_val_for_dev_env",
+  secret_key_base: "dummy_val_for_dev_env_and_long_enough_for_form_helpers_xxxxxxxxxxxxx",
   render_errors: [view: GameOfLifeWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: GameOfLife.PubSub, adapter: Phoenix.PubSub.PG2],
   live_view: [

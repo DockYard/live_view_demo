@@ -1,7 +1,22 @@
-    <div id="universe-page">
-      <h1>It's time for... the Game... of... LIFE!</h1>
+<div id="universe-page">
+  <h1>It's time for... the Game... of... LIFE!</h1>
 
-      <div class="universe">
-        <%= render_generation(@generation, @dimensions) %>
-      </div>
+  <%= form_tag "#", phx_change: "update_speed" do %>
+    <div class="form-control">
+      <%= label class: "form-label inline middle" do %>Slower<% end %>
+
+      <%= range_input :universe, :speed,
+        class: "form-input slider middle",
+        min: "1", max: "20", step: "1",
+        value: @speed %>
+
+      <%= label class: "form-label inline middle" do %>Faster<% end %>
     </div>
+
+    <p class="help-text">Current speed: <%= @speed %>fps</p>
+  <% end %>
+
+  <div class="universe">
+    <%= render_generation(@generation, @dimensions) %>
+  </div>
+</div>
