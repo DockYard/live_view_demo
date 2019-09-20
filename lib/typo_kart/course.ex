@@ -1,4 +1,4 @@
-defmodule TypoKart.CourseMap do
+defmodule TypoKart.Course do
   alias TypoKart.Path
 
   defstruct initial_rotation: 0,

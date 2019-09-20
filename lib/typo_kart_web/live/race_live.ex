@@ -2,7 +2,7 @@ defmodule TypoKartWeb.RaceLive do
   use Phoenix.LiveView
 
   alias TypoKart.{
-    CourseMap,
+    Course,
     Game,
     Path,
     PathChar,
@@ -53,7 +53,7 @@ defmodule TypoKartWeb.RaceLive do
       ]
     }
 
-    map = %CourseMap{
+    map = %Course{
       initial_rotation: 150,
       base_translate_x: 250,
       base_translate_y: 250,
@@ -131,8 +131,8 @@ defmodule TypoKartWeb.RaceLive do
       after_text_range: (cur_char_num + 1)..(String.length(full_text) - 1)
     ]
 
-  @spec advance(CourseMap.t(), Game.t(), integer(), binary()) :: {:ok, Game.t()} | :error
-  def advance(%CourseMap{} = map, %Game{} = game, player, key)
+  @spec advance(Course.t(), Game.t(), integer(), binary()) :: {:ok, Game.t()} | :error
+  def advance(%Course{} = map, %Game{} = game, player, key)
   when is_integer(player) and is_binary(key) do
     # TODO: make this function test whether the current key
     with %Player{cur_path_char: %PathChar{path: cur_path, char: cur_char}} <- Enum.at(game.players, player),
