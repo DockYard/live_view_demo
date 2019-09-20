@@ -62,7 +62,7 @@ defmodule TypoKartWeb.RaceLive do
       marker_center_offset_y: 20,
       paths: [
         %Path{
-          text: "Two households, both alike in dignity, In fair Verona, where we lay our scene,",
+          chars: String.to_charlist("Two households, both alike in dignity, In fair Verona, where we lay our scene,"),
           d: "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z",
         }
       ]
@@ -85,8 +85,8 @@ defmodule TypoKartWeb.RaceLive do
             marker_rotation_offset: 90,
             marker_translate_offset_x: -8,
             marker_translate_offset_y: 24
-          ],
-          text_ranges(Enum.at(game.players,0).cur_path_char.char, Enum.at(map.paths,0).text)
+          ]
+          #text_ranges(Enum.at(game.players,0).cur_path_char.char, Enum.at(map.paths,0).text)
         )
       )
     }
@@ -134,20 +134,51 @@ defmodule TypoKartWeb.RaceLive do
   @spec advance(Course.t(), Game.t(), integer(), binary()) :: {:ok, Game.t()} | :error
   def advance(%Course{} = map, %Game{} = game, player, key)
   when is_integer(player) and is_binary(key) do
-    # TODO: make this function test whether the current key
-    with %Player{cur_path_char: %PathChar{path: cur_path, char: cur_char}} <- Enum.at(game.players, player),
-      %{text: text} <- Enum.at(map.paths, cur_path) do
-      case String.slice(text, cur_char..cur_char) do
-        x when key == x or (key == "_" and x == " ") -> {:ok, game}
 
-        bad ->
-          Logger.debug("BAD Key: player=#{player}, key=#{key}, cur_path=#{cur_path}, cur_char=#{cur_char}, cur_text=\"#{bad}\"")
-          :error
-      end
-    else
-      bad ->
-        Logger.debug("ERROR: #{inspect(bad)}")
-        :error
-    end
+
+    {:ok, game}
+
+    # %Player{cur_path_chars: cur_path_chars} = Enum.at(game.players, player)
+
+    # Enum.reduce(cur_path_chars, nil, fn (%PathChar{path: path, char: char}, acc) ->
+    #   # does this one match the current key?
+    #   case String.slice(Enum.at(course_paths, path).text, char..char) do
+    #     x when key == x or (key == "_" and x == " ") ->
+    #       Logger.debug("GOOD key: advance")
+    #       # Mutate the game.
+    #       # For the current player who has just keyed something correctly,
+    #       # mark the current text slice as his, and then recompute the next
+    #       {:ok, game}
+
+    #     bad ->
+    #       Logger.debug("BAD Key: player=#{player}, key=#{key}, cur_path=#{cur_path}, cur_char=#{cur_char}, cur_text=\"#{bad}\"")
+    #       :error
+    #   end
+
+    # end)
+    # # Find the first matching cur_path _char
+    # with ,
+    #   %PathChar{path: cur_path, char: cur_char} <- Enum.find(cur_path_chars, &(&1))
+    #   %{text: text} <- Enum.at(map.paths, cur_path) do
+    #   case String.slice(text, cur_char..cur_char) do
+    #     x when key == x or (key == "_" and x == " ") ->
+    #       Logger.debug("GOOD key: advance")
+    #       # Mutate the game.
+    #       # For the current player who has just keyed something correctly,
+    #       # mark the current text slice as his, and then recompute the next
+    #       {:ok, game}
+
+    #     bad ->
+    #       Logger.debug("BAD Key: player=#{player}, key=#{key}, cur_path=#{cur_path}, cur_char=#{cur_char}, cur_text=\"#{bad}\"")
+    #       :error
+    #   end
+    # else
+    #   bad ->
+    #     Logger.debug("ERROR: #{inspect(bad)}")
+    #     :error
+    # end
+
+
+
   end
 end
