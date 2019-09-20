@@ -4,7 +4,10 @@ defmodule TypoKart.GameMasterTest do
   alias TypoKart.{
     Game,
     GameMaster,
-    Player
+    Player,
+    Course,
+    Path,
+    PathCharIndex
   }
 
   test "initializes" do
@@ -43,5 +46,17 @@ defmodule TypoKart.GameMasterTest do
         }
       }
     } = GameMaster.state()
+  end
+
+  test "char_from_course/2 works" do
+    course = %Course{paths: [
+      %Path{
+        chars: String.to_charlist("The quick brown fox")
+      }
+    ]}
+
+    path_char_index = %PathCharIndex{path_index: 0, char_index: 4}
+
+    assert 113 = GameMaster.char_from_course(course, path_char_index)
   end
 end
