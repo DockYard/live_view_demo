@@ -1,9 +1,13 @@
-alias TypoKart.Player
-
 defmodule TypoKart.Game do
-  defstruct players: []
+  alias TypoKart.{
+    Course,
+    Player
+  }
+
+  defstruct players: [], course: %Course{}
 
   @type t :: %__MODULE__{
-    players: list(Player.t())
+    players: list(Player.t()),
+    course: Course.t()
   }
 end
