@@ -4,6 +4,7 @@ defmodule TypoKart.GameMaster do
   alias TypoKart.{
     Game,
     Course,
+    Path,
     PathCharIndex
   }
 
@@ -36,8 +37,13 @@ defmodule TypoKart.GameMaster do
 
   @spec char_from_course(Course.t(), PathCharIndex.t()) :: char() | nil
   def char_from_course(%Course{paths: paths}, %PathCharIndex{path_index: path_index, char_index: char_index}) do
-    Enum.at(paths, path_index)
-    |> Map.get(:chars)
-    |> Enum.at(char_index)
+    with %Path{} = path <- Enum.at(paths, path_index),
+      chars <- Map.get(path, :chars),
+      char <- Enum.at(chars, char_index) do
+        char
+    else
+      _ ->
+        nil
+    end
   end
 end
