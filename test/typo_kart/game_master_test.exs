@@ -194,6 +194,7 @@ defmodule TypoKart.GameMasterTest do
     ] = GameMaster.next_chars(course, %PathCharIndex{char_index: 9, path_index: 0})
   end
 
+  @tag :advance
   test "advance/3 with valid single path inputs and single current path_char index for given player" do
     game = %Game{
       players: [
@@ -218,17 +219,20 @@ defmodule TypoKart.GameMasterTest do
     assert {:ok, game} = GameMaster.advance(game_id, 0, hd('q'))
 
     assert %Game{
-      players: %Player{
-        cur_path_char_indices: [
-          %PathCharIndex{
-            path_index: 0,
-            char_index: 5 # incremented
-          }
-        ]
-      }
+      players: [
+        %Player{
+          cur_path_char_indices: [
+            %PathCharIndex{
+              path_index: 0,
+              char_index: 5 # incremented
+            }
+          ]
+        }
+      ]
     } = game
   end
 
+  @tag :advance
   test "advance/3 following a path branch" do
     course = %Course{
       paths: [
@@ -272,17 +276,18 @@ defmodule TypoKart.GameMasterTest do
     assert {:ok, game} = GameMaster.advance(game_id, 0, hd('A'))
 
     assert %Game{
-      players: %Player{
+      players: [%Player{
         cur_path_char_indices: [
           %PathCharIndex{
             path_index: 1,
             char_index: 1 # moved onto new path
           }
         ]
-      }
+      }]
     } = game
   end
 
+  @tag :advance
   test "advance/3 remaining on the same path passing a branch point" do
     course = %Course{
       paths: [
@@ -323,20 +328,51 @@ defmodule TypoKart.GameMasterTest do
 
     assert game_id = GameMaster.new_game(game)
 
-    assert {:ok, game} = GameMaster.advance(game_id, 0, hd('A'))
+    assert {:ok, game} = GameMaster.advance(game_id, 0, hd('b'))
 
     assert %Game{
-      players: %Player{
+      players: [%Player{
         cur_path_char_indices: [
           %PathCharIndex{
             path_index: 0,
             char_index: 11 # advanced along the same path
           }
         ]
-      }
+      }]
     } = game
   end
 
+  @tag :advance
+  test "advance/3 invalid keyCode in the middle of a path" do
+    course = %Course{
+      paths: [
+        %Path{
+          chars: String.to_charlist("fox")
+        }
+      ],
+      path_branches: []
+    }
+
+    game = %Game{
+      players: [
+        %Player{
+          cur_path_char_indices: [
+            %PathCharIndex{
+              path_index: 0,
+              char_index: 1
+            }
+          ]
+        }
+      ],
+      course: course
+    }
+
+    assert game_id = GameMaster.new_game(game)
+
+    assert {:error, _} = GameMaster.advance(game_id, 0, hd('k'))
+  end
+
+  @tag :advance
   test "advance/3 invalid keyCode at a path branch" do
     course = %Course{
       paths: [

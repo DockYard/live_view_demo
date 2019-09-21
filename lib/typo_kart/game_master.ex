@@ -37,23 +37,20 @@ defmodule TypoKart.GameMaster do
   def handle_call({:advance_game, game_id, player_index, key_code}, _from, state) do
     # If key_code fits one of the characters (we'll take the first one found) indexed by the player's
     # cur_path_char_indices, then we can advance.
-    with %Game{course: course} = game <- Kernel.get_in(state, [:games, game_id]),
-      %Player{cur_path_char_indices: cur_path_char_indices} = player <- Enum.at(game.players, player_index),
-      %PathCharIndex{} = valid_index <- Enum.find(cur_path_char_indices, &(char_from_course(course, &1) == key_code))
+    with %Game{course: course, players: players} = game <- Kernel.get_in(state, [:games, game_id]),
+      %Player{cur_path_char_indices: cur_path_char_indices} = player <- Enum.at(players, player_index),
+      %PathCharIndex{} = valid_index <- Enum.find(cur_path_char_indices, &(char_from_course(course, &1) == key_code)),
+      updated_player <- Map.put(player, :cur_path_char_indices, next_chars(course, valid_index)),
+      updated_game <- Map.put(game, :players, List.replace_at(players, player_index, updated_player)),
+      updated_state <- put_in(state, [:games, game_id], updated_game)
     do
-      {:reply, {:ok, game}, state} # temporary FAKE result
+      # TODO:
+      # 1. Mark this point on the course as claimed by this player.
+      # 2. Accumulate any relevant points as a result of this action
+      {:reply, {:ok, updated_game}, updated_state}
 
-      # Update game state to reflect this player's progress
-
-      # 1. Discover all of the possible path_char_indices that are now valid for this player.
-      #    Set those as the new possible chars for that player.
-      #
-      # 2. Mark this point on the course as claimed by this player.
-      #
-      # 3. Accumulate any points that may be relevant 
     else
       _bad ->
-        IO.puts("BAD: #{inspect(_bad)}")
         {:reply, {:error, "bad key_code"}, state}
     end
   end
