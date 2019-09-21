@@ -1,6 +1,6 @@
 /* This file is for your main application css. */
 
-@import "./phoenix.css";
+/*@import "./phoenix.css";*/
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
 
 * {
@@ -9,10 +9,77 @@
     padding: 0;
 }
 
+html, body {
+    height: 100%;
+}
+
+body {
+    background: #000;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif;
+}
+
+main {
+    flex: 1;
+}
+
+div[data-phx-view="GameOfLifeWeb.UniverseLive"] {
+    display: flex;
+    height: 100%;
+}
+
+.universe-sidebar {
+    background-image: radial-gradient( circle at 50% 50%, #F67938 29%, #EF4734 120%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.universe-sidebar .sidebar-title-wrapper {
+    display: flex;
+}
+
+.universe-sidebar .sidebar-title {
+    /*font-size: 24px;*/
+    padding-left: 20px;
+}
+
+.universe-sidebar .title-word.flame {
+    font-family: 'Dancing Script', cursive;
+    font-size: 36px;
+}
+
+.universe-sidebar .title-word.of {
+    font-family: sans-serif;
+    font-size: 18px;
+    font-weight: 100;
+}
+
+.universe-sidebar .title-word.life {
+    display: block;
+    font-family: 'Chau Philomene One', sans-serif;
+    font-size: 48px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+}
+
+.universe-sidebar .flame-of-life-logo {
+    width: 100px;
+}
+
+.universe-sidebar .phoenix-logo {
+    width: 200px;
+}
+
 .universe {
     align-items: center;
     display: flex;
+    flex: 1;
     flex-direction: column;
+    justify-content: center;
 }
 
 .cell-row {
@@ -20,6 +87,8 @@
 }
 
 .cell {
+    border: 1px solid #000;
+    box-sizing: content-box;
     width: 10px;
     height: 10px;
 }
@@ -29,7 +98,7 @@
 }
 
 .cell.dead {
-    background: #eee;
+    background: rgb(50, 50, 50);
 }
 
 .form-input {
@@ -42,6 +111,11 @@
 
 .form-control.slider {
     margin: 0 10px;
+}
+
+.fancy {
+    font-family: 'Dancing Script', cursive;
+    font-size: 125%;
 }
 
 .inline {
