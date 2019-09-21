@@ -27,31 +27,8 @@ defmodule TypoKart.GameMaster do
     {:reply, id, put_in(state, [:games, id], game)}
   end
 
-  def state do
-    GenServer.call(__MODULE__, :state)
-  end
-
-  def new_game(%Game{} = game \\ %Game{}) do
-    GenServer.call(__MODULE__, {:new_game, game})
-  end
-
-  @spec char_from_course(Course.t(), PathCharIndex.t()) :: char() | nil
-  def char_from_course(%Course{paths: paths}, %PathCharIndex{path_index: path_index, char_index: char_index}) do
-    with %Path{} = path <- Enum.at(paths, path_index),
-      chars when is_list(chars) <- Map.get(path, :chars) do
-        Enum.at(chars, char_index)
-    else
-      _ ->
-        nil
-    end
-  end
-
-  @spec advance(Course.t(), Game.t(), integer(), integer()) :: {:ok, Game.t()} | :error
-  def advance(%Course{} = course, %Game{} = game, player_index, key_code)
-  when is_integer(player_index) and is_integer(key_code) do
-
-
-    {:ok, game}
+  def handle_call({:advance_game, game_id, player_index, key_code}, _from, state) do
+    {:reply, %Game{}, state}
 
     # %Player{cur_path_chars: cur_path_chars} = Enum.at(game.players, player)
 
@@ -92,8 +69,30 @@ defmodule TypoKart.GameMaster do
     #     Logger.debug("ERROR: #{inspect(bad)}")
     #     :error
     # end
+  end
 
+  def state do
+    GenServer.call(__MODULE__, :state)
+  end
 
+  def new_game(%Game{} = game \\ %Game{}) do
+    GenServer.call(__MODULE__, {:new_game, game})
+  end
 
+  @spec char_from_course(Course.t(), PathCharIndex.t()) :: char() | nil
+  def char_from_course(%Course{paths: paths}, %PathCharIndex{path_index: path_index, char_index: char_index}) do
+    with %Path{} = path <- Enum.at(paths, path_index),
+      chars when is_list(chars) <- Map.get(path, :chars) do
+        Enum.at(chars, char_index)
+    else
+      _ ->
+        nil
+    end
+  end
+
+  @spec advance(binary(), integer(), integer()) :: {:ok, Game.t()} | {:error, binary()}
+  def advance(game_id, player_index, key_code)
+    when is_binary(game_id) and is_integer(player_index) and is_integer(key_code) do
+    GenServer.call(__MODULE__, {:advance_game, game_id, player_index, key_code})
   end
 end

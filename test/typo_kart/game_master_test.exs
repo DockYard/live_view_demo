@@ -31,7 +31,10 @@ defmodule TypoKart.GameMasterTest do
           label: "foo",
           color: "orange"
         }
-      ]
+      ],
+      course: %Course{
+        view_box: "0 0 800 800"
+      }
     })
 
     assert %{
@@ -42,7 +45,10 @@ defmodule TypoKart.GameMasterTest do
               label: "foo",
               color: "orange"
             }
-          ]
+          ],
+          course: %Course{
+            view_box: "0 0 800 800"
+          }
         }
       }
     } = GameMaster.state()
@@ -84,13 +90,7 @@ defmodule TypoKart.GameMasterTest do
     assert nil == GameMaster.char_from_course(course, path_char_index)
   end
 
-  test "advance/4 with valid single path inputs and single current path_char index for given player" do
-    course = %Course{paths: [
-      %Path{
-        chars: String.to_charlist("The quick brown fox")
-      }
-    ]}
-
+  test "advance/3 with valid single path inputs and single current path_char index for given player" do
     game = %Game{
       players: [
         %Player{
@@ -101,10 +101,17 @@ defmodule TypoKart.GameMasterTest do
             }
           ]
         }
-      ]
+      ],
+      course: %Course{paths: [
+        %Path{
+          chars: String.to_charlist("The quick brown fox")
+        }
+      ]}
     }
 
-    assert {:ok, game} = GameMaster.advance(course, game, 0, hd('q'))
+    assert game_id = GameMaster.new_game(game)
+
+    assert {:ok, game} = GameMaster.advance(game_id, 0, hd('q'))
 
     assert %Game{
       players: %Player{
@@ -118,7 +125,7 @@ defmodule TypoKart.GameMasterTest do
     } = game
   end
 
-  test "advance/4 following a path branch" do
+  test "advance/3 following a path branch" do
     course = %Course{
       paths: [
         %Path{
@@ -152,10 +159,13 @@ defmodule TypoKart.GameMasterTest do
             }
           ]
         }
-      ]
+      ],
+      course: course
     }
 
-    assert {:ok, game} = GameMaster.advance(course, game, 0, hd('A'))
+    assert game_id = GameMaster.new_game(game)
+
+    assert {:ok, game} = GameMaster.advance(game_id, 0, hd('A'))
 
     assert %Game{
       players: %Player{
@@ -169,7 +179,7 @@ defmodule TypoKart.GameMasterTest do
     } = game
   end
 
-  test "advance/4 remaining on the same path passing a branch point" do
+  test "advance/3 remaining on the same path passing a branch point" do
     course = %Course{
       paths: [
         %Path{
@@ -203,10 +213,13 @@ defmodule TypoKart.GameMasterTest do
             }
           ]
         }
-      ]
+      ],
+      course: course
     }
 
-    assert {:ok, game} = GameMaster.advance(course, game, 0, hd('A'))
+    assert game_id = GameMaster.new_game(game)
+
+    assert {:ok, game} = GameMaster.advance(game_id, 0, hd('A'))
 
     assert %Game{
       players: %Player{
@@ -220,7 +233,7 @@ defmodule TypoKart.GameMasterTest do
     } = game
   end
 
-  test "advance/4 invalid keyCode at a path branch" do
+  test "advance/3 invalid keyCode at a path branch" do
     course = %Course{
       paths: [
         %Path{
@@ -254,9 +267,12 @@ defmodule TypoKart.GameMasterTest do
             }
           ]
         }
-      ]
+      ],
+      course: course
     }
 
-    assert :error = GameMaster.advance(course, game, 0, hd('s'))
+    assert game_id = GameMaster.new_game(game)
+
+    assert {:error, _} = GameMaster.advance(game_id, 0, hd('s'))
   end
 end
