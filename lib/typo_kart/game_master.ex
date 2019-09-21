@@ -71,10 +71,12 @@ defmodule TypoKart.GameMaster do
     # end
   end
 
+  @spec state() :: map()
   def state do
     GenServer.call(__MODULE__, :state)
   end
 
+  @spec new_game(Game.t()) :: binary()
   def new_game(%Game{} = game \\ %Game{}) do
     GenServer.call(__MODULE__, {:new_game, game})
   end
