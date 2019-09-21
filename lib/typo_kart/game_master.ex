@@ -38,9 +38,8 @@ defmodule TypoKart.GameMaster do
   @spec char_from_course(Course.t(), PathCharIndex.t()) :: char() | nil
   def char_from_course(%Course{paths: paths}, %PathCharIndex{path_index: path_index, char_index: char_index}) do
     with %Path{} = path <- Enum.at(paths, path_index),
-      chars <- Map.get(path, :chars),
-      char <- Enum.at(chars, char_index) do
-        char
+      chars when is_list(chars) <- Map.get(path, :chars) do
+        Enum.at(chars, char_index)
     else
       _ ->
         nil
