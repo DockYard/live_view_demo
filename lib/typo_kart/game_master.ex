@@ -45,4 +45,55 @@ defmodule TypoKart.GameMaster do
         nil
     end
   end
+
+  @spec advance(Course.t(), Game.t(), integer(), integer()) :: {:ok, Game.t()} | :error
+  def advance(%Course{} = course, %Game{} = game, player_index, key_code)
+  when is_integer(player_index) and is_integer(key_code) do
+
+
+    {:ok, game}
+
+    # %Player{cur_path_chars: cur_path_chars} = Enum.at(game.players, player)
+
+    # Enum.reduce(cur_path_chars, nil, fn (%PathChar{path: path, char: char}, acc) ->
+    #   # does this one match the current key?
+    #   case String.slice(Enum.at(course_paths, path).text, char..char) do
+    #     x when key == x or (key == "_" and x == " ") ->
+    #       Logger.debug("GOOD key: advance")
+    #       # Mutate the game.
+    #       # For the current player who has just keyed something correctly,
+    #       # mark the current text slice as his, and then recompute the next
+    #       {:ok, game}
+
+    #     bad ->
+    #       Logger.debug("BAD Key: player=#{player}, key=#{key}, cur_path=#{cur_path}, cur_char=#{cur_char}, cur_text=\"#{bad}\"")
+    #       :error
+    #   end
+
+    # end)
+    # # Find the first matching cur_path _char
+    # with ,
+    #   %PathChar{path: cur_path, char: cur_char} <- Enum.find(cur_path_chars, &(&1))
+    #   %{text: text} <- Enum.at(map.paths, cur_path) do
+    #   case String.slice(text, cur_char..cur_char) do
+    #     x when key == x or (key == "_" and x == " ") ->
+    #       Logger.debug("GOOD key: advance")
+    #       # Mutate the game.
+    #       # For the current player who has just keyed something correctly,
+    #       # mark the current text slice as his, and then recompute the next
+    #       {:ok, game}
+
+    #     bad ->
+    #       Logger.debug("BAD Key: player=#{player}, key=#{key}, cur_path=#{cur_path}, cur_char=#{cur_char}, cur_text=\"#{bad}\"")
+    #       :error
+    #   end
+    # else
+    #   bad ->
+    #     Logger.debug("ERROR: #{inspect(bad)}")
+    #     :error
+    # end
+
+
+
+  end
 end

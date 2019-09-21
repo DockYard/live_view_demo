@@ -4,6 +4,7 @@ defmodule TypoKartWeb.RaceLive do
   alias TypoKart.{
     Course,
     Game,
+    GameMaster,
     Path,
     PathChar,
     Player
@@ -103,7 +104,7 @@ defmodule TypoKartWeb.RaceLive do
         player: player
       }
     } = socket) do
-    case advance(map, game, player, key) do
+    case GameMaster.advance(map, game, player, key) do
       {:ok, game} ->
         {:noreply, assign(socket, status_class: "", game: game)}
 
@@ -131,54 +132,4 @@ defmodule TypoKartWeb.RaceLive do
       after_text_range: (cur_char_num + 1)..(String.length(full_text) - 1)
     ]
 
-  @spec advance(Course.t(), Game.t(), integer(), binary()) :: {:ok, Game.t()} | :error
-  def advance(%Course{} = map, %Game{} = game, player, key)
-  when is_integer(player) and is_binary(key) do
-
-
-    {:ok, game}
-
-    # %Player{cur_path_chars: cur_path_chars} = Enum.at(game.players, player)
-
-    # Enum.reduce(cur_path_chars, nil, fn (%PathChar{path: path, char: char}, acc) ->
-    #   # does this one match the current key?
-    #   case String.slice(Enum.at(course_paths, path).text, char..char) do
-    #     x when key == x or (key == "_" and x == " ") ->
-    #       Logger.debug("GOOD key: advance")
-    #       # Mutate the game.
-    #       # For the current player who has just keyed something correctly,
-    #       # mark the current text slice as his, and then recompute the next
-    #       {:ok, game}
-
-    #     bad ->
-    #       Logger.debug("BAD Key: player=#{player}, key=#{key}, cur_path=#{cur_path}, cur_char=#{cur_char}, cur_text=\"#{bad}\"")
-    #       :error
-    #   end
-
-    # end)
-    # # Find the first matching cur_path _char
-    # with ,
-    #   %PathChar{path: cur_path, char: cur_char} <- Enum.find(cur_path_chars, &(&1))
-    #   %{text: text} <- Enum.at(map.paths, cur_path) do
-    #   case String.slice(text, cur_char..cur_char) do
-    #     x when key == x or (key == "_" and x == " ") ->
-    #       Logger.debug("GOOD key: advance")
-    #       # Mutate the game.
-    #       # For the current player who has just keyed something correctly,
-    #       # mark the current text slice as his, and then recompute the next
-    #       {:ok, game}
-
-    #     bad ->
-    #       Logger.debug("BAD Key: player=#{player}, key=#{key}, cur_path=#{cur_path}, cur_char=#{cur_char}, cur_text=\"#{bad}\"")
-    #       :error
-    #   end
-    # else
-    #   bad ->
-    #     Logger.debug("ERROR: #{inspect(bad)}")
-    #     :error
-    # end
-
-
-
-  end
 end
