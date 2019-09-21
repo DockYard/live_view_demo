@@ -51,44 +51,38 @@ defmodule TypoKartWeb.RaceLive do
           color: "orange",
           label: "P1"
         }
-      ]
+      ],
+      course: %Course{
+        initial_rotation: 150,
+        base_translate_x: 250,
+        base_translate_y: 250,
+        view_box: "0, 0, 1000, 1000",
+        marker_center_offset_x: 20,
+        marker_center_offset_y: 20,
+        paths: [
+          %Path{
+            chars: String.to_charlist("Two households, both alike in dignity, In fair Verona, where we lay our scene,"),
+            d: "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z",
+          }
+        ]
+      }
     }
 
-    map = %Course{
-      initial_rotation: 150,
-      base_translate_x: 250,
-      base_translate_y: 250,
-      view_box: "0, 0, 1000, 1000",
-      marker_center_offset_x: 20,
-      marker_center_offset_y: 20,
-      paths: [
-        %Path{
-          chars: String.to_charlist("Two households, both alike in dignity, In fair Verona, where we lay our scene,"),
-          d: "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z",
-        }
-      ]
-    }
-
-    player = 0
+    game_id = GameMaster.new_game(game)
 
     {
       :ok,
       assign(
         socket,
-        Keyword.merge(
-          [
-            status_class: "",
-            map: map,
-            game: game,
-            player: player,
-            cur_char_rotation: map.initial_rotation,
-            cur_char_point: [0,0],
-            marker_rotation_offset: 90,
-            marker_translate_offset_x: -8,
-            marker_translate_offset_y: 24
-          ]
-          #text_ranges(Enum.at(game.players,0).cur_path_char.char, Enum.at(map.paths,0).text)
-        )
+        status_class: "",
+        game: game,
+        game_id: game_id,
+        player_index: 0,
+        cur_char_rotation: game.course.initial_rotation,
+        cur_char_point: [0,0],
+        marker_rotation_offset: 90,
+        marker_translate_offset_x: -8,
+        marker_translate_offset_y: 24
       )
     }
   end
@@ -97,18 +91,17 @@ defmodule TypoKartWeb.RaceLive do
     when keyCode in @ignored_key_codes,
     do: {:noreply, socket}
 
-  def handle_event("key", %{"key" => key}, %{
+  def handle_event("key", %{"keyCode" => key_code}, %{
       assigns: %{
-        map: map,
-        game: game,
-        player: player
+        game_id: game_id,
+        player_index: player_index
       }
     } = socket) do
-    case GameMaster.advance(map, game, player, key) do
+    case GameMaster.advance(game_id, player_index, key_code) do
       {:ok, game} ->
         {:noreply, assign(socket, status_class: "", game: game)}
 
-      _ ->
+      {:error, _} ->
         {:noreply, assign(socket, status_class: "error")}
     end
   end
@@ -124,12 +117,4 @@ defmodule TypoKartWeb.RaceLive do
   end
 
   def handle_event(_, _, socket), do: {:noreply, socket}
-
-  defp text_ranges(cur_char_num, full_text), do: [
-      before_text_range: (if cur_char_num == 0, do: -1..0, else: 0..(cur_char_num - 1)),
-      cur_text_range: cur_char_num..cur_char_num,
-      cur_text: String.slice(full_text, cur_char_num..cur_char_num),
-      after_text_range: (cur_char_num + 1)..(String.length(full_text) - 1)
-    ]
-
 end
