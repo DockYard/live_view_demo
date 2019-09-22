@@ -76,7 +76,7 @@ defmodule TypoKartWeb.RaceLive do
       course: %Course{
         initial_rotation: 150,
         base_translate_x: 250,
-        base_translate_y: 250,
+        base_translate_y: 165,
         view_box: "0, 0, 1000, 1000",
         marker_center_offset_x: 20,
         marker_center_offset_y: 20,
