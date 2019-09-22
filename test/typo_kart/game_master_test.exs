@@ -333,10 +333,48 @@ defmodule TypoKart.GameMasterTest do
                }
              ],
              char_ownership: [
-              [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,
-              nil, nil, nil],
-              [0, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,
-              nil, nil, nil]
+               [
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil
+               ],
+               [
+                 0,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil
+               ]
              ]
            } = game
   end
@@ -397,10 +435,48 @@ defmodule TypoKart.GameMasterTest do
                }
              ],
              char_ownership: [
-              [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0, nil, nil, nil, nil, nil,
-              nil, nil, nil],
-              [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,
-              nil, nil, nil]
+               [
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 0,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil
+               ],
+               [
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil
+               ]
              ]
            } = game
   end
