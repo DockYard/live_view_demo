@@ -46,6 +46,14 @@ defmodule TypoKartWeb.RaceView do
 
   def map_angle(cur_char_rotation), do: -1 * cur_char_rotation
 
+  def text_segments(%Game{} = _game) do
+    # TODO: implement this for real
+    [
+      {"foo bar", "orange"},
+      {"blue baz", "blue"}
+    ]
+  end
+
   defp cur_path_char_index(%Game{} = game, player_index) when is_integer(player_index) do
     %Player{cur_path_char_indices: cur_path_char_indices} = Enum.at(game.players, player_index)
     hd(cur_path_char_indices)
