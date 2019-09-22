@@ -19,7 +19,7 @@ defmodule TypoKart.GameMaster do
     }}
   end
 
-  def handle_call(:reset_all, _from, state) do
+  def handle_call(:reset_all, _from, _state) do
     {:ok, reset_state} = init()
 
     {:reply, :ok, reset_state}
@@ -31,6 +31,7 @@ defmodule TypoKart.GameMaster do
 
   def handle_call({:new_game, game}, _from, state) do
     id = UUID.uuid1()
+    game = initialize_char_ownership(game)
     {:reply, id, put_in(state, [:games, id], game)}
   end
 
@@ -88,7 +89,7 @@ defmodule TypoKart.GameMaster do
   end
 
   @spec next_chars(Course.t(), PathCharIndex.t()) :: list(PathCharIndex.t())
-  def next_chars(%Course{paths: paths, path_branches: path_branches}, %PathCharIndex{path_index: cur_path_index, char_index: cur_char_index} = path_char_index) do
+  def next_chars(%Course{paths: paths, path_branches: path_branches}, %PathCharIndex{path_index: cur_path_index, char_index: cur_char_index}) do
     %Path{chars: cur_path_chars} = Enum.at(paths, cur_path_index)
 
     # 1. Add the next char_index on the current path. It's always a valid next char.
@@ -98,7 +99,7 @@ defmodule TypoKart.GameMaster do
         %PathCharIndex{char_index: next_char_index} = pci
           when next_char_index < length(cur_path_chars) ->
             pci
-        
+
         _ ->
           %PathCharIndex{path_index: cur_path_index, char_index: 0}
       end
@@ -113,5 +114,15 @@ defmodule TypoKart.GameMaster do
         _, acc ->
           acc
       end)
+  end
+
+  defp initialize_char_ownership(%Game{course: %Course{paths: paths}} = game) do
+    game
+    |> Map.put(
+      :char_ownership,
+      Enum.map(paths, fn %Path{chars: chars} ->
+        Enum.map(chars, fn _ -> nil end)
+      end)
+    )
   end
 end

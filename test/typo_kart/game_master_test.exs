@@ -53,7 +53,15 @@ defmodule TypoKart.GameMasterTest do
         }
       ],
       course: %Course{
-        view_box: "0 0 800 800"
+        view_box: "0 0 800 800",
+        paths: [
+          %Path{
+            chars: 'fox'
+          },
+          %Path{
+            chars: 'blue'
+          }
+        ]
       }
     })
 
@@ -68,7 +76,11 @@ defmodule TypoKart.GameMasterTest do
           ],
           course: %Course{
             view_box: "0 0 800 800"
-          }
+          },
+          char_ownership: [
+            [nil, nil, nil],
+            [nil, nil, nil, nil]
+          ]
         }
       }
     } = GameMaster.state()
