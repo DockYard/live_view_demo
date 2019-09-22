@@ -14,24 +14,42 @@ defmodule TypoKartWeb.RaceLive do
 
   # See: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
   @ignored_key_codes [
-    8,  # Backspace
-    13, # Enter
-    16, # Shift
-    17, # Control
-    18, # Alt
-    20, # Caps Lock
-    27, # Esc
-    33, # PageUp
-    34, # PageDown
-    35, # End
-    36, # Home
-    37, # ArrowLeft
-    38, # ArrowUp
-    39, # ArrowRight
-    40, # ArrowDown
-    46, # Delete
-    45, # Insert
-    93, # Meta
+    # Backspace
+    8,
+    # Enter
+    13,
+    # Shift
+    16,
+    # Control
+    17,
+    # Alt
+    18,
+    # Caps Lock
+    20,
+    # Esc
+    27,
+    # PageUp
+    33,
+    # PageDown
+    34,
+    # End
+    35,
+    # Home
+    36,
+    # ArrowLeft
+    37,
+    # ArrowUp
+    38,
+    # ArrowRight
+    39,
+    # ArrowDown
+    40,
+    # Delete
+    46,
+    # Insert
+    45,
+    # Meta
+    93
   ]
 
   def render(assigns) do
@@ -61,8 +79,12 @@ defmodule TypoKartWeb.RaceLive do
         marker_center_offset_y: 20,
         paths: [
           %Path{
-            chars: String.to_charlist("Two households, both alike in dignity, In fair Verona, where we lay our scene,"),
-            d: "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z",
+            chars:
+              String.to_charlist(
+                "Two households, both alike in dignity, In fair Verona, where we lay our scene,"
+              ),
+            d:
+              "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z"
           }
         ]
       }
@@ -79,7 +101,7 @@ defmodule TypoKartWeb.RaceLive do
         game_id: game_id,
         player_index: 0,
         cur_char_rotation: game.course.initial_rotation,
-        cur_char_point: [0,0],
+        cur_char_point: [0, 0],
         marker_rotation_offset: 90,
         marker_translate_offset_x: -8,
         marker_translate_offset_y: 24
@@ -88,15 +110,19 @@ defmodule TypoKartWeb.RaceLive do
   end
 
   def handle_event("key", %{"keyCode" => keyCode}, socket)
-    when keyCode in @ignored_key_codes,
-    do: {:noreply, socket}
+      when keyCode in @ignored_key_codes,
+      do: {:noreply, socket}
 
-  def handle_event("key", %{"keyCode" => key_code}, %{
-      assigns: %{
-        game_id: game_id,
-        player_index: player_index
-      }
-    } = socket) do
+  def handle_event(
+        "key",
+        %{"keyCode" => key_code},
+        %{
+          assigns: %{
+            game_id: game_id,
+            player_index: player_index
+          }
+        } = socket
+      ) do
     case GameMaster.advance(game_id, player_index, key_code) do
       {:ok, game} ->
         {:noreply, assign(socket, status_class: "", game: game)}
@@ -109,11 +135,16 @@ defmodule TypoKartWeb.RaceLive do
   def handle_event("key", _, socket),
     do: {:noreply, assign(socket, status_class: "error")}
 
-  def handle_event("adjust_rotation", %{
-    "currentCharPoint" => %{ "x" => cur_char_x, "y" => cur_char_y },
-    "currentCharRotation" => cur_char_rotation
-    }, socket) do
-    {:noreply, assign(socket, cur_char_point: [cur_char_x, cur_char_y], cur_char_rotation: cur_char_rotation )}
+  def handle_event(
+        "adjust_rotation",
+        %{
+          "currentCharPoint" => %{"x" => cur_char_x, "y" => cur_char_y},
+          "currentCharRotation" => cur_char_rotation
+        },
+        socket
+      ) do
+    {:noreply,
+     assign(socket, cur_char_point: [cur_char_x, cur_char_y], cur_char_rotation: cur_char_rotation)}
   end
 
   def handle_event(_, _, socket), do: {:noreply, socket}

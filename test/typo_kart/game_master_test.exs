@@ -22,20 +22,20 @@ defmodule TypoKart.GameMasterTest do
     assert id = GameMaster.new_game()
 
     assert %{
-      games: %{
-        ^id => %Game{}
-      }
-    } = GameMaster.state()
+             games: %{
+               ^id => %Game{}
+             }
+           } = GameMaster.state()
   end
 
   test "reset_all re-initializes everything" do
     assert id = GameMaster.new_game()
 
     assert %{
-      games: %{
-        ^id => %Game{}
-      }
-    } = GameMaster.state()
+             games: %{
+               ^id => %Game{}
+             }
+           } = GameMaster.state()
 
     assert :ok = GameMaster.reset_all()
 
@@ -45,53 +45,56 @@ defmodule TypoKart.GameMasterTest do
   end
 
   test "creates a game with some initialization" do
-    assert id = GameMaster.new_game(%Game{
-      players: [
-        %Player{
-          label: "foo",
-          color: "orange"
-        }
-      ],
-      course: %Course{
-        view_box: "0 0 800 800",
-        paths: [
-          %Path{
-            chars: 'fox'
-          },
-          %Path{
-            chars: 'blue'
-          }
-        ]
-      }
-    })
+    assert id =
+             GameMaster.new_game(%Game{
+               players: [
+                 %Player{
+                   label: "foo",
+                   color: "orange"
+                 }
+               ],
+               course: %Course{
+                 view_box: "0 0 800 800",
+                 paths: [
+                   %Path{
+                     chars: 'fox'
+                   },
+                   %Path{
+                     chars: 'blue'
+                   }
+                 ]
+               }
+             })
 
     assert %{
-      games: %{
-        ^id => %Game{
-          players: [
-            %Player{
-              label: "foo",
-              color: "orange"
-            }
-          ],
-          course: %Course{
-            view_box: "0 0 800 800"
-          },
-          char_ownership: [
-            [nil, nil, nil],
-            [nil, nil, nil, nil]
-          ]
-        }
-      }
-    } = GameMaster.state()
+             games: %{
+               ^id => %Game{
+                 players: [
+                   %Player{
+                     label: "foo",
+                     color: "orange"
+                   }
+                 ],
+                 course: %Course{
+                   view_box: "0 0 800 800"
+                 },
+                 char_ownership: [
+                   [nil, nil, nil],
+                   [nil, nil, nil, nil]
+                 ]
+               }
+             }
+           } = GameMaster.state()
   end
 
   test "char_from_course/2 when given a valid index" do
-    course = %Course{paths: [
-      %Path{
-        chars: String.to_charlist("The quick brown fox")
-      }
-    ]}
+    course = %Course{
+      paths: [
+        %Path{
+          chars: String.to_charlist("The quick brown fox")
+        }
+      ]
+    }
 
     path_char_index = %PathCharIndex{path_index: 0, char_index: 4}
 
@@ -99,11 +102,13 @@ defmodule TypoKart.GameMasterTest do
   end
 
   test "char_from_course/2 when given an invalid path index" do
-    course = %Course{paths: [
-      %Path{
-        chars: String.to_charlist("The quick brown fox")
-      }
-    ]}
+    course = %Course{
+      paths: [
+        %Path{
+          chars: String.to_charlist("The quick brown fox")
+        }
+      ]
+    }
 
     path_char_index = %PathCharIndex{path_index: 1, char_index: 4}
 
@@ -111,11 +116,13 @@ defmodule TypoKart.GameMasterTest do
   end
 
   test "char_from_course/2 when given an invalid char index" do
-    course = %Course{paths: [
-      %Path{
-        chars: String.to_charlist("The quick brown fox")
-      }
-    ]}
+    course = %Course{
+      paths: [
+        %Path{
+          chars: String.to_charlist("The quick brown fox")
+        }
+      ]
+    }
 
     path_char_index = %PathCharIndex{path_index: 0, char_index: 40}
 
@@ -134,8 +141,8 @@ defmodule TypoKart.GameMasterTest do
     }
 
     assert [
-      %PathCharIndex{path_index: 0, char_index: 4}
-    ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 3})
+             %PathCharIndex{path_index: 0, char_index: 4}
+           ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 3})
   end
 
   @tag :next_chars
@@ -150,8 +157,8 @@ defmodule TypoKart.GameMasterTest do
     }
 
     assert [
-      %PathCharIndex{path_index: 0, char_index: 0}
-    ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 2})
+             %PathCharIndex{path_index: 0, char_index: 0}
+           ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 2})
   end
 
   @tag :next_chars
@@ -176,8 +183,8 @@ defmodule TypoKart.GameMasterTest do
     }
 
     assert [
-      %PathCharIndex{path_index: 1, char_index: 1}
-    ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 1, char_index: 0})
+             %PathCharIndex{path_index: 1, char_index: 1}
+           ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 1, char_index: 0})
   end
 
   @tag :next_chars
@@ -202,8 +209,8 @@ defmodule TypoKart.GameMasterTest do
     }
 
     assert [
-      %PathCharIndex{char_index: 10, path_index: 0}
-    ] = GameMaster.next_chars(course, %PathCharIndex{char_index: 9, path_index: 0})
+             %PathCharIndex{char_index: 10, path_index: 0}
+           ] = GameMaster.next_chars(course, %PathCharIndex{char_index: 9, path_index: 0})
   end
 
   @tag :advance
@@ -219,11 +226,13 @@ defmodule TypoKart.GameMasterTest do
           ]
         }
       ],
-      course: %Course{paths: [
-        %Path{
-          chars: 'The quick brown fox'
-        }
-      ]}
+      course: %Course{
+        paths: [
+          %Path{
+            chars: 'The quick brown fox'
+          }
+        ]
+      }
     }
 
     assert game_id = GameMaster.new_game(game)
@@ -231,21 +240,41 @@ defmodule TypoKart.GameMasterTest do
     assert {:ok, game} = GameMaster.advance(game_id, 0, hd('q'))
 
     assert %Game{
-      players: [
-        %Player{
-          cur_path_char_indices: [
-            %PathCharIndex{
-              path_index: 0,
-              char_index: 5 # incremented
-            }
-          ]
-        }
-      ],
-      char_ownership: [
-        [nil, nil, nil, nil, 0, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,
- nil, nil, nil]
-      ]
-    } = game
+             players: [
+               %Player{
+                 cur_path_char_indices: [
+                   %PathCharIndex{
+                     path_index: 0,
+                     # incremented
+                     char_index: 5
+                   }
+                 ]
+               }
+             ],
+             char_ownership: [
+               [
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 0,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil,
+                 nil
+               ]
+             ]
+           } = game
   end
 
   @tag :advance
@@ -292,15 +321,18 @@ defmodule TypoKart.GameMasterTest do
     assert {:ok, game} = GameMaster.advance(game_id, 0, hd('A'))
 
     assert %Game{
-      players: [%Player{
-        cur_path_char_indices: [
-          %PathCharIndex{
-            path_index: 1,
-            char_index: 1 # moved onto new path
-          }
-        ]
-      }]
-    } = game
+             players: [
+               %Player{
+                 cur_path_char_indices: [
+                   %PathCharIndex{
+                     path_index: 1,
+                     # moved onto new path
+                     char_index: 1
+                   }
+                 ]
+               }
+             ]
+           } = game
   end
 
   @tag :advance
@@ -347,15 +379,18 @@ defmodule TypoKart.GameMasterTest do
     assert {:ok, game} = GameMaster.advance(game_id, 0, hd('b'))
 
     assert %Game{
-      players: [%Player{
-        cur_path_char_indices: [
-          %PathCharIndex{
-            path_index: 0,
-            char_index: 11 # advanced along the same path
-          }
-        ]
-      }]
-    } = game
+             players: [
+               %Player{
+                 cur_path_char_indices: [
+                   %PathCharIndex{
+                     path_index: 0,
+                     # advanced along the same path
+                     char_index: 11
+                   }
+                 ]
+               }
+             ]
+           } = game
   end
 
   @tag :advance
