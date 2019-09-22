@@ -554,4 +554,84 @@ defmodule TypoKart.GameMasterTest do
 
     assert {:error, _} = GameMaster.advance(game_id, 0, hd('s'))
   end
+
+  @tag :text_segments
+  test "text_segments/2" do
+    game = %Game{
+      players: [
+        %Player{
+          color: "orange"
+        },
+        %Player{
+          color: "blue"
+        }
+      ],
+      course: %Course{
+        paths: [
+          %Path{
+            chars: 'The quick brown fox'
+          },
+          %Path{
+            chars: 'A slow green turtle'
+          }
+        ]
+      },
+      char_ownership: [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+
+    assert [
+      {"The quick b", "orange"},
+      {"rown ", ""},
+      {"fox", "blue"}
+    ] = GameMaster.text_segments(game, 0)
+
+    assert [
+      {"A slo", "blue"},
+      {"w green tu", ""},
+      {"rtle", "orange"},
+    ] = GameMaster.text_segments(game, 1)
+  end
 end
