@@ -221,7 +221,7 @@ defmodule TypoKart.GameMasterTest do
       ],
       course: %Course{paths: [
         %Path{
-          chars: String.to_charlist("The quick brown fox")
+          chars: 'The quick brown fox'
         }
       ]}
     }
@@ -240,6 +240,10 @@ defmodule TypoKart.GameMasterTest do
             }
           ]
         }
+      ],
+      char_ownership: [
+        [nil, nil, nil, nil, 0, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,
+ nil, nil, nil]
       ]
     } = game
   end

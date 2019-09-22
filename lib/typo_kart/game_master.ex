@@ -42,7 +42,7 @@ defmodule TypoKart.GameMaster do
       %Player{cur_path_char_indices: cur_path_char_indices} = player <- Enum.at(players, player_index),
       %PathCharIndex{} = valid_index <- Enum.find(cur_path_char_indices, &(char_from_course(course, &1) == key_code)),
       updated_player <- Map.put(player, :cur_path_char_indices, next_chars(course, valid_index)),
-      updated_game <- Map.put(game, :players, List.replace_at(players, player_index, updated_player)),
+      updated_game <- update_char_ownership(game, valid_index, player_index) |> Map.put(:players, List.replace_at(players, player_index, updated_player)),
       updated_state <- put_in(state, [:games, game_id], updated_game)
     do
       # TODO:
@@ -123,6 +123,19 @@ defmodule TypoKart.GameMaster do
       Enum.map(paths, fn %Path{chars: chars} ->
         Enum.map(chars, fn _ -> nil end)
       end)
+    )
+  end
+
+  defp update_char_ownership(%Game{char_ownership: char_ownership} = game, %PathCharIndex{path_index: path_index, char_index: char_index}, player_index) do
+    game
+    |> Map.put(
+      :char_ownership,
+      char_ownership
+      |> List.replace_at(
+        path_index,
+        Enum.at(char_ownership, path_index)
+        |> List.replace_at(char_index, player_index)
+      )
     )
   end
 end
