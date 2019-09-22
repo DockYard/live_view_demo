@@ -57,5 +57,9 @@ Hooks.CurrentText = {
   }
 }
 
+window.addEventListener('keydown', function(e) {
+  e.keyCode == 32 && e.preventDefault()
+})
+
 let liveSocket = new LiveSocket("/live", Socket, { hooks: Hooks })
 liveSocket.connect()
