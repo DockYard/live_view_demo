@@ -63,6 +63,9 @@ defmodule TypoKartWeb.RaceLive do
     #
     # connected?(socket)
 
+
+    chars = 'Two households, both alike in dignity, In fair Verona, where we lay our scene,'
+
     game = %Game{
       players: [
         %Player{
@@ -79,15 +82,12 @@ defmodule TypoKartWeb.RaceLive do
         marker_center_offset_y: 20,
         paths: [
           %Path{
-            chars:
-              String.to_charlist(
-                "Two households, both alike in dignity, In fair Verona, where we lay our scene,"
-              ),
-            d:
-              "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z"
+            chars: chars,
+            d: "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z"
           }
         ]
-      }
+      },
+      char_ownership: [ Enum.map(chars, fn _ -> nil end) ]
     }
 
     game_id = GameMaster.new_game(game)
@@ -96,7 +96,7 @@ defmodule TypoKartWeb.RaceLive do
       :ok,
       assign(
         socket,
-        status_class: "",
+        error_status: "",
         game: game,
         game_id: game_id,
         player_index: 0,
@@ -115,7 +115,7 @@ defmodule TypoKartWeb.RaceLive do
 
   def handle_event(
         "key",
-        %{"keyCode" => key_code},
+        %{"key" => key},
         %{
           assigns: %{
             game_id: game_id,
@@ -123,17 +123,17 @@ defmodule TypoKartWeb.RaceLive do
           }
         } = socket
       ) do
-    case GameMaster.advance(game_id, player_index, key_code) do
+    case GameMaster.advance(game_id, player_index, String.to_charlist(key) |> hd()) do
       {:ok, game} ->
-        {:noreply, assign(socket, status_class: "", game: game)}
+        {:noreply, assign(socket, error_status: "", game: game, text_segments: GameMaster.text_segments(game, player_index))}
 
       {:error, _} ->
-        {:noreply, assign(socket, status_class: "error")}
+        {:noreply, assign(socket, error_status: "show")}
     end
   end
 
   def handle_event("key", _, socket),
-    do: {:noreply, assign(socket, status_class: "error")}
+    do: {:noreply, assign(socket, error_status: "show")}
 
   def handle_event(
         "adjust_rotation",

@@ -54,3 +54,12 @@ path.secondary {
   stroke: #d3d3d3;
   stroke-width: 50;
 }
+
+.marker.error.show {
+  display: unset;
+}
+
+.marker.error {
+  display: none;
+  fill: red;
+}

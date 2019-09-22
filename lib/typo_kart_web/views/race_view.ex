@@ -4,6 +4,7 @@ defmodule TypoKartWeb.RaceView do
   alias TypoKart.{
     Course,
     Game,
+    GameMaster,
     Player
   }
 
@@ -27,9 +28,6 @@ defmodule TypoKartWeb.RaceView do
         marker_translate_offset_x,
         marker_translate_offset_y
       ) do
-    marker_translate_offset_x = -8
-    marker_translate_offset_y = 24
-
     "rotate(#{cur_char_rotation + marker_rotation_offset}, #{cur_char_x}, #{cur_char_y}) translate(#{
       cur_char_x - marker_center_offset_x + marker_translate_offset_x
     }, #{cur_char_y - marker_center_offset_y + marker_translate_offset_y}) scale(0.07)"
@@ -46,13 +44,7 @@ defmodule TypoKartWeb.RaceView do
 
   def map_angle(cur_char_rotation), do: -1 * cur_char_rotation
 
-  def text_segments(%Game{} = _game) do
-    # TODO: implement this for real
-    [
-      {"foo bar", "orange"},
-      {"blue baz", "blue"}
-    ]
-  end
+  defdelegate text_segments(game, path_index), to: GameMaster
 
   defp cur_path_char_index(%Game{} = game, player_index) when is_integer(player_index) do
     %Player{cur_path_char_indices: cur_path_char_indices} = Enum.at(game.players, player_index)
