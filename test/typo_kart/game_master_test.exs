@@ -624,16 +624,16 @@ defmodule TypoKart.GameMasterTest do
 
     assert [
       {"The quick b", "orange"},
-      {"rown ", ""},
+      {"rown ", "unowned"},
       {"fox", "blue"}
     ] = GameMaster.text_segments(game, 0)
 
     assert [
       {"A", "orange"},
       {" slo", "blue"},
-      {"w green tu", ""},
+      {"w green tu", "unowned"},
       {"rtl", "orange"},
-      {"e", ""},
+      {"e", "unowned"},
     ] = GameMaster.text_segments(game, 1)
   end
 end

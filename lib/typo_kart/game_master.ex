@@ -178,10 +178,12 @@ defmodule TypoKart.GameMaster do
   |> Enum.map(&(
       {
         cur_path_chars |> Enum.slice(elem(&1, 1)) |> List.to_string(),
-        if elem(&1,0) == nil do "" else Enum.at(player_colors, elem(&1, 0)) end
+        if elem(&1,0) == nil do unowned_class() else Enum.at(player_colors, elem(&1, 0)) end
       }
     ))
   end
+
+  defp unowned_class, do: "unowned"
 
   defp initialize_char_ownership(%Game{course: %Course{paths: paths}} = game) do
     game
