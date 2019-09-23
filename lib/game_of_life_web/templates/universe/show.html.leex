@@ -8,20 +8,32 @@
       <span class="title-word life">life</span>
   </div>
 
-  <%= form_tag "#", phx_change: "update_speed" do %>
-    <div class="form-control">
-      <%= label class: "form-label inline middle" do %>1<% end %>
+  <div class="form-group">
+    <%= form_tag "#", phx_change: "update_speed" do %>
+      <div class="form-control">
+        <%= label class: "form-label inline middle" do %>1<% end %>
 
-      <%= range_input :universe, :speed,
-        class: "form-input slider middle",
-        min: "1", max: "20", step: "1",
-        value: @speed %>
+        <%= range_input :universe, :speed,
+          class: "form-input slider middle",
+          min: "1", max: "20", step: "1",
+          value: @speed %>
 
-      <%= label class: "form-label inline middle" do %>20<% end %>
-    </div>
+        <%= label class: "form-label inline middle" do %>20<% end %>
+      </div>
 
-    <p class="help-text">Current speed: <%= @speed %>fps</p>
-  <% end %>
+      <p class="help-text">Current speed: <%= @speed %></p>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form_tag "#", class: "inline", phx_submit: "toggle_playing" do %>
+      <%= submit (if @playing, do: "Pause", else: "Play"), class: "button" %>
+    <% end %>
+
+    <%= form_tag "#", class: "inline", phx_submit: "reset" do %>
+      <%= submit "Reset", class: "button" %>
+    <% end %>
+  </div>
 
   <div>
     <p class="fancy">Powered by</p>
@@ -32,5 +44,5 @@
 </section>
 
 <section class="universe">
-  <%= render_generation(@generation, @dimensions) %>
+  <%= render_universe(@universe) %>
 </section>
