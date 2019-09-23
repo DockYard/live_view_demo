@@ -21,7 +21,7 @@ import LiveSocket from "phoenix_live_view"
 const Hooks = {}
 
 function getCourse(){
-  return document.getElementById('course')
+  return document.getElementById('the-course')
 }
 
 function getCurrentTextPath() {

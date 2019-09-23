@@ -1,9 +1,9 @@
-<div id="course" data-current-text-path-id="<%= cur_text_path_id(@game, @player_index) %>" data-current-char-index="<%= cur_char_index(@game, @player_index) %>" phx-keyup="key" phx-target="window" phx-hook="CurrentText">
+<div id="the-course" data-current-text-path-id="<%= cur_text_path_id(@game, @player_index) %>" data-current-char-index="<%= cur_char_index(@game, @player_index) %>" phx-keyup="key" phx-target="window" phx-hook="CurrentText">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="<%= @game.course.view_box %>">
     <g transform="<%= map_transform(@game.course, @cur_char_rotation) %>">
       <%= for {path, path_index} <- Enum.with_index(@game.course.paths) do %>
-        <path class="secondary path-<%= path_index %>" d="<%= path.d %>"/>
-        <path class="primary path-<%= path_index %>" id= "primary-path-<%= path_index %>" d="<%= path.d %>"/>
+        <path class="course secondary path-<%= path_index %>" d="<%= path.d %>"/>
+        <path class="course primary path-<%= path_index %>" id= "primary-path-<%= path_index %>" d="<%= path.d %>"/>
         <text dy="10">
           <textPath id="text-path-<%= path_index %>" href="#primary-path-<%= path_index %>">
             <%= for {text, class} <- text_segments(@game, path_index) do %><tspan class="<%= class %>"><%= text %></tspan><% end %>

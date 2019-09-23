@@ -3,31 +3,39 @@
 /* @import "./phoenix.css"; */
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
 
-.map text {
+#the-course {
+  width: 80%;
+  margin: auto;
+}
+
+text {
   stroke: rgb(77, 71, 71);
   font-size: 24pt;
   letter-spacing: 4px;
   font-family: sans-serif;
 }
-.map {
-  width: 60%;
-  margin: auto;
-}
+
 .orange {
   fill: orange;
   stroke: orange;
 }
-/*
-.before-text {
-  fill: orange;
-  stroke: orange;
+
+.blue {
+  fill: blue;
+  stroke: blue;
 }
-*/
-.after-text {
+
+tspan {
+  fill-opacity: 0.5;
+}
+
+.unowned {
   fill: lightgrey;
   stroke: darkgrey;
+  fill-opacity: 1;
   stroke-width: 2;
 }
+
 .cur-text {
   fill: black;
   stroke: black;
@@ -39,12 +47,10 @@
   stroke: red;
 }
 
-.map path.course {
+path.course {
   fill-opacity: 0;
 }
-.map g.marker {
-  fill-opacity: 1;
-}
+
 path.primary {
   stroke: #ecf1f8;
   stroke-width: 45;
