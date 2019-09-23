@@ -29,7 +29,7 @@
     <div class="form-control">
       <%= label class: "form-label inline middle" do %>Select Template: <% end %>
 
-      <%= select :universe, :template, template_names %>
+      <%= select :universe, :template, template_names() %>
     </div>
 
     <p class="help-text">Current template: <%= @template %></p>
