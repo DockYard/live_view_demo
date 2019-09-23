@@ -26,8 +26,8 @@ defmodule TypoKart.Courses do
   defp paths(path_data_list, chars_list) when is_list(path_data_list) and is_list(chars_list) do
     Enum.with_index(path_data_list)
     |> Enum.map(fn {d, index} -> %TypoKart.Path{
-      d: d,
-      chars: Enum.at(chars_list, index) |> String.to_charlist()
+      d: String.trim(d),
+      chars: Enum.at(chars_list, index) |> String.trim() |> String.to_charlist()
     } end)
   end
 end
