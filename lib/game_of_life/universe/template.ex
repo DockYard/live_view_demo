@@ -3,11 +3,16 @@ defmodule GameOfLife.Universe.Template do
   alias GameOfLife.Universe.Dimensions
   alias GameOfLife.Cell.Position
 
-  def dimensions(:beacon), do: %Dimensions{width: 6, height: 6}
-  def dimensions(:pulsar), do: %Dimensions{width: 17, height: 17}
-  def dimensions(:penta_decathlon), do: %Dimensions{width: 11, height: 18}
+  def dimensions("random"), do: %Dimensions{width: 16, height: 16}
+  def dimensions("beacon"), do: %Dimensions{width: 6, height: 6}
+  def dimensions("pulsar"), do: %Dimensions{width: 17, height: 17}
+  def dimensions("penta_decathlon"), do: %Dimensions{width: 11, height: 18}
 
-  def initial_state(:beacon) do
+  def names do
+    ["random", "beacon", "pulsar", "penta_decathlon"]
+  end
+
+  def initial_state("beacon") do
     [
       %Position{x: 1, y: 1},
       %Position{x: 1, y: 2},
@@ -18,7 +23,7 @@ defmodule GameOfLife.Universe.Template do
     ]
   end
 
-  def initial_state(:pulsar) do
+  def initial_state("pulsar") do
     [
       %Position{x: 4, y: 2},
       %Position{x: 5, y: 2},
@@ -71,7 +76,7 @@ defmodule GameOfLife.Universe.Template do
     ]
   end
 
-  def initial_state(:penta_decathlon) do
+  def initial_state("penta_decathlon") do
     [
       %Position{x: 4, y: 5},
       %Position{x: 4, y: 6},

@@ -8,9 +8,6 @@ defmodule GameOfLifeWeb.UniverseLive do
   def render(assigns), do: GameOfLifeWeb.UniverseView.render("show.html", assigns)
 
   def mount(_session, socket) do
-    # {:ok, load_universe(socket, %{template: :beacon, dimensions: Template.dimensions(:beacon)})}
-    # {:ok, load_universe(socket, %{template: :pulsar, dimensions: Template.dimensions(:pulsar)})}
-
     {:ok, load_universe(socket)}
   end
 
@@ -32,6 +29,14 @@ defmodule GameOfLifeWeb.UniverseLive do
 
   def handle_event("reset", _params, socket) do
     {:noreply, reset_universe(socket)}
+  end
+
+  def handle_event("set_template", %{"universe" => %{ "template" => template }}, socket) do
+    {:noreply, set_template(socket, template)}
+  end
+
+  defp set_template(socket, template) do
+    load_universe(socket, %{template: template, dimensions: Template.dimensions(template)})
   end
 
   defp tick(socket) do
@@ -72,8 +77,8 @@ defmodule GameOfLifeWeb.UniverseLive do
       socket,
       playing: Map.get(opts, :playing, false),
       speed: Map.get(opts, :speed, 5),
-      template: Map.get(opts, :template, :random),
-      dimensions: Map.get(opts, :dimensions, %Dimensions{width: 32, height: 32})
+      template: Map.get(opts, :template, "random"),
+      dimensions: Map.get(opts, :dimensions, Template.dimensions("random"))
     )
   end
 

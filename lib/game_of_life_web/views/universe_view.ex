@@ -4,6 +4,7 @@ defmodule GameOfLifeWeb.UniverseView do
   alias GameOfLife.Universe
   alias GameOfLife.Universe.Generation
   alias GameOfLife.Universe.Dimensions
+  alias GameOfLife.Universe.Template
   alias GameOfLife.Cell.Position
 
   def render_universe(%Universe{generation: generation, dimensions: %Dimensions{width: width, height: height}}) do
@@ -16,5 +17,9 @@ defmodule GameOfLifeWeb.UniverseView do
         end)
       end
     end)
+  end
+
+  def template_names do
+    Template.names
   end
 end

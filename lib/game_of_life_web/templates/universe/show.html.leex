@@ -25,6 +25,16 @@
     <% end %>
   </div>
 
+  <%= form_tag "#", phx_change: "set_template" do %>
+    <div class="form-control">
+      <%= label class: "form-label inline middle" do %>Select Template: <% end %>
+
+      <%= select :universe, :template, template_names %>
+    </div>
+
+    <p class="help-text">Current template: <%= @template %></p>
+  <% end %>
+
   <div class="form-group">
     <%= form_tag "#", class: "inline", phx_submit: "toggle_playing" do %>
       <%= submit (if @playing, do: "Pause", else: "Play"), class: "button" %>

@@ -6,7 +6,7 @@ defmodule GameOfLife.Universe do
   alias GameOfLife.Universe.Dimensions
   alias GameOfLife.Cell.Position
 
-  defstruct template: :random, dimensions: %Dimensions{width: 0, height: 0}, generation: %Generation{}
+  defstruct template: "random", dimensions: %Dimensions{width: 0, height: 0}, generation: %Generation{}
 
   def init(template, %Dimensions{} = dimensions) do
     %Universe{
@@ -18,7 +18,7 @@ defmodule GameOfLife.Universe do
 
   def tick(%Universe{} = universe), do: %{universe | generation: Generation.init(tick_cells(universe))}
 
-  defp initialize_cells(:random, %Dimensions{width: width, height: height}) do
+  defp initialize_cells("random", %Dimensions{width: width, height: height}) do
     Enum.flat_map(0..(height - 1), fn y ->
       Enum.map(0..(width - 1), fn x ->
         %Cell{
