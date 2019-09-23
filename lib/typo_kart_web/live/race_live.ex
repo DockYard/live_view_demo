@@ -3,6 +3,7 @@ defmodule TypoKartWeb.RaceLive do
 
   alias TypoKart.{
     Course,
+    Courses,
     Game,
     GameMaster,
     Path,
@@ -64,33 +65,19 @@ defmodule TypoKartWeb.RaceLive do
     # connected?(socket)
 
 
-    chars = 'Two households, both alike in dignity, In fair Verona, where we lay our scene,'
+    {:ok, course} = Courses.load("course1")
 
-    game = %Game{
+    game_id = GameMaster.new_game(%Game{
       players: [
         %Player{
           color: "orange",
           label: "P1"
         }
       ],
-      course: %Course{
-        initial_rotation: 150,
-        base_translate_x: 250,
-        base_translate_y: 165,
-        view_box: "0, 0, 1000, 1000",
-        marker_center_offset_x: 20,
-        marker_center_offset_y: 20,
-        paths: [
-          %Path{
-            chars: chars,
-            d: "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z"
-          }
-        ]
-      },
-      char_ownership: [ Enum.map(chars, fn _ -> nil end) ]
-    }
+      course: course
+    })
 
-    game_id = GameMaster.new_game(game)
+    game = GameMaster.state() |> get_in([:games, game_id])
 
     {
       :ok,
