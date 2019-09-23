@@ -19,7 +19,5 @@ defmodule GameOfLifeWeb.UniverseView do
     end)
   end
 
-  def template_names do
-    Template.names
-  end
+  def template_names(), do: Template.names()
 end

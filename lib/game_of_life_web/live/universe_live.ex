@@ -3,7 +3,6 @@ defmodule GameOfLifeWeb.UniverseLive do
 
   alias GameOfLife.Universe
   alias GameOfLife.Universe.Template
-  alias GameOfLife.Universe.Dimensions
 
   def render(assigns), do: GameOfLifeWeb.UniverseView.render("show.html", assigns)
 
@@ -31,7 +30,7 @@ defmodule GameOfLifeWeb.UniverseLive do
     {:noreply, reset_universe(socket)}
   end
 
-  def handle_event("set_template", %{"universe" => %{ "template" => template }}, socket) do
+  def handle_event("set_template", %{"universe" => %{"template" => template}}, socket) do
     {:noreply, set_template(socket, template)}
   end
 
