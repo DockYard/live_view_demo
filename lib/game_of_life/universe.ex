@@ -1,12 +1,7 @@
 defmodule GameOfLife.Universe do
   use GenServer
-  require Logger
 
-  @moduledoc """
-  GameOfLife.Universe.start_link("u1", {5, 5})
-  GameOfLife.Universe.tick("u1")
-  GameOfLife.Universe.info("u1", 0)
-  """
+  require Logger
 
   alias GameOfLife.Cell
   alias GameOfLife.Universe.Template
@@ -24,13 +19,12 @@ defmodule GameOfLife.Universe do
     )
   end
 
-  def stop(name), do: GenServer.stop(via_tuple(name))
+  def stop(name), do: GenServer.stop(via_tuple(name), :normal)
 
   def crash(name), do: GenServer.cast(via_tuple(name), :crash)
 
   def tick(name), do: GenServer.call(via_tuple(name), :tick)
 
-  def info(name, generation_num), do: GenServer.call(via_tuple(name), {:info, generation_num})
   def info(name), do: GenServer.call(via_tuple(name), :info)
 
   ## Server
@@ -39,25 +33,19 @@ defmodule GameOfLife.Universe do
   def init(%{name: name} = state) do
     GameOfLife.Cell.Supervisor.start_link(name)
 
-    generation = %Generation{cells: initialize_cells(state)}
-
-    {:ok, add_generation(state, generation)}
+    {:ok, Map.put(state, :current_generation, %Generation{cells: initialize_cells(state)})}
   end
 
   @impl true
   def handle_call(:tick, _from, state) do
-    generation = %Generation{cells: each_cell(state, &Cell.tick/1)}
+    new_generation = %Generation{cells: each_cell(state, &Cell.tick/1)}
+    state = Map.put(state, :current_generation, new_generation)
 
-    {:reply, generation, add_generation(state, generation)}
+    {:reply, new_generation, state}
   end
 
   @impl true
-  def handle_call(:info, _from, state), do: {:reply, get_generation(state), state}
-
-  @impl true
-  def handle_call({:info, generation_num}, _from, state) do
-    {:reply, get_generation(state, generation_num), state}
-  end
+  def handle_call(:info, _from, %{current_generation: generation} = state), do: {:reply, generation, state}
 
   @impl true
   def handle_cast(:crash, _state), do: raise("💥kaboom💥")
@@ -104,14 +92,12 @@ defmodule GameOfLife.Universe do
     |> Map.new()
   end
 
-  defp each_cell(%{name: name, dimensions: %Dimensions{width: width, height: height}} = state, f) do
-    generation = get_generation(state)
-
+  defp each_cell(%{name: name, current_generation: current_generation, dimensions: %Dimensions{width: width, height: height}}, f) do
     Enum.flat_map(0..(height - 1), fn y ->
       Enum.map(0..(width - 1), fn x ->
         Task.async(fn ->
           position = %Position{x: x, y: y}
-          result = f.(%{universe_name: name, position: position, generation: generation})
+          result = f.(%{universe_name: name, position: position, generation: current_generation})
 
           {position, result}
         end)
@@ -121,18 +107,6 @@ defmodule GameOfLife.Universe do
     |> Enum.map(fn {task, res} -> res || Task.shutdown(task, :brutal_kill) end)
     |> Enum.map(fn {:ok, res} -> res end)
     |> Map.new()
-  end
-
-  defp add_generation(state, generation) do
-    history = Map.get(state, :history, [])
-
-    Map.put(state, :history, history ++ [generation])
-  end
-
-  defp get_generation(state, generation_num \\ -1) do
-    state
-    |> Map.get(:history)
-    |> Enum.at(generation_num)
   end
 
   defp via_tuple(name), do: {:via, Registry, {:gol_registry, tuple(name)}}
