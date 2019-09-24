@@ -3,7 +3,7 @@ defmodule GameOfLife.Universe.Template do
   alias GameOfLife.Universe.Dimensions
   alias GameOfLife.Cell.Position
 
-  def dimensions("random"), do: %Dimensions{width: 16, height: 16}
+  def dimensions("random"), do: %Dimensions{width: 100, height: 100}
   def dimensions("beacon"), do: %Dimensions{width: 6, height: 6}
   def dimensions("pulsar"), do: %Dimensions{width: 17, height: 17}
   def dimensions("rocket"), do: %Dimensions{width: 21, height: 21}

@@ -80,6 +80,31 @@ div[data-phx-view="GameOfLifeWeb.UniverseLive"] {
     flex: 1;
     flex-direction: column;
     justify-content: center;
+
+    &.xxl .cell {
+        width: 1px;
+        height: 1px;
+    }
+
+    &.xl .cell {
+        width: 3px;
+        height: 3px;
+    }
+
+    &.lg .cell {
+        width: 5px;
+        height: 5px;
+    }
+
+    &.md .cell {
+        width: 10px;
+        height: 10px;
+    }
+
+    &.sm .cell {
+        width: 15px;
+        height: 15px;
+    }
 }
 
 .cell-row {
@@ -89,8 +114,6 @@ div[data-phx-view="GameOfLifeWeb.UniverseLive"] {
 .cell {
     border: 1px solid #000;
     box-sizing: content-box;
-    width: 10px;
-    height: 10px;
 }
 
 .cell.alive {
