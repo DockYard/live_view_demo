@@ -5,7 +5,7 @@
         <path class="course secondary path-<%= path_index %>" d="<%= path.d %>"/>
         <path class="course primary path-<%= path_index %>" id= "primary-path-<%= path_index %>" d="<%= path.d %>"/>
         <text dy="10">
-          <textPath id="text-path-<%= path_index %>" href="#primary-path-<%= path_index %>">
+          <textPath id="text-path-<%= path_index %>" href="#primary-path-<%= path_index %>" <%= text_path_extra_attrs(@game, path_index) %>>
             <%= for {text, class} <- text_segments(@game, path_index) do %><tspan class="<%= class %>"><%= text %></tspan><% end %>
           </textPath>
         </text>

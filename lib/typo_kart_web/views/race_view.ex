@@ -44,6 +44,15 @@ defmodule TypoKartWeb.RaceView do
 
   def map_angle(cur_char_rotation), do: -1 * cur_char_rotation
 
+  def text_path_extra_attrs(%Game{course: %{paths: paths}}, path_index) when is_integer(path_index) do
+    paths
+    |> Enum.at(path_index)
+    |> Map.get(:text_path_extra_attrs)
+    |> Map.to_list()
+    |> Enum.map(fn {key, val} -> "#{key}=#{val}" end)
+    |> Enum.join(" ")
+  end
+
   defdelegate text_segments(game, path_index), to: GameMaster
 
   defp cur_path_char_index(%Game{} = game, player_index) when is_integer(player_index) do
