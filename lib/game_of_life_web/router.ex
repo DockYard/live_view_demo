@@ -17,7 +17,6 @@ defmodule GameOfLifeWeb.Router do
   scope "/", GameOfLifeWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
-    live "/universe", UniverseLive
+    live "/", UniverseLive
   end
 end
