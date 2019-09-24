@@ -1,5 +1,5 @@
 defmodule TypoKart.Courses do
-  @course_dir "priv/static/courses"
+  @course_dir "assets/static/courses"
   alias TypoKart.{
     Course
   }
