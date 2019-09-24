@@ -7,6 +7,7 @@
     <title>Flame of Life</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <link href="https://fonts.googleapis.com/css?family=Chau+Philomene+One|Dancing+Script:700&display=swap" rel="stylesheet"> 
+    <link rel="icon" href="images/favicon.png">
   </head>
 
   <body>
