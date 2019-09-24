@@ -27,9 +27,9 @@ defmodule TypoKart.Courses do
     Enum.with_index(paths)
     |> Enum.map(fn {path, index} -> %TypoKart.Path{
       d: Map.get(path, "d") |> String.trim(),
-      extra_attrs: Map.get(path, "extra_attrs"),
+      extra_attrs: Map.get(path, "extra_attrs", %{}),
       chars: Enum.at(text_paths, index) |> Map.get("chars") |> String.trim() |> String.to_charlist(),
-      text_path_extra_attrs: Enum.at(text_paths, index) |> Map.get("extra_attrs")
+      text_path_extra_attrs: Enum.at(text_paths, index) |> Map.get("extra_attrs", %{})
     } end)
   end
 end
