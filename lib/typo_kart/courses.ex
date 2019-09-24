@@ -7,7 +7,7 @@ defmodule TypoKart.Courses do
   @spec load(binary()) :: {:ok, Course.t} | {:error, binary()}
   def load(name) when is_binary(name) do
     with {:ok, data} <- Path.join(File.cwd!(), "#{@course_dir}/#{name}.yml") |> YamlElixir.read_from_file(),
-      paths <- paths(Map.get(data, "paths"), Map.get(data, "chars")) do
+      paths <- paths(data) do
       {:ok, %Course{
         paths: paths,
         initial_rotation: Map.get(data, "initial_rotation"),
@@ -23,11 +23,13 @@ defmodule TypoKart.Courses do
     end
   end
 
-  defp paths(path_data_list, chars_list) when is_list(path_data_list) and is_list(chars_list) do
-    Enum.with_index(path_data_list)
-    |> Enum.map(fn {d, index} -> %TypoKart.Path{
-      d: String.trim(d),
-      chars: Enum.at(chars_list, index) |> String.trim() |> String.to_charlist()
+  defp paths(%{"paths" => paths, "text_paths" => text_paths}) do
+    Enum.with_index(paths)
+    |> Enum.map(fn {path, index} -> %TypoKart.Path{
+      d: Map.get(path, "d") |> String.trim(),
+      extra_attrs: Map.get(path, "extra_attrs"),
+      chars: Enum.at(text_paths, index) |> Map.get("chars") |> String.trim() |> String.to_charlist(),
+      text_path_extra_attrs: Enum.at(text_paths, index) |> Map.get("extra_attrs")
     } end)
   end
 end

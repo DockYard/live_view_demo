@@ -1,35 +1,45 @@
 paths:
-  - '
-    M 400 150
-    c 120,100 120,350 0,460
-    '
-  - '
-    M 700 610
-    c -120,-100 -120,-350 0,-460
-    '
-  - '
-    M 250 100
-    c 150,0 150,100 300,100
-    c 150,0 150,-100 300,-100
-    a 1,1,0,0,1,0,560
-    c -150,0 -150,-100 -300,-100
-    c -150,0 -150,100 -300,100
-    a 1,1,0,0,1,0,-560
-    z
-    '
-chars:
-  - '
-    52 6f 6d 65 6f 26
-    '
-  - '
-    4a 75 6c 69 65 74
-    '
-  - '
-    Two households, both alike in dignity,
-    In fair Verona, where we lay our scene,
-    From ancient grudge break to new mutiny,
-    Where civil blood makes civil hands unclean.
-    '
+  -
+    d: '
+       M 400 150
+       c 120,100 120,350 0,460
+       '
+    extra_attrs:
+      stroke-linecap: 'round'
+  - 
+    d: '
+       M 700 610
+       c -120,-100 -120,-350 0,-460
+       '
+    extra_attrs:
+      stroke-linecap: 'round'
+  - 
+    d: '
+       M 250 100
+       c 150,0 150,100 300,100
+       c 150,0 150,-100 300,-100
+       a 1,1,0,0,1,0,560
+       c -150,0 -150,-100 -300,-100
+       c -150,0 -150,100 -300,100
+       a 1,1,0,0,1,0,-560
+       z
+       '
+text_paths:
+  - 
+    chars: '52 6f 6d 65 6f 26'
+    extra_attrs:
+      startOffset: 90
+  - 
+    chars: '4a 75 6c 69 65 74'
+    extra_attrs:
+      startOffset: 90
+  - 
+    chars: '
+           Two households, both alike in dignity,
+           In fair Verona, where we lay our scene,
+           From ancient grudge break to new mutiny,
+           Where civil blood makes civil hands unclean.
+           '
 initial_rotation: 0
 base_translate_x: 75 
 base_translate_y: 0
