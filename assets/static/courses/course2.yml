@@ -1,39 +1,38 @@
 paths:
   - '
-    M 80,80
-    a 100,100,0,0,1,250,0
-    a 100,100,0,0,0,150,0
-    a 100,100,0,0,1,150,0
-    a 110,110,0,0,1,0,150
-    a 100,100,0,0,1,-150,0
-    a 100,100,0,0,0,-150,0
-    a 100,100,0,0,1,-150,0
-    A 110,110,0,0,1,80,80
-    Z
+    M 400 150
+    c 120,100 120,350 0,460
     '
   - '
-    M230,80a110,110,0,0,1,0,150
+    M 700 610
+    c -120,-100 -120,-350 0,-460
     '
   - '
-    M380,230a110,110,0,0,1,0-150
+    M 250 100
+    c 150,0 150,100 300,100
+    c 150,0 150,-100 300,-100
+    a 1,1,0,0,1,0,560
+    c -150,0 -150,-100 -300,-100
+    c -150,0 -150,100 -300,100
+    a 1,1,0,0,1,0,-560
+    z
     '
 chars:
+  - '
+    52 6f 6d 65 6f 26
+    '
+  - '
+    4a 75 6c 69 65 74
+    '
   - '
     Two households, both alike in dignity,
     In fair Verona, where we lay our scene,
     From ancient grudge break to new mutiny,
     Where civil blood makes civil hands unclean.
-    From forth...
     '
-  - '
-    Foo bar
-    '
-  - '
-    Blue baz
-    '
-initial_rotation: 150
-base_translate_x: 250
-base_translate_y: 165
-view_box: '0, 0, 1000, 1000'
+initial_rotation: 0
+base_translate_x: 75 
+base_translate_y: 0
+view_box: '0, 0, 1250, 1000'
 marker_center_offset_x: 20
 marker_center_offset_y: 20
