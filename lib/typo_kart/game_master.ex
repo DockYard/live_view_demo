@@ -97,7 +97,7 @@ defmodule TypoKart.GameMaster do
   end
 
   @spec next_chars(Course.t(), PathCharIndex.t()) :: list(PathCharIndex.t())
-  def next_chars(%Course{paths: paths, path_branches: path_branches}, %PathCharIndex{
+  def next_chars(%Course{paths: paths, path_connections: path_connections}, %PathCharIndex{
         path_index: cur_path_index,
         char_index: cur_char_index
       } = cur_pci) do
@@ -117,7 +117,7 @@ defmodule TypoKart.GameMaster do
 
     # 2. If the current char is a connection point to another path, then add that char on the other path.
     next_chars_list ++
-      Enum.reduce(path_branches, [], fn
+      Enum.reduce(path_connections, [], fn
         {%PathCharIndex{} = pci_from, %PathCharIndex{} = pci_to}, acc
         when pci_from == cur_pci ->
           acc ++ [pci_to]

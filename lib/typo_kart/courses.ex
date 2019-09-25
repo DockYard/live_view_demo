@@ -9,10 +9,10 @@ defmodule TypoKart.Courses do
   def load(name) when is_binary(name) do
     with {:ok, data} <- Path.join(File.cwd!(), "#{@course_dir}/#{name}.yml") |> YamlElixir.read_from_file(),
       paths <- paths(data),
-      path_branches <- path_branches(data) do
+      path_connections <- path_connections(data) do
       {:ok, %Course{
         paths: paths,
-        path_branches: path_branches,
+        path_connections: path_connections,
         initial_rotation: Map.get(data, "initial_rotation"),
         base_translate_x: Map.get(data, "base_translate_x"),
         base_translate_y: Map.get(data, "base_translate_y"),
@@ -38,8 +38,8 @@ defmodule TypoKart.Courses do
     } end)
   end
 
-  defp path_branches(%{"path_branches" => path_branches}) do
-    path_branches
+  defp path_connections(%{"path_connections" => path_connections}) do
+    path_connections
     |> Enum.map(&({
       struct(PathCharIndex, path_index: Enum.at(&1, 0) |> Map.get("path_index"), char_index: Enum.at(&1, 0) |> Map.get("char_index")),
       struct(PathCharIndex, path_index: Enum.at(&1, 1) |> Map.get("path_index"), char_index: Enum.at(&1, 1) |> Map.get("char_index"))

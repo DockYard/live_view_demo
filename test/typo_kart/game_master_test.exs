@@ -130,14 +130,14 @@ defmodule TypoKart.GameMasterTest do
   end
 
   @tag :next_chars
-  test "next_chars/2 single path, with no branches" do
+  test "next_chars/2 single path, with no connections" do
     course = %Course{
       paths: [
         %Path{
           chars: 'fox'
         }
       ],
-      path_branches: []
+      path_connections: []
     }
 
     assert [
@@ -146,14 +146,14 @@ defmodule TypoKart.GameMasterTest do
   end
 
   @tag :next_chars
-  test "next_chars/2 wrap around on the current path if there's an explicit path_branch linking it back to itself" do
+  test "next_chars/2 wrap around on the current path if there's an explicit path_connection linking it back to itself" do
     course = %Course{
       paths: [
         %Path{
           chars: String.to_charlist("fox")
         }
       ],
-      path_branches: [
+      path_connections: [
         {
           # ... from this character
           %PathCharIndex{path_index: 0, char_index: 2},
@@ -176,14 +176,14 @@ defmodule TypoKart.GameMasterTest do
           chars: String.to_charlist("fox")
         }
       ],
-      path_branches: []
+      path_connections: []
     }
 
     assert [] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 2})
   end
 
   @tag :next_chars
-  test "next_chars/2 when cur char is a branch point" do
+  test "next_chars/2 when cur char is a connection point" do
     course = %Course{
       paths: [
         %Path{
@@ -193,7 +193,7 @@ defmodule TypoKart.GameMasterTest do
           chars: 'red'
         }
       ],
-      path_branches: [
+      path_connections: [
         {
           # A player can advance directly from this point...
           %PathCharIndex{path_index: 0, char_index: 1},
@@ -274,7 +274,7 @@ defmodule TypoKart.GameMasterTest do
   end
 
   @tag :advance
-  test "advance/3 following a path branch" do
+  test "advance/3 following a path connection" do
     course = %Course{
       paths: [
         %Path{
@@ -284,7 +284,7 @@ defmodule TypoKart.GameMasterTest do
           chars: String.to_charlist("A slow green turtle")
         }
       ],
-      path_branches: [
+      path_connections: [
         {
           # A player can advance directly from this point...
           %PathCharIndex{path_index: 0, char_index: 9},
@@ -386,7 +386,7 @@ defmodule TypoKart.GameMasterTest do
   #         chars: 'go'
   #       }
   #     ],
-  #     path_branches: [
+  #     path_connections: [
   #       {
   #         # A player can advance directly from this point...
   #         %PathCharIndex{path_index: 0, char_index: 4},
@@ -437,7 +437,7 @@ defmodule TypoKart.GameMasterTest do
   #          } = game
 
   #   # The second advance should take us to the second path junction, which may
-  #   # only continue forward onto the next path branch--not wrap around on itself.
+  #   # only continue forward onto the next path connection--not wrap around on itself.
   #   assert {:ok, game} = GameMaster.advance(game_id, 0, hd('g'))
 
   #   assert %Game{
@@ -455,7 +455,7 @@ defmodule TypoKart.GameMasterTest do
   # end
 
   @tag :advance
-  test "advance/3 remaining on the same path passing a branch point" do
+  test "advance/3 remaining on the same path passing a connection point" do
     course = %Course{
       paths: [
         %Path{
@@ -465,7 +465,7 @@ defmodule TypoKart.GameMasterTest do
           chars: String.to_charlist("A slow green turtle")
         }
       ],
-      path_branches: [
+      path_connections: [
         {
           # A player can advance directly from this point...
           %PathCharIndex{path_index: 0, char_index: 9},
@@ -564,7 +564,7 @@ defmodule TypoKart.GameMasterTest do
           chars: String.to_charlist("fox")
         }
       ],
-      path_branches: []
+      path_connections: []
     }
 
     game = %Game{
@@ -587,7 +587,7 @@ defmodule TypoKart.GameMasterTest do
   end
 
   @tag :advance
-  test "advance/3 invalid keyCode at a path branch" do
+  test "advance/3 invalid keyCode at a path connection" do
     course = %Course{
       paths: [
         %Path{
@@ -597,7 +597,7 @@ defmodule TypoKart.GameMasterTest do
           chars: String.to_charlist("A slow green turtle")
         }
       ],
-      path_branches: [
+      path_connections: [
         {
           # A player can advance directly from this point...
           %PathCharIndex{path_index: 0, char_index: 9},

@@ -13,7 +13,7 @@ defmodule TypoKart.Course do
             course_rotation_center_y: 0,
             view_box: "",
             paths: [],
-            path_branches: []
+            path_connections: []
 
   @type t :: %__MODULE__{
           initial_rotation: integer(),
@@ -25,6 +25,6 @@ defmodule TypoKart.Course do
           course_rotation_center_x: integer(),
           course_rotation_center_y: integer(),
           paths: list(Path.t()),
-          path_branches: list(PathCharIndex.t())
+          path_connections: list(PathCharIndex.t())
         }
 end

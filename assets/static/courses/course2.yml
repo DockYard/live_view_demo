@@ -40,7 +40,7 @@ text_paths:
            From ancient grudge break to new mutiny,
            Where civil blood makes civil hands unclean.
            '
-path_branches:
+path_connections:
   -
     -
       path_index: 2
