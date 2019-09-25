@@ -1,15 +1,18 @@
 defmodule TypoKart.Courses do
   @course_dir "assets/static/courses"
   alias TypoKart.{
-    Course
+    Course,
+    PathCharIndex
   }
 
   @spec load(binary()) :: {:ok, Course.t} | {:error, binary()}
   def load(name) when is_binary(name) do
     with {:ok, data} <- Path.join(File.cwd!(), "#{@course_dir}/#{name}.yml") |> YamlElixir.read_from_file(),
-      paths <- paths(data) do
+      paths <- paths(data),
+      path_branches <- path_branches(data) do
       {:ok, %Course{
         paths: paths,
+        path_branches: path_branches,
         initial_rotation: Map.get(data, "initial_rotation"),
         base_translate_x: Map.get(data, "base_translate_x"),
         base_translate_y: Map.get(data, "base_translate_y"),
@@ -33,5 +36,13 @@ defmodule TypoKart.Courses do
       chars: Enum.at(text_paths, index) |> Map.get("chars") |> String.trim() |> String.to_charlist(),
       text_path_extra_attrs: Enum.at(text_paths, index) |> Map.get("extra_attrs", %{})
     } end)
+  end
+
+  defp path_branches(%{"path_branches" => path_branches}) do
+    path_branches
+    |> Enum.map(&({
+      struct(PathCharIndex, path_index: Enum.at(&1, 0) |> Map.get("path_index"), char_index: Enum.at(&1, 0) |> Map.get("char_index")),
+      struct(PathCharIndex, path_index: Enum.at(&1, 1) |> Map.get("path_index"), char_index: Enum.at(&1, 1) |> Map.get("char_index"))
+    }))
   end
 end
