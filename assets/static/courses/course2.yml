@@ -44,17 +44,38 @@ path_connections:
   -
     -
       path_index: 2
+      char_index: 163
+    -
+      path_index: 2
+      char_index: 0
+  -
+    -
+      path_index: 2
       char_index: 11
     -
       path_index: 0
       char_index: 0
-  - 
-    - 
+  -
+    -
       path_index: 2
       char_index: 95
     -
       path_index: 1
       char_index: 0
+  -
+    -
+      path_index: 1
+      char_index: 16
+    -
+      path_index: 2
+      char_index: 21
+  -
+    -
+      path_index: 0
+      char_index: 16
+    -
+      path_index: 2
+      char_index: 108 
   
 initial_rotation: 0
 base_translate_x: 75 
