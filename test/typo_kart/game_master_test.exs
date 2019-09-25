@@ -134,19 +134,42 @@ defmodule TypoKart.GameMasterTest do
     course = %Course{
       paths: [
         %Path{
-          chars: String.to_charlist("The quick brown fox")
+          chars: 'fox'
         }
       ],
       path_branches: []
     }
 
     assert [
-             %PathCharIndex{path_index: 0, char_index: 4}
-           ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 3})
+             %PathCharIndex{path_index: 0, char_index: 2}
+           ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 1})
   end
 
   @tag :next_chars
-  test "next_chars/2 wrap around on the current path" do
+  test "next_chars/2 wrap around on the current path if there's an explicit path_branch linking it back to itself" do
+    course = %Course{
+      paths: [
+        %Path{
+          chars: String.to_charlist("fox")
+        }
+      ],
+      path_branches: [
+        {
+          # ... from this character
+          %PathCharIndex{path_index: 0, char_index: 2},
+          # ... player can move to this character
+          %PathCharIndex{path_index: 0, char_index: 0}
+        }
+      ]
+    }
+
+    assert [
+             %PathCharIndex{path_index: 0, char_index: 0}
+           ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 2})
+  end
+
+  @tag :next_chars
+  test "next_chars/2 empty when at the end of the current path and there's no explicit connection to any other path." do
     course = %Course{
       paths: [
         %Path{
@@ -156,26 +179,24 @@ defmodule TypoKart.GameMasterTest do
       path_branches: []
     }
 
-    assert [
-             %PathCharIndex{path_index: 0, char_index: 0}
-           ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 2})
+    assert [] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 2})
   end
 
   @tag :next_chars
-  test "next_chars/2 with a branch, taking the branch path" do
+  test "next_chars/2 when cur char is a branch point" do
     course = %Course{
       paths: [
         %Path{
-          chars: String.to_charlist("The quick brown fox")
+          chars: 'fox'
         },
         %Path{
-          chars: String.to_charlist("A slow green turtle")
+          chars: 'red'
         }
       ],
       path_branches: [
         {
           # A player can advance directly from this point...
-          %PathCharIndex{path_index: 0, char_index: 9},
+          %PathCharIndex{path_index: 0, char_index: 1},
           # ...to this point.
           %PathCharIndex{path_index: 1, char_index: 0}
         }
@@ -183,34 +204,9 @@ defmodule TypoKart.GameMasterTest do
     }
 
     assert [
-             %PathCharIndex{path_index: 1, char_index: 1}
-           ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 1, char_index: 0})
-  end
-
-  @tag :next_chars
-  test "next_chars/2 with a branch, remaining on the current path" do
-    course = %Course{
-      paths: [
-        %Path{
-          chars: String.to_charlist("The quick brown fox")
-        },
-        %Path{
-          chars: String.to_charlist("A slow green turtle")
-        }
-      ],
-      path_branches: [
-        {
-          # A player can advance directly from this point...
-          %PathCharIndex{char_index: 9, path_index: 0},
-          # ...to this point.
-          %PathCharIndex{char_index: 0, path_index: 1}
-        }
-      ]
-    }
-
-    assert [
-             %PathCharIndex{char_index: 10, path_index: 0}
-           ] = GameMaster.next_chars(course, %PathCharIndex{char_index: 9, path_index: 0})
+             %PathCharIndex{path_index: 0, char_index: 2},
+             %PathCharIndex{path_index: 1, char_index: 0}
+           ] = GameMaster.next_chars(course, %PathCharIndex{path_index: 0, char_index: 1})
   end
 
   @tag :advance
@@ -378,6 +374,85 @@ defmodule TypoKart.GameMasterTest do
              ]
            } = game
   end
+
+  # @tag :advance
+  # test "advance/3 continuing on a different path when at the end of the current path" do
+  #   course = %Course{
+  #     paths: [
+  #       %Path{
+  #         chars: 'turtle'
+  #       },
+  #       %Path{
+  #         chars: 'go'
+  #       }
+  #     ],
+  #     path_branches: [
+  #       {
+  #         # A player can advance directly from this point...
+  #         %PathCharIndex{path_index: 0, char_index: 4},
+  #         # ...to this point.
+  #         %PathCharIndex{path_index: 1, char_index: 0}
+  #       },
+  #       {
+  #         %PathCharIndex{path_index: 1, char_index: 1},
+  #         %PathCharIndex{path_index: 0, char_index: 0}
+  #       }
+  #     ]
+  #   }
+
+  #   game = %Game{
+  #     players: [
+  #       %Player{
+  #         cur_path_char_indices: [
+  #           %PathCharIndex{
+  #             path_index: 0,
+  #             char_index: 3
+  #           }
+  #         ]
+  #       }
+  #     ],
+  #     course: course
+  #   }
+
+  #   assert game_id = GameMaster.new_game(game)
+
+  #   # The first advance should take us to the first path junction:
+  #   assert {:ok, game} = GameMaster.advance(game_id, 0, hd('t'))
+
+  #   assert %Game{
+  #            players: [
+  #              %Player{
+  #                cur_path_char_indices: [
+  #                  %PathCharIndex{
+  #                    path_index: 0,
+  #                    char_index: 4
+  #                  },
+  #                  %PathCharIndex{
+  #                    path_index: 1,
+  #                    char_index: 0
+  #                  }
+  #                ]
+  #              }
+  #            ]
+  #          } = game
+
+  #   # The second advance should take us to the second path junction, which may
+  #   # only continue forward onto the next path branch--not wrap around on itself.
+  #   assert {:ok, game} = GameMaster.advance(game_id, 0, hd('g'))
+
+  #   assert %Game{
+  #            players: [
+  #              %Player{
+  #                cur_path_char_indices: [
+  #                  %PathCharIndex{
+  #                    path_index: 0,
+  #                    char_index: 0
+  #                  }
+  #                ]
+  #              }
+  #            ]
+  #          } = game
+  # end
 
   @tag :advance
   test "advance/3 remaining on the same path passing a branch point" do

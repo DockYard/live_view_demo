@@ -100,27 +100,26 @@ defmodule TypoKart.GameMaster do
   def next_chars(%Course{paths: paths, path_branches: path_branches}, %PathCharIndex{
         path_index: cur_path_index,
         char_index: cur_char_index
-      }) do
+      } = cur_pci) do
     %Path{chars: cur_path_chars} = Enum.at(paths, cur_path_index)
 
-    # 1. Add the next char_index on the current path. It's always a valid next char.
-    #    If we're at the end of the path, wrap back around to index 0 on that path.
-    cur_path_next_char_index =
+    # 1. Add the next char_index on the current path. It's always a valid next char,
+    # unless we're at the end of that path.
+    next_chars_list =
       case %PathCharIndex{path_index: cur_path_index, char_index: cur_char_index + 1} do
         %PathCharIndex{char_index: next_char_index} = pci
         when next_char_index < length(cur_path_chars) ->
-          pci
+          [pci]
 
         _ ->
-          %PathCharIndex{path_index: cur_path_index, char_index: 0}
+          []
       end
 
-    # 2. If the next char on the current path is a branch point onto another path,
-    #    then add the index on that other path.
-    [cur_path_next_char_index] ++
+    # 2. If the current char is a connection point to another path, then add that char on the other path.
+    next_chars_list ++
       Enum.reduce(path_branches, [], fn
         {%PathCharIndex{} = pci_from, %PathCharIndex{} = pci_to}, acc
-        when pci_from == cur_path_next_char_index ->
+        when pci_from == cur_pci ->
           acc ++ [pci_to]
 
         _, acc ->
