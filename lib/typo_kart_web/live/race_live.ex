@@ -65,7 +65,7 @@ defmodule TypoKartWeb.RaceLive do
     # connected?(socket)
 
 
-    {:ok, course} = Courses.load("course1")
+    {:ok, course} = Courses.load("course2")
 
     game_id = GameMaster.new_game(%Game{
       players: [
@@ -130,8 +130,9 @@ defmodule TypoKartWeb.RaceLive do
         },
         socket
       ) do
-    {:noreply,
-     assign(socket, cur_char_point: [cur_char_x, cur_char_y], cur_char_rotation: cur_char_rotation)}
+    # {:noreply,
+    #  assign(socket, cur_char_point: [cur_char_x, cur_char_y], cur_char_rotation: cur_char_rotation)}
+    {:noreply, socket}
   end
 
   def handle_event(_, _, socket), do: {:noreply, socket}
