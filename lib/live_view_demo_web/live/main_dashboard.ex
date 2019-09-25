@@ -1,84 +1,68 @@
 defmodule LiveViewDemoWeb.MainDashboard do
   use Phoenix.LiveView
 
-  alias LiveViewDemo.Queries.{UserQueries, OrderQueries}
-
   def render(assigns) do
-    IO.inspect(assigns)
     ~L"""
     <div class="mainBG flex-one centerItems">
       <div>
         <h1>Welcome to Visualixir</h1>
-        <img src="../../../assets/images/logo_v1_circle.png" />
       </div>
       <div>
-        <h2>Let's make some data visualizations<h2>
-      </div>
-      <div>
-        <div class="blueButton">
-          <p class="whiteText">New chart</p>
+      <div class="display-flex">
+        <div class="row space-around">
+          <div class="text-center">
+            <h2>Visualixir</h2>
+            <img src="images/logo_v1_circle.png" width="150" height="150"/>
+          </div>
+          <div class="paragraph-container">
+            <h2>About</h2>
+            <p>
+              Visualixir is a data visualization tool inspired in
+              <a href="https://superset.incubator.apache.org/" target="_blank">
+                Apache's Superset
+              </a>. It connects to your DB and lets you
+              make charts selecting data from your tables. It
+              also includes a SQL Lab where you can run custom queries.
+            </p>
+            <p>
+              This tool was developed as my entry for the Phoenix Phrenzy contest.
+            </p>
+          </div>
         </div>
       </div>
-      <div class="listContainer">
-        <div class="listInsideContainer">
-          <%= generate_users_table(@users) %>
+      <div class="middle-container-db">
+        <div class="mainContainer text-center">
+          <h2 class="little-margin-top">Try it out</h2>
+          <div class="display-flex">
+            <div class="row space-around">
+              <a href="/chart" class="db-box">
+                <img src="images/logo_v1_circle.png" width="120" height="120"/>
+                <h3> Charts </h3>
+              </a>
+              <a href="/examples" class="db-box">
+                <img src="images/logo_v1_circle.png" width="120" height="120"/>
+                <h3> Examples </h3>
+              </a>
+              <a href="/sql-lab" class="db-box">
+                <img src="images/logo_v1_circle.png" width="120" height="120"/>
+                <h3> SQL Lab </h3>
+              </a>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="final-p">
+        <h2>What's next?</h2>
+        <p>
+          Building this was very fun and exciting. A lot of "it feels like cheating" moments.
+        </p>
       </div>
     </div>
     """
   end
 
   def mount(_session, socket) do
-    # if connected?(socket), do: :timer.send_interval(10_000, self(), :tick)
-
-    {:ok, put_user_list(socket)}
+    {:ok, socket}
   end
 
-  def handle_info(:tick, socket) do
-    {:noreply, put_user_list(socket)}
-  end
-
-  defp put_user_list(socket) do
-    users = UserQueries.get_newest_users(10)
-    orders = OrderQueries.get_orders_status_count()
-
-    assign(socket, users: users)
-  end
-
-  defp generate_users_table([]) do
-    assigns = nil
-    ~L"""
-      <p>Sorry, no users yet</p>
-    """
-  end
-
-  defp generate_users_table(users) do
-    assigns = %{users: users}
-    ~L"""
-      <div>
-        <%= for user <- @users do %>
-          <div>
-            <%= generate_user_row(user) %>
-          </div>
-        <% end %>
-      </div>
-    """
-  end
-
-  defp generate_user_row(user) do
-    assigns = %{user: user}
-    ~L"""
-      <div class="row table-row space-around">
-        <div>
-          <%= user.first_name %>
-        </div>
-        <div>
-          <%= user.last_name %>
-        </div>
-        <div>
-          <%= user.email %>
-        </div>
-      </div>
-    """
-  end
 end

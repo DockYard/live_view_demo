@@ -52,6 +52,12 @@ select {
   border-radius: 2px;
 }
 
+.download-button {
+  margin-left: 15px;
+  margin-top: 3px;
+  cursor: pointer;
+}
+
 /* USED STYLES */
 
 .mainBlue {
@@ -112,6 +118,7 @@ select {
 
 .mainBG {
   background-color: #f1f4fa;
+  display: block;
 }
 
 .flex-one {
@@ -130,10 +137,19 @@ select {
 }
 
 .mainContainer {
-  max-width: 80.0rem;
+  max-width: 120.0rem;
   padding: 0 10.0rem;
   width: 100%;
   flex: 1;
+}
+
+.middle-container-db {
+  margin-top: 30px;
+  background-color: #d0ecf2;
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 300px;
 }
 
 .row {
@@ -149,6 +165,107 @@ select {
   border-style: solid;
   border-width: 2px;
   border-color:#bd97e8;
+}
+
+/* DASHBOARD STYLES */
+
+.paragraph-container {
+  max-width: 550px;
+}
+
+.db-box {
+  border: solid 1px #a8c9e3;
+  border-radius: 5px;
+  width: 200px;
+  height: 200px;
+  background-color: #daecf0;
+}
+
+.db-box h3 {
+  color: #3d3e44;
+}
+
+.db-box img {
+  margin: 15px 0px;
+}
+
+.final-p {
+  margin-top: 350px;
+  /* border: solid 1px red; */
+}
+
+/* NAV STYLES */
+
+.header-container {
+  display: flex;
+}
+
+.nav-row {
+  flex-direction: row;
+  flex: 1;
+  justify-content: space-around;
+}
+
+.nav-container {
+  display: flex;
+  flex-direction: row;
+  max-width: 120.0rem;
+  padding: 0 10.0rem;
+}
+
+.nav-option {
+  margin-left: 35px;
+  margin-top: 50px;
+  color: #784cb5;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.nav-option:hover {
+  color: #9161d5;
+  text-decoration: none;
+}
+
+.nav-option-container {
+  margin-top: 8px;
+}
+
+.logo-container {
+  margin-right: 0px;
+  margin-top: 8px;
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+}
+
+/* END OF NAV STYLES */
+
+.display-flex {
+  display: flex;
+  flex-direction: row;
+}
+
+.footer-container {
+  margin-top: 20px;
+  align-content: center;
+}
+
+.phoenix-logo {
+  margin: 0px 10px;
+  margin-top: 2px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.little-margin-top {
+  margin-top: 7px;
+}
+
+.test-border {
+  border: solid 1px red;
 }
 
 /* END OF USED STYLES */
@@ -217,44 +334,7 @@ header {
   background: #fdfdfd;
   border-bottom: 1px solid #eaeaea;
   margin-bottom: 2rem;
-}
-header section {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-header section :first-child {
-  order: 2;
-}
-header section :last-child {
-  order: 1;
-}
-header nav ul,
-header nav li {
-  margin: 0;
-  padding: 0;
-  display: block;
-  text-align: right;
-  white-space: nowrap;
-}
-header nav ul {
-  margin: 1rem;
-  margin-top: 0;
-}
-header nav a {
-  display: block;
-}
-
-@media (min-width: 40.0rem) { /* Small devices (landscape phones, 576px and up) */
-  header section {
-    flex-direction: row;
-  }
-  header nav ul {
-    margin: 1rem;
-  }
-  .phx-logo {
-    flex-basis: 527px;
-    margin: 2rem 1rem;
-  }
+  position: absolute;
+  top: 0;
+  left: 0;
 }

@@ -2,7 +2,7 @@ defmodule LiveViewDemoWeb.SqlLab do
   use Phoenix.LiveView
   import Phoenix.HTML.Form
 
-  alias LiveViewDemo.SqlLab.QueryExecuter
+  alias LiveViewDemo.SqlLab.{QueryExecuter, CsvDownload}
 
   def render(assigns) do
     ~L"""
@@ -63,7 +63,10 @@ defmodule LiveViewDemoWeb.SqlLab do
   defp generate_results_table({columns, rows}) when is_list(columns) and is_list(rows) do
     assigns = nil
     ~L"""
-      <h3>Results</h3>
+      <div class="row">
+        <h3>Results</h3>
+        <%= generate_download_button(columns, rows) %>
+      </div>
       <table>
         <%= generate_headers_row(columns) %>
         <%= generate_result_rows(rows) %>
@@ -83,6 +86,19 @@ defmodule LiveViewDemoWeb.SqlLab do
     ~L"""
       <h3>Results</h3>
       <p>Something went wrong when rendering the results.</p>
+    """
+  end
+
+  defp generate_download_button(columns, rows) do
+    csv_content = CsvDownload.format_csv_for_download(columns, rows)
+    assigns = nil
+
+    ~L"""
+      <a class="download-button" download="visualixir-query.csv" href="<%= csv_content %>" target="_blank">
+        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+          <path fill="#595454" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+        </svg>
+      </a>
     """
   end
 

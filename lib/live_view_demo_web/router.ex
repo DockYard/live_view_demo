@@ -18,7 +18,8 @@ defmodule LiveViewDemoWeb.Router do
     pipe_through :browser
 
     live "/", MainDashboard
-    live "/dashboard", MainDashboard
+    live "/chart", Chart
+    live "/examples", MainDashboard
     live "/sql-lab", SqlLab
   end
 

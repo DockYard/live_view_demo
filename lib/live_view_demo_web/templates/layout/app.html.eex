@@ -6,16 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Visualixir</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <link rel="icon" href="<%= Routes.static_path(@conn, "/static/favicon.ico") %>"/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
   </head>
   <body class="mainBG flex-one">
     <main role="main" class="mainBG flex-one">
+      <div class="header-container">
+        <header class="header">
+          <div class="nav-container">
+            <nav class="nav-row">
+              <div class="logo-container">
+                <a href="/">
+                  <img src="images/logo_v1_circle.png" width="40"/>
+                </a>
+                <div class="nav-option-container">
+                  <a class="nav-option" href="/">Home</a>
+                  <a class="nav-option" href="/chart">Charts</a>
+                  <a class="nav-option" href="/examples">Examples</a>
+                  <a class="nav-option" href="/sql-lab">SQL Lab</a>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </header>
+      </div>
       <div class="mainContainer flex-one">
         <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
         <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
         <%= render @view_module, @view_template, assigns %>
       <div>
     </main>
+    <div class="mainContainer display-flex footer-container">
+      <p>Made using</p>
+      <img class="phoenix-logo" src="https://raw.githubusercontent.com/phoenixframework/phoenix/master/priv/static/phoenix.png" width="auto" height="20"/>
+      <p>& LiveView</p>
+    </div>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>
