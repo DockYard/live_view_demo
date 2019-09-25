@@ -2,12 +2,10 @@ defmodule TypoKartWeb.RaceLive do
   use Phoenix.LiveView
 
   alias TypoKart.{
-    Course,
     Courses,
     Game,
     GameMaster,
-    Path,
-    PathChar,
+    PathCharIndex,
     Player
   }
 
@@ -71,7 +69,10 @@ defmodule TypoKartWeb.RaceLive do
       players: [
         %Player{
           color: "orange",
-          label: "P1"
+          label: "P1",
+          cur_path_char_indices: [
+            %PathCharIndex{path_index: 2, char_index: 0}
+          ]
         }
       ],
       course: course
@@ -130,9 +131,8 @@ defmodule TypoKartWeb.RaceLive do
         },
         socket
       ) do
-    # {:noreply,
-    #  assign(socket, cur_char_point: [cur_char_x, cur_char_y], cur_char_rotation: cur_char_rotation)}
-    {:noreply, socket}
+    {:noreply,
+     assign(socket, cur_char_point: [cur_char_x, cur_char_y], cur_char_rotation: cur_char_rotation)}
   end
 
   def handle_event(_, _, socket), do: {:noreply, socket}
