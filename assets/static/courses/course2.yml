@@ -42,7 +42,9 @@ text_paths:
            '
 initial_rotation: 0
 base_translate_x: 75 
-base_translate_y: 0
-view_box: '0, 0, 1250, 1000'
+base_translate_y: 250 
+view_box: '0, 0, 1700, 1500'
+course_rotation_center_x: 550
+course_rotation_center_y: 380 
 marker_center_offset_x: 20
 marker_center_offset_y: 20
