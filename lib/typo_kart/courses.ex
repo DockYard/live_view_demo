@@ -15,7 +15,9 @@ defmodule TypoKart.Courses do
         base_translate_y: Map.get(data, "base_translate_y"),
         view_box: Map.get(data, "view_box"),
         marker_center_offset_x: Map.get(data, "marker_center_offset_x"),
-        marker_center_offset_y: Map.get(data, "marker_center_offset_y")
+        marker_center_offset_y: Map.get(data, "marker_center_offset_y"),
+        course_rotation_center_x: Map.get(data, "course_rotation_center_x"),
+        course_rotation_center_y: Map.get(data, "course_rotation_center_y")
       }}
     else
       bad ->
