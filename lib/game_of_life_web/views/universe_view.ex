@@ -1,6 +1,7 @@
 defmodule GameOfLifeWeb.UniverseView do
   use GameOfLifeWeb, :view
 
+  alias GameOfLife.Color
   alias GameOfLife.Universe
   alias GameOfLife.Universe.Generation
   alias GameOfLife.Universe.Dimensions

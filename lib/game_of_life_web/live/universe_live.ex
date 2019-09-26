@@ -1,6 +1,7 @@
 defmodule GameOfLifeWeb.UniverseLive do
   use Phoenix.LiveView
 
+  alias GameOfLife.Color
   alias GameOfLife.Universe
   alias GameOfLife.Universe.Template
 
@@ -20,6 +21,16 @@ defmodule GameOfLifeWeb.UniverseLive do
 
   def handle_event("update_speed", %{"universe" => %{"speed" => speed}}, socket) do
     {:noreply, assign(socket, speed: String.to_integer(speed))}
+  end
+
+  def handle_event("update_color", %{"color" => color}, socket) do
+    color = %Color{ socket.assigns.color |
+      red: color["red"],
+      green: color["green"],
+      blue: color["blue"]
+    }
+
+    {:noreply, assign(socket, color: color)}
   end
 
   def handle_event("toggle_playing", _params, socket) do
@@ -61,7 +72,8 @@ defmodule GameOfLifeWeb.UniverseLive do
       playing: false,
       speed: socket.assigns.speed,
       template: socket.assigns.template,
-      dimensions: socket.assigns.dimensions
+      dimensions: socket.assigns.dimensions,
+      color: socket.assigns.color,
     })
   end
 
@@ -74,6 +86,7 @@ defmodule GameOfLifeWeb.UniverseLive do
   defp setup_universe(socket, opts) do
     assign(
       socket,
+      color: Map.get(opts, :color, %Color{red: "255", green: "68", blue: "0"}),
       playing: Map.get(opts, :playing, false),
       speed: Map.get(opts, :speed, 5),
       template: Map.get(opts, :template, "random"),

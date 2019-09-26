@@ -1,10 +1,10 @@
 defmodule GameOfLife.Universe do
   alias GameOfLife.Cell
-  alias GameOfLife.Universe
-  alias GameOfLife.Universe.Template
-  alias GameOfLife.Universe.Generation
-  alias GameOfLife.Universe.Dimensions
   alias GameOfLife.Cell.Position
+  alias GameOfLife.Universe
+  alias GameOfLife.Universe.Dimensions
+  alias GameOfLife.Universe.Generation
+  alias GameOfLife.Universe.Template
 
   defstruct template: "random", dimensions: %Dimensions{width: 0, height: 0}, generation: %Generation{}
 

@@ -1,4 +1,10 @@
 <!-- Wrapped in div[data-phx-view="GameOfLifeWeb.UniverseLive"] -->
+<style>
+.cell.alive {
+  background: <%= Color.rgb_string(@color) %>;
+}
+</style>
+
 <section class="universe-sidebar">
   <div class="sidebar-title-wrapper">
     <img class="flame-of-life-logo" src="/images/logo.gif" alt="Game of Life Logo"/>
@@ -8,34 +14,61 @@
       <span class="title-word life">life</span>
   </div>
 
-  <div class="form-group">
-    <%= form_tag "#", phx_change: "update_speed" do %>
-      <div class="form-control">
-        <%= label class: "form-label inline middle" do %>1<% end %>
-
-        <%= range_input :universe, :speed,
-          class: "form-input slider middle",
-          min: "1", max: "20", step: "1",
-          value: @speed %>
-
-        <%= label class: "form-label inline middle" do %>20<% end %>
-      </div>
-
-      <p class="help-text">Current speed: <%= @speed %></p>
-    <% end %>
-  </div>
-
   <%= form_tag "#", phx_change: "set_template" do %>
-    <div class="form-control">
-      <%= label class: "form-label inline middle" do %>Select Template: <% end %>
+    <h2>Template</h2>
 
-      <%= select :universe, :template, template_names() %>
-    </div>
-
-    <p class="help-text">Current template: <%= @template %></p>
+    <%= select :universe, :template, template_names() %>
   <% end %>
 
-  <div class="form-group">
+  <%= form_tag "#", phx_change: "update_speed" do %>
+    <h2>Speed</h2>
+
+    <div>
+      <%= range_input :universe, :speed,
+        class: "slider middle",
+        min: "1", max: "20", step: "1",
+        value: @speed %>
+
+      <%= label :universe, :speed, @speed, class: "inline middle" %>
+    </div>
+  <% end %>
+
+  <%= form_tag "#", phx_change: "update_color" do %>
+    <h2>Cell Color</h2>
+
+    <div>
+        <%= label :color, :red, "R", class: "inline middle" %>
+
+        <%= range_input :color, :red,
+          class: "slider middle",
+          min: "0", max: "255", step: "5",
+          value: @color.red %>
+
+        <%= label :color, :red, @color.red, class: "inline middle" %>
+    </div>
+    <div>
+        <%= label :color, :green, "G", class: "inline middle" %>
+
+        <%= range_input :color, :green,
+          class: "slider middle",
+          min: "0", max: "255", step: "5",
+          value: @color.green %>
+
+        <%= label :color, :green, @color.green, class: "inline middle" %>
+    </div>
+    <div>
+        <%= label :color, :blue, "B", class: "inline middle" %>
+
+        <%= range_input :color, :blue,
+          class: "slider middle",
+          min: "0", max: "255", step: "5",
+          value: @color.blue %>
+
+        <%= label :color, :blue, @color.blue, class: "inline middle" %>
+    </div>
+  <% end %>
+
+  <div>
     <%= form_tag "#", class: "inline", phx_submit: "toggle_playing" do %>
       <%= submit (if @playing, do: "Pause", else: "Play"), class: "button" %>
     <% end %>
