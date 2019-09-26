@@ -375,85 +375,6 @@ defmodule TypoKart.GameMasterTest do
            } = game
   end
 
-  # @tag :advance
-  # test "advance/3 continuing on a different path when at the end of the current path" do
-  #   course = %Course{
-  #     paths: [
-  #       %Path{
-  #         chars: 'turtle'
-  #       },
-  #       %Path{
-  #         chars: 'go'
-  #       }
-  #     ],
-  #     path_connections: [
-  #       {
-  #         # A player can advance directly from this point...
-  #         %PathCharIndex{path_index: 0, char_index: 4},
-  #         # ...to this point.
-  #         %PathCharIndex{path_index: 1, char_index: 0}
-  #       },
-  #       {
-  #         %PathCharIndex{path_index: 1, char_index: 1},
-  #         %PathCharIndex{path_index: 0, char_index: 0}
-  #       }
-  #     ]
-  #   }
-
-  #   game = %Game{
-  #     players: [
-  #       %Player{
-  #         cur_path_char_indices: [
-  #           %PathCharIndex{
-  #             path_index: 0,
-  #             char_index: 3
-  #           }
-  #         ]
-  #       }
-  #     ],
-  #     course: course
-  #   }
-
-  #   assert game_id = GameMaster.new_game(game)
-
-  #   # The first advance should take us to the first path junction:
-  #   assert {:ok, game} = GameMaster.advance(game_id, 0, hd('t'))
-
-  #   assert %Game{
-  #            players: [
-  #              %Player{
-  #                cur_path_char_indices: [
-  #                  %PathCharIndex{
-  #                    path_index: 0,
-  #                    char_index: 4
-  #                  },
-  #                  %PathCharIndex{
-  #                    path_index: 1,
-  #                    char_index: 0
-  #                  }
-  #                ]
-  #              }
-  #            ]
-  #          } = game
-
-  #   # The second advance should take us to the second path junction, which may
-  #   # only continue forward onto the next path connection--not wrap around on itself.
-  #   assert {:ok, game} = GameMaster.advance(game_id, 0, hd('g'))
-
-  #   assert %Game{
-  #            players: [
-  #              %Player{
-  #                cur_path_char_indices: [
-  #                  %PathCharIndex{
-  #                    path_index: 0,
-  #                    char_index: 0
-  #                  }
-  #                ]
-  #              }
-  #            ]
-  #          } = game
-  # end
-
   @tag :advance
   test "advance/3 remaining on the same path passing a connection point" do
     course = %Course{
@@ -631,7 +552,7 @@ defmodule TypoKart.GameMasterTest do
   end
 
   @tag :text_segments
-  test "text_segments/2 when current player is at a path connection point and the char on other path is unowned" do
+  test "text_segments/3 when current player is at a path connection point and the char on other path is unowned" do
     game = %Game{
       players: [
         %Player{
@@ -639,7 +560,11 @@ defmodule TypoKart.GameMasterTest do
           cur_path_char_indices: [
             %PathCharIndex{
               path_index: 0,
-              char_index: 12
+              char_index: 13
+            },
+            %PathCharIndex{
+              path_index: 1,
+              char_index: 6
             }
           ]
         },
@@ -713,11 +638,11 @@ defmodule TypoKart.GameMasterTest do
 
     assert [
              {"The quick b", "orange"},
-             {"ro ", "unowned"},
-             {"w ", "unowned next-char"},
+             {"ro", "unowned"},
+             {"w", "unowned next-char"},
              {"n ", "unowned"},
              {"fox", "blue"}
-           ] = GameMaster.text_segments(game, 0)
+           ] = GameMaster.text_segments(game, 0, 0)
 
     assert [
              {"A", "orange"},
@@ -727,11 +652,11 @@ defmodule TypoKart.GameMasterTest do
              {"green tu", "unowned"},
              {"rtl", "orange"},
              {"e", "unowned"}
-           ] = GameMaster.text_segments(game, 1)
+           ] = GameMaster.text_segments(game, 1, 0)
   end
 
   @tag :text_segments
-  test "text_segments/2 when current player is at a path connection point and the char on other path is owned" do
+  test "text_segments/3 when current player is at a path connection point and the char on other path is owned" do
     game = %Game{
       players: [
         %Player{
@@ -739,7 +664,11 @@ defmodule TypoKart.GameMasterTest do
           cur_path_char_indices: [
             %PathCharIndex{
               path_index: 0,
-              char_index: 12
+              char_index: 13
+            },
+            %PathCharIndex{
+              path_index: 1,
+              char_index: 3
             }
           ]
         },
@@ -813,20 +742,20 @@ defmodule TypoKart.GameMasterTest do
 
     assert [
              {"The quick b", "orange"},
-             {"ro ", "unowned"},
-             {"w ", "unowned next-char"},
+             {"ro", "unowned"},
+             {"w", "unowned next-char"},
              {"n ", "unowned"},
              {"fox", "blue"}
-           ] = GameMaster.text_segments(game, 0)
+           ] = GameMaster.text_segments(game, 0, 0)
 
     assert [
              {"A", "orange"},
              {" s", "blue"},
              {"l", "blue next-char"},
-             {"ow ", "blue"},
-             {"green tu", "unowned"},
+             {"o", "blue"},
+             {"w green tu", "unowned"},
              {"rtl", "orange"},
              {"e", "unowned"}
-           ] = GameMaster.text_segments(game, 1)
+           ] = GameMaster.text_segments(game, 1, 0)
   end
 end
