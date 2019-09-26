@@ -59,7 +59,7 @@ defmodule TypoKartWeb.RaceView do
     |> Enum.join(" ")
   end
 
-  defdelegate text_segments(game, path_index), to: GameMaster
+  defdelegate text_segments(game, path_index, player_index), to: GameMaster
 
   defp cur_path_char_index(%Game{} = game, player_index) when is_integer(player_index) do
     %Player{cur_path_char_indices: cur_path_char_indices} = Enum.at(game.players, player_index)

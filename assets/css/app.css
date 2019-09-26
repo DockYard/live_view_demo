@@ -15,6 +15,20 @@ text {
   font-family: sans-serif;
 }
 
+.next-char {
+  text-decoration: overline;
+}
+
+tspan.next-char {
+  fill: black;
+  stroke: black;
+}
+
+.error tspan.next-char {
+  fill: red;
+  stroke: red;
+}
+
 .orange {
   fill: orange;
   stroke: orange;

@@ -116,17 +116,16 @@ defmodule TypoKartWeb.RaceLive do
         {:noreply,
          assign(socket,
            error_status: "",
-           game: game,
-           text_segments: GameMaster.text_segments(game, player_index)
+           game: game
          )}
 
       {:error, _} ->
-        {:noreply, assign(socket, error_status: "show")}
+        {:noreply, assign(socket, error_status: "error")}
     end
   end
 
   def handle_event("key", _, socket),
-    do: {:noreply, assign(socket, error_status: "show")}
+    do: {:noreply, assign(socket, error_status: "error")}
 
   def handle_event(
         "adjust_rotation",
