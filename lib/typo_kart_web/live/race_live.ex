@@ -2,8 +2,10 @@ defmodule TypoKartWeb.RaceLive do
   use Phoenix.LiveView
 
   alias TypoKart.{
-    CourseMap,
+    Courses,
     Game,
+    GameMaster,
+    PathCharIndex,
     Player
   }
 
@@ -11,24 +13,42 @@ defmodule TypoKartWeb.RaceLive do
 
   # See: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
   @ignored_key_codes [
-    8,  # Backspace
-    13, # Enter
-    16, # Shift
-    17, # Control
-    18, # Alt
-    20, # Caps Lock
-    27, # Esc
-    33, # PageUp
-    34, # PageDown
-    35, # End
-    36, # Home
-    37, # ArrowLeft
-    38, # ArrowUp
-    39, # ArrowRight
-    40, # ArrowDown
-    46, # Delete
-    45, # Insert
-    93, # Meta
+    # Backspace
+    8,
+    # Enter
+    13,
+    # Shift
+    16,
+    # Control
+    17,
+    # Alt
+    18,
+    # Caps Lock
+    20,
+    # Esc
+    27,
+    # PageUp
+    33,
+    # PageDown
+    34,
+    # End
+    35,
+    # Home
+    36,
+    # ArrowLeft
+    37,
+    # ArrowUp
+    38,
+    # ArrowRight
+    39,
+    # ArrowDown
+    40,
+    # Delete
+    46,
+    # Insert
+    45,
+    # Meta
+    93
   ]
 
   def render(assigns) do
@@ -42,93 +62,82 @@ defmodule TypoKartWeb.RaceLive do
     #
     # connected?(socket)
 
-    game = %Game{
-      players: [
-        %Player{
-          color: "orange",
-          label: "P1"
-        }
-      ]
-    }
+    {:ok, course} = Courses.load("course2")
 
-    map = %CourseMap{
-      full_text: "Two households, both alike in dignity, In fair Verona, where we lay our scene,",
-      path: "M250.5,406.902 C158.713,155.121 0.5,332.815 0.5,241.423 C0.5,150.031 152.251,-133.524 250.5,75.943 C348.749,285.411 500.5,150.031 500.5,241.423 C500.5,332.815 342.287,658.684 250.5,406.902 z",
-      initial_rotation: 150,
-      base_translate_x: 250,
-      base_translate_y: 250,
-      view_box: "0, 0, 1000, 1000",
-      marker_center_offset_x: 20,
-      marker_center_offset_y: 20
-    }
+    game_id =
+      GameMaster.new_game(%Game{
+        players: [
+          %Player{
+            color: "orange",
+            label: "P1",
+            cur_path_char_indices: [
+              %PathCharIndex{path_index: 2, char_index: 0}
+            ]
+          }
+        ],
+        course: course
+      })
 
-    initial_char_num = 0
+    game = GameMaster.state() |> get_in([:games, game_id])
 
     {
       :ok,
       assign(
         socket,
-        Keyword.merge(
-          [
-            status_class: "",
-            map: map,
-            game: game,
-            cur_char_num: initial_char_num,
-            cur_char_rotation: map.initial_rotation,
-            cur_char_point: [0,0],
-            marker_rotation_offset: 90,
-            marker_translate_offset_x: -8,
-            marker_translate_offset_y: 24
-          ],
-          text_ranges(initial_char_num, map.full_text)
-        )
-      )
-    }
-  end
-
-  def handle_event("key", %{"key" => key}, %{
-    assigns: %{
-      map: %{full_text: full_text},
-      cur_text: cur_text,
-      cur_text_range: cur_char_num.._
-    }
-  } = socket) when (key == cur_text) or (key == "_" and cur_text == " ") do
-    next_char_num = cur_char_num + 1
-    {
-      :noreply,
-      assign(
-        socket,
-        Keyword.merge(
-          [
-            status_class: "",
-            cur_char_num: next_char_num
-          ],
-          text_ranges(next_char_num, full_text)
-        )
+        error_status: "",
+        game: game,
+        game_id: game_id,
+        player_index: 0,
+        cur_char_rotation: game.course.initial_rotation,
+        cur_char_point: [0, 0],
+        marker_rotation_offset: 90,
+        marker_translate_offset_x: -8,
+        marker_translate_offset_y: 24
       )
     }
   end
 
   def handle_event("key", %{"keyCode" => keyCode}, socket)
-    when keyCode in @ignored_key_codes,
-    do: {:noreply, socket}
+      when keyCode in @ignored_key_codes,
+      do: {:noreply, socket}
+
+  def handle_event(
+        "key",
+        %{"key" => key},
+        %{
+          assigns: %{
+            game_id: game_id,
+            player_index: player_index
+          }
+        } = socket
+      ) do
+    case GameMaster.advance(game_id, player_index, String.to_charlist(key) |> hd()) do
+      {:ok, game} ->
+        {:noreply,
+         assign(socket,
+           error_status: "",
+           game: game
+         )}
+
+      {:error, _} ->
+        {:noreply, assign(socket, error_status: "error")}
+    end
+  end
 
   def handle_event("key", _, socket),
-    do: {:noreply, assign(socket, status_class: "error")}
+    do: {:noreply, assign(socket, error_status: "error")}
 
-  def handle_event("adjust_rotation", %{
-    "currentCharPoint" => %{ "x" => cur_char_x, "y" => cur_char_y },
-    "currentCharRotation" => cur_char_rotation
-    }, socket) do
-    {:noreply, assign(socket, cur_char_point: [cur_char_x, cur_char_y], cur_char_rotation: cur_char_rotation )}
+  def handle_event(
+        "adjust_rotation",
+        %{
+          "currentCharPoint" => %{"x" => cur_char_x, "y" => cur_char_y},
+          "currentCharRotation" => cur_char_rotation
+        },
+        socket
+      ) do
+    {:noreply,
+     assign(socket, cur_char_point: [cur_char_x, cur_char_y], cur_char_rotation: cur_char_rotation)}
   end
 
   def handle_event(_, _, socket), do: {:noreply, socket}
-
-  defp text_ranges(cur_char_num, full_text), do: [
-      before_text_range: (if cur_char_num == 0, do: -1..0, else: 0..(cur_char_num - 1)),
-      cur_text_range: cur_char_num..cur_char_num,
-      cur_text: String.slice(full_text, cur_char_num..cur_char_num),
-      after_text_range: (cur_char_num + 1)..(String.length(full_text) - 1)
-    ]
 end

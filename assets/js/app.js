@@ -20,21 +20,27 @@ import LiveSocket from "phoenix_live_view"
 
 const Hooks = {}
 
-function getTextPath() {
-  return document.getElementById('thetext')
+function getCourse(){
+  return document.getElementById('the-course')
 }
 
-function getCurCharNum(){
-  const map = document.querySelector('div.map')
-  return +map.getAttribute('data-current-char')
+function getCurrentTextPath() {
+  return document.getElementById(
+    getCourse()
+      .getAttribute('data-current-text-path-id')
+  )
+}
+
+function getCurCharIndex(){
+  return +getCourse().getAttribute('data-current-char-index')
 }
 
 Hooks.CurrentText = {
   adjustRotation() {
-    const textPath = getTextPath()
-    const currentCharNum = getCurCharNum()
-    const point = textPath.getStartPositionOfChar(currentCharNum)
-    const charRotation = textPath.getRotationOfChar(currentCharNum)
+    const textPath = getCurrentTextPath()
+    const currentCharIndex = getCurCharIndex()
+    const point = textPath.getStartPositionOfChar(currentCharIndex)
+    const charRotation = textPath.getRotationOfChar(currentCharIndex)
 
     this.pushEvent('adjust_rotation', {
       currentCharPoint: {
@@ -50,6 +56,10 @@ Hooks.CurrentText = {
     this.adjustRotation()
   }
 }
+
+window.addEventListener('keydown', function(e) {
+  e.keyCode == 32 && e.preventDefault()
+})
 
 let liveSocket = new LiveSocket("/live", Socket, { hooks: Hooks })
 liveSocket.connect()

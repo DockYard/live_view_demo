@@ -41,7 +41,8 @@ defmodule TypoKart.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:calendar, "~> 0.17.6"},
-      {:uuid, "~> 1.1"}
+      {:uuid, "~> 1.1"},
+      {:yaml_elixir, "~> 2.4"}
     ]
   end
 end

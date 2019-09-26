@@ -50,6 +50,7 @@ config :typo_kart, TypoKartWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/courses/.*(yml)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/typo_kart_web/(live|views)/.*(ex)$",
       ~r"lib/typo_kart_web/templates/.*(eex)$",
