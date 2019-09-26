@@ -1,0 +1,49 @@
+.universe {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+
+    &.xxl .cell {
+        width: 1px;
+        height: 1px;
+    }
+
+    &.xl .cell {
+        width: 3px;
+        height: 3px;
+    }
+
+    &.lg .cell {
+        width: 5px;
+        height: 5px;
+    }
+
+    &.md .cell {
+        width: 10px;
+        height: 10px;
+    }
+
+    &.sm .cell {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+.cell-row {
+    display: flex;
+}
+
+.cell {
+    border: 1px solid #000;
+    box-sizing: content-box;
+
+    &.alive {
+        background: rgb(255, 68, 0);
+    }
+
+    &.dead {
+        background: rgb(50, 50, 50);
+    }
+}

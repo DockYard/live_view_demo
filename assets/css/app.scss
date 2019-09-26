@@ -1,6 +1,9 @@
 /* This file is for your main application css. */
 
-/*@import "./phoenix.css";*/
+// @import "./phoenix.css";
+@import "./form.scss";
+@import "./sidebar.scss";
+@import "./universe.scss";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
 
 * {
@@ -33,136 +36,4 @@ main {
 div[data-phx-view="GameOfLifeWeb.UniverseLive"] {
     display: flex;
     height: 100%;
-}
-
-.universe-sidebar {
-    background-image: radial-gradient( circle at 50% 50%, #F67938 29%, #EF4734 120%);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px 20px;
-}
-
-.universe-sidebar .sidebar-title-wrapper {
-    display: flex;
-}
-
-.universe-sidebar .sidebar-title {
-    /*font-size: 24px;*/
-    padding-left: 20px;
-}
-
-.universe-sidebar .title-word.flame {
-    font-family: 'Dancing Script', cursive;
-    font-size: 36px;
-}
-
-.universe-sidebar .title-word.of {
-    font-family: sans-serif;
-    font-size: 18px;
-    font-weight: 100;
-}
-
-.universe-sidebar .title-word.life {
-    display: block;
-    font-family: 'Chau Philomene One', sans-serif;
-    font-size: 48px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-}
-
-.universe-sidebar .flame-of-life-logo {
-    width: 100px;
-}
-
-.universe-sidebar .phoenix-logo {
-    width: 200px;
-}
-
-.universe {
-    align-items: center;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: center;
-
-    &.xxl .cell {
-        width: 1px;
-        height: 1px;
-    }
-
-    &.xl .cell {
-        width: 3px;
-        height: 3px;
-    }
-
-    &.lg .cell {
-        width: 5px;
-        height: 5px;
-    }
-
-    &.md .cell {
-        width: 10px;
-        height: 10px;
-    }
-
-    &.sm .cell {
-        width: 15px;
-        height: 15px;
-    }
-}
-
-.cell-row {
-    display: flex;
-}
-
-.cell {
-    border: 1px solid #000;
-    box-sizing: content-box;
-}
-
-.cell.dead {
-    background: rgb(50, 50, 50);
-}
-
-.form-group {
-    display: flex;
-    justify-content: space-around;
-}
-
-.slider {
-    margin: 0 10px;
-}
-
-.fancy {
-    font-family: 'Dancing Script', cursive;
-    font-size: 125%;
-}
-
-.button {
-    background: #fff;
-    border: 0;
-    border-radius: 2px;
-    color: #EF4734;
-    cursor: pointer;
-    font-size: 18px;
-    padding: 5px 10px;
-    transition: transform 0.025s;
-}
-
-.button:hover, .button:active {
-    transform: scale(1.15);
-    transition: transform 0.025s;
-}
-
-.inline {
-    display: inline-block;
-}
-
-.middle {
-    vertical-align: middle;
-}
-
-.help-text {
-    font-size: 14px;
 }

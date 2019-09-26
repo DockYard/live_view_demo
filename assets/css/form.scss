@@ -1,0 +1,50 @@
+.form-group {
+    display: flex;
+    justify-content: space-around;
+}
+
+.form-input {
+    margin: 0;
+}
+
+.form-label {
+    margin: 0;
+}
+
+.form-control.slider {
+    margin: 0 10px;
+}
+
+.button {
+    background: #fff;
+    border: 0;
+    border-radius: 2px;
+    color: #EF4734;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px 10px;
+    transition: transform 0.025s;
+}
+
+a {
+    &.button {
+        text-decoration: none;
+    }
+}
+
+.button:hover, .button:active {
+    transform: scale(1.15);
+    transition: transform 0.025s;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.middle {
+    vertical-align: middle;
+}
+
+.help-text {
+    font-size: 14px;
+}

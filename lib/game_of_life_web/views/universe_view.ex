@@ -22,6 +22,9 @@ defmodule GameOfLifeWeb.UniverseView do
     end
   end
 
+  def play_text(false), do: "Play"
+  def play_text(true), do: "Pause"
+
   def template_names(), do: Template.names()
 
   defp universe_class(%Dimensions{width: width, height: height}) when width > 200 or height > 200, do: "universe xxl"

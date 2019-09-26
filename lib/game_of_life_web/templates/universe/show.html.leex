@@ -17,7 +17,7 @@
   <%= form_tag "#", phx_change: "set_template" do %>
     <h2>Template</h2>
 
-    <%= select :universe, :template, template_names() %>
+    <%= select :universe, :template, template_names(), selected: @template %>
   <% end %>
 
   <%= form_tag "#", phx_change: "update_speed" do %>
@@ -69,17 +69,12 @@
   <% end %>
 
   <div>
-    <%= form_tag "#", class: "inline", phx_submit: "toggle_playing" do %>
-      <%= submit (if @playing, do: "Pause", else: "Play"), class: "button" %>
-    <% end %>
-
-    <%= form_tag "#", class: "inline", phx_submit: "reset" do %>
-      <%= submit "Reset", class: "button" %>
-    <% end %>
+    <%= link play_text(@playing), to: "#", phx_click: "toggle_playing", class: "inline button" %>
+    <%= link "Reset", to: "#", phx_click: "reset", class: "inline button" %>
   </div>
 
   <div>
-    <p class="fancy">Powered by</p>
+    <div class="fancy">Powered by</div>
     <a href="https://phoenixframework.org" target="_blank">
       <img class="phoenix-logo" src="/images/phoenix-white.png" alt="Phoenix Framework"/>
     </a>

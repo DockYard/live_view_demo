@@ -1,0 +1,48 @@
+.universe-sidebar {
+    background-image: radial-gradient( circle at 50% 50%, #F67938 29%, #EF4734 120%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 20px;
+
+    .sidebar-title-wrapper {
+        display: flex;
+    }
+
+    .sidebar-title {
+        /*font-size: 24px;*/
+        padding-left: 20px;
+    }
+
+    .title-word.flame {
+        font-family: 'Dancing Script', cursive;
+        font-size: 36px;
+    }
+
+    .title-word.of {
+        font-family: sans-serif;
+        font-size: 18px;
+        font-weight: 100;
+    }
+
+    .title-word.life {
+        display: block;
+        font-family: 'Chau Philomene One', sans-serif;
+        font-size: 48px;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+    }
+
+    .flame-of-life-logo {
+        width: 100px;
+    }
+
+    .phoenix-logo {
+        width: 200px;
+    }
+
+    .fancy {
+        font-family: 'Dancing Script', cursive;
+        font-size: 125%;
+    }
+}
