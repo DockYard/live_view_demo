@@ -25,7 +25,7 @@ defmodule TypoKartWeb.RaceView do
   def marker_transform(
         %Course{
           marker_center_offset_x: marker_center_offset_x,
-          marker_center_offset_y: marker_center_offset_y,
+          marker_center_offset_y: marker_center_offset_y
         },
         cur_char_rotation,
         [cur_char_x, cur_char_y],
@@ -49,7 +49,8 @@ defmodule TypoKartWeb.RaceView do
 
   def map_angle(cur_char_rotation), do: -1 * cur_char_rotation
 
-  def text_path_extra_attrs(%Game{course: %{paths: paths}}, path_index) when is_integer(path_index) do
+  def text_path_extra_attrs(%Game{course: %{paths: paths}}, path_index)
+      when is_integer(path_index) do
     paths
     |> Enum.at(path_index)
     |> Map.get(:text_path_extra_attrs)

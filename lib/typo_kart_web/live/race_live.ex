@@ -62,21 +62,21 @@ defmodule TypoKartWeb.RaceLive do
     #
     # connected?(socket)
 
-
     {:ok, course} = Courses.load("course2")
 
-    game_id = GameMaster.new_game(%Game{
-      players: [
-        %Player{
-          color: "orange",
-          label: "P1",
-          cur_path_char_indices: [
-            %PathCharIndex{path_index: 2, char_index: 0}
-          ]
-        }
-      ],
-      course: course
-    })
+    game_id =
+      GameMaster.new_game(%Game{
+        players: [
+          %Player{
+            color: "orange",
+            label: "P1",
+            cur_path_char_indices: [
+              %PathCharIndex{path_index: 2, char_index: 0}
+            ]
+          }
+        ],
+        course: course
+      })
 
     game = GameMaster.state() |> get_in([:games, game_id])
 
@@ -113,7 +113,12 @@ defmodule TypoKartWeb.RaceLive do
       ) do
     case GameMaster.advance(game_id, player_index, String.to_charlist(key) |> hd()) do
       {:ok, game} ->
-        {:noreply, assign(socket, error_status: "", game: game, text_segments: GameMaster.text_segments(game, player_index))}
+        {:noreply,
+         assign(socket,
+           error_status: "",
+           game: game,
+           text_segments: GameMaster.text_segments(game, player_index)
+         )}
 
       {:error, _} ->
         {:noreply, assign(socket, error_status: "show")}

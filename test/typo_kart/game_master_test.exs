@@ -712,22 +712,22 @@ defmodule TypoKart.GameMasterTest do
     }
 
     assert [
-      {"The quick b", "orange"},
-      {"ro ", "unowned"},
-      {"w ", "unowned next-char"},
-      {"n ", "unowned"},
-      {"fox", "blue"}
-    ] = GameMaster.text_segments(game, 0)
+             {"The quick b", "orange"},
+             {"ro ", "unowned"},
+             {"w ", "unowned next-char"},
+             {"n ", "unowned"},
+             {"fox", "blue"}
+           ] = GameMaster.text_segments(game, 0)
 
     assert [
-      {"A", "orange"},
-      {" slo", "blue"},
-      {"w", "unowned"},
-      {" ", "unowned next-char"},
-      {"green tu", "unowned"},
-      {"rtl", "orange"},
-      {"e", "unowned"},
-    ] = GameMaster.text_segments(game, 1)
+             {"A", "orange"},
+             {" slo", "blue"},
+             {"w", "unowned"},
+             {" ", "unowned next-char"},
+             {"green tu", "unowned"},
+             {"rtl", "orange"},
+             {"e", "unowned"}
+           ] = GameMaster.text_segments(game, 1)
   end
 
   @tag :text_segments
@@ -812,21 +812,21 @@ defmodule TypoKart.GameMasterTest do
     }
 
     assert [
-      {"The quick b", "orange"},
-      {"ro ", "unowned"},
-      {"w ", "unowned next-char"},
-      {"n ", "unowned"},
-      {"fox", "blue"}
-    ] = GameMaster.text_segments(game, 0)
+             {"The quick b", "orange"},
+             {"ro ", "unowned"},
+             {"w ", "unowned next-char"},
+             {"n ", "unowned"},
+             {"fox", "blue"}
+           ] = GameMaster.text_segments(game, 0)
 
     assert [
-      {"A", "orange"},
-      {" s", "blue"},
-      {"l", "blue next-char"},
-      {"ow ", "blue"},
-      {"green tu", "unowned"},
-      {"rtl", "orange"},
-      {"e", "unowned"},
-    ] = GameMaster.text_segments(game, 1)
+             {"A", "orange"},
+             {" s", "blue"},
+             {"l", "blue next-char"},
+             {"ow ", "blue"},
+             {"green tu", "unowned"},
+             {"rtl", "orange"},
+             {"e", "unowned"}
+           ] = GameMaster.text_segments(game, 1)
   end
 end

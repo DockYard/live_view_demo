@@ -97,10 +97,13 @@ defmodule TypoKart.GameMaster do
   end
 
   @spec next_chars(Course.t(), PathCharIndex.t()) :: list(PathCharIndex.t())
-  def next_chars(%Course{paths: paths, path_connections: path_connections}, %PathCharIndex{
-        path_index: cur_path_index,
-        char_index: cur_char_index
-      } = cur_pci) do
+  def next_chars(
+        %Course{paths: paths, path_connections: path_connections},
+        %PathCharIndex{
+          path_index: cur_path_index,
+          char_index: cur_char_index
+        } = cur_pci
+      ) do
     %Path{chars: cur_path_chars} = Enum.at(paths, cur_path_index)
 
     # 1. Add the next char_index on the current path. It's always a valid next char,
@@ -129,57 +132,80 @@ defmodule TypoKart.GameMaster do
 
   @type text_segment() :: {binary(), binary()}
   @spec text_segments(Game.t(), integer()) :: list(text_segment())
-  def text_segments(%Game{players: players, course: %{paths: paths}, char_ownership: char_ownership}, path_index) when is_integer(path_index) do
+  def text_segments(
+        %Game{players: players, course: %{paths: paths}, char_ownership: char_ownership},
+        path_index
+      )
+      when is_integer(path_index) do
     cur_path_chars = Enum.at(paths, path_index) |> Map.get(:chars)
     cur_char_ownership = Enum.at(char_ownership, path_index)
-    player_colors = Enum.map(players, &(&1.color))
+    player_colors = Enum.map(players, & &1.color)
 
     Enum.with_index(cur_char_ownership)
-    |> Enum.reduce(%{cur_owner: nil, cur_segment_start: nil, last_index: length(cur_path_chars) - 1, segments: []}, fn cur, %{last_index: last_index, cur_owner: cur_owner, cur_segment_start: cur_segment_start, segments: segments} = acc ->
-      case cur do
-        {owner, 0} ->
-          %{
-            acc |
-            cur_owner: owner,
-            cur_segment_start: 0,
-            segments: []
-          }
+    |> Enum.reduce(
+      %{
+        cur_owner: nil,
+        cur_segment_start: nil,
+        last_index: length(cur_path_chars) - 1,
+        segments: []
+      },
+      fn cur,
+         %{
+           last_index: last_index,
+           cur_owner: cur_owner,
+           cur_segment_start: cur_segment_start,
+           segments: segments
+         } = acc ->
+        case cur do
+          {owner, 0} ->
+            %{
+              acc
+              | cur_owner: owner,
+                cur_segment_start: 0,
+                segments: []
+            }
 
-        # When we're on the last index and the owner changed
-        {owner, index} when owner != cur_owner and index == last_index ->
-          %{
-            acc |
-            segments: segments ++ [{cur_owner, (cur_segment_start)..(index-1)}, {owner, index..index}]
-          }
+          # When we're on the last index and the owner changed
+          {owner, index} when owner != cur_owner and index == last_index ->
+            %{
+              acc
+              | segments:
+                  segments ++ [{cur_owner, cur_segment_start..(index - 1)}, {owner, index..index}]
+            }
 
-        # When we're on the last index and the owner is unchanged
-        {_owner, index} when index == last_index ->
-          %{
-            acc |
-            segments: segments ++ [{cur_owner, cur_segment_start..index}]
-          }
+          # When we're on the last index and the owner is unchanged
+          {_owner, index} when index == last_index ->
+            %{
+              acc
+              | segments: segments ++ [{cur_owner, cur_segment_start..index}]
+            }
 
-        # When we're somewwere in the middle and the owner has changed
-        {owner, index} when owner != cur_owner ->
-          %{
-            acc |
-            cur_owner: owner,
-            cur_segment_start: index,
-            segments: segments ++ [{cur_owner, cur_segment_start..index-1}]
-          }
+          # When we're somewwere in the middle and the owner has changed
+          {owner, index} when owner != cur_owner ->
+            %{
+              acc
+              | cur_owner: owner,
+                cur_segment_start: index,
+                segments: segments ++ [{cur_owner, cur_segment_start..(index - 1)}]
+            }
 
-        # Leftover default case: When we're somewhere in the middle and the owner has not changed
-        {_owner, _index} ->
-          acc
+          # Leftover default case: When we're somewhere in the middle and the owner has not changed
+          {_owner, _index} ->
+            acc
+        end
       end
-    end)
-  |> Map.get(:segments)
-  |> Enum.map(&(
-      {
+    )
+    |> Map.get(:segments)
+    |> Enum.map(
+      &{
         cur_path_chars |> Enum.slice(elem(&1, 1)) |> List.to_string(),
-        if elem(&1,0) == nil do unowned_class() else Enum.at(player_colors, elem(&1, 0)) end
+        if elem(&1, 0) == nil do
+          unowned_class()
+        else
+          Enum.at(player_colors, elem(&1, 0))
+        end
       }
-    ))
+    )
   end
 
   defp unowned_class, do: "unowned"
