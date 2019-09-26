@@ -758,4 +758,244 @@ defmodule TypoKart.GameMasterTest do
              {"e", "unowned"}
            ] = GameMaster.text_segments(game, 1, 0)
   end
+
+  @tag :text_segments
+  test "text_segments/3 when first character on path is unowned and a next-char" do
+    game = %Game{
+      players: [
+        %Player{
+          color: "orange",
+          cur_path_char_indices: [
+            %PathCharIndex{
+              path_index: 0,
+              char_index: 0
+            }
+          ]
+        }
+      ],
+      course: %Course{
+        paths: [
+          %Path{
+            chars: 'fox'
+          }
+        ],
+        path_connections: []
+      },
+      char_ownership: [
+        [
+          nil,
+          0,
+          0
+        ]
+      ]
+    }
+
+    assert [
+             {"f", "unowned next-char"},
+             {"ox", "orange"},
+           ] = GameMaster.text_segments(game, 0, 0)
+  end
+
+  @tag :text_segments
+  test "text_segments/3 when first character on path is owned and a next-char" do
+    game = %Game{
+      players: [
+        %Player{
+          color: "orange",
+          cur_path_char_indices: [
+            %PathCharIndex{
+              path_index: 0,
+              char_index: 0
+            }
+          ]
+        },
+        %Player{
+          color: "blue",
+        }
+      ],
+      course: %Course{
+        paths: [
+          %Path{
+            chars: 'fox'
+          }
+        ],
+        path_connections: []
+      },
+      char_ownership: [
+        [
+          1,
+          nil,
+          nil
+        ]
+      ]
+    }
+
+    assert [
+             {"f", "blue next-char"},
+             {"ox", "unowned"},
+           ] = GameMaster.text_segments(game, 0, 0)
+  end
+
+  @tag :text_segments
+  test "text_segments/3 when last character on path is owned and a next-char" do
+    game = %Game{
+      players: [
+        %Player{
+          color: "orange",
+          cur_path_char_indices: [
+            %PathCharIndex{
+              path_index: 0,
+              char_index: 2
+            }
+          ]
+        },
+        %Player{
+          color: "blue",
+        }
+      ],
+      course: %Course{
+        paths: [
+          %Path{
+            chars: 'fox'
+          }
+        ],
+        path_connections: []
+      },
+      char_ownership: [
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    }
+
+    assert [
+             {"fo", "orange"},
+             {"x", "blue next-char"},
+           ] = GameMaster.text_segments(game, 0, 0)
+  end
+
+  @tag :text_segments
+  test "text_segments/3 when last character on path is unowned a next-char" do
+    game = %Game{
+      players: [
+        %Player{
+          color: "orange",
+          cur_path_char_indices: [
+            %PathCharIndex{
+              path_index: 0,
+              char_index: 2
+            }
+          ]
+        },
+        %Player{
+          color: "blue",
+        }
+      ],
+      course: %Course{
+        paths: [
+          %Path{
+            chars: 'fox'
+          }
+        ],
+        path_connections: []
+      },
+      char_ownership: [
+        [
+          0,
+          0,
+          nil
+        ]
+      ]
+    }
+
+    assert [
+             {"fo", "orange"},
+             {"x", "unowned next-char"},
+           ] = GameMaster.text_segments(game, 0, 0)
+  end
+
+  @tag :text_segments
+  test "text_segments/3 when last character on path is owned by the same player, and is a next-char" do
+    game = %Game{
+      players: [
+        %Player{
+          color: "orange",
+          cur_path_char_indices: [
+            %PathCharIndex{
+              path_index: 0,
+              char_index: 2
+            }
+          ]
+        },
+        %Player{
+          color: "blue",
+        }
+      ],
+      course: %Course{
+        paths: [
+          %Path{
+            chars: 'fox'
+          }
+        ],
+        path_connections: []
+      },
+      char_ownership: [
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+
+    assert [
+             {"fo", "orange"},
+             {"x", "orange next-char"},
+           ] = GameMaster.text_segments(game, 0, 0)
+  end
+
+  @tag :text_segments
+  test "text_segments/3 when owner changes in the middle of the path on a next-char" do
+    game = %Game{
+      players: [
+        %Player{
+          color: "orange",
+          cur_path_char_indices: [
+            %PathCharIndex{
+              path_index: 0,
+              char_index: 2
+            }
+          ]
+        },
+        %Player{
+          color: "blue",
+        }
+      ],
+      course: %Course{
+        paths: [
+          %Path{
+            chars: 'blast'
+          }
+        ],
+        path_connections: []
+      },
+      char_ownership: [
+        [
+          0,
+          0,
+          1,
+          1,
+          1
+        ]
+      ]
+    }
+
+    assert [
+             {"bl", "orange"},
+             {"a", "blue next-char"},
+             {"st", "blue"},
+           ] = GameMaster.text_segments(game, 0, 0)
+  end
 end

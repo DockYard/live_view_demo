@@ -184,7 +184,7 @@ defmodule TypoKart.GameMaster do
               acc
               | cur_owner: owner,
                 cur_segment_start: 1,
-                segments: [{owner, true, 0..0}]
+                segments: [{owner, 0..0, true}]
             }
 
           {owner, 0, false} ->
@@ -215,14 +215,6 @@ defmodule TypoKart.GameMaster do
             }
 
           # When we're on the last index, the owner is unchanged, it is a next char,
-          # and the last index would be in a segment by itself
-          {_owner, index, true} when index == last_index and cur_segment_start == last_index ->
-            %{
-              acc
-              | segments: segments ++ [{cur_owner, cur_segment_start..index, true}]
-            }
-
-          # When we're on the last index, the owner is unchanged, it is a next char,
           # and it should be broken out into its own segment
           {_owner, index, true} when index == last_index and cur_segment_start != last_index ->
             %{
@@ -235,13 +227,27 @@ defmodule TypoKart.GameMaster do
                     ]
             }
 
-          # When we're somewhere in the middle, the owner has changed, and it's not a next-char
+          # When we're somewhere in the middle, the owner has changed, it's not a next-char,
+          # and it's the start of a new segment.
+          {owner, index, false} when owner != cur_owner and cur_segment_start == index ->
+            %{
+              acc
+              | cur_owner: owner,
+                # This is the proper behavior when the current index is also the start of a new
+                # segment and is not a next-char.
+                # For example, when previous char was a next-char, and therefore would have
+                # comprised its own segment and forced this char to open a new segment.
+                segments: segments
+            }
+
+          # When we're somewhere in the middle, the owner has changed, it's not a next-char,
+          # and it's not the start of a new segment
           {owner, index, false} when owner != cur_owner ->
             %{
               acc
               | cur_owner: owner,
                 cur_segment_start: index,
-                segments: segments ++ [{cur_owner, cur_segment_start..(index - 1), false}]
+                segments: segments ++ [{cur_owner, cur_segment_start..if(cur_segment_start < index, do: index - 1, else: index), false}]
             }
 
           # When we're somewhere in the middle, the owner has changed, and it is a next-char
