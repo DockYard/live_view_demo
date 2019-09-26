@@ -141,12 +141,15 @@ defmodule TypoKart.GameMaster do
     cur_path_chars = Enum.at(paths, path_index) |> Map.get(:chars)
     cur_char_ownership = Enum.at(char_ownership, path_index)
     player_colors = Enum.map(players, & &1.color)
-    player_cur_path_char_indices = Enum.at(players, player_index) |> Map.get(:cur_path_char_indices)
+
+    player_cur_path_char_indices =
+      Enum.at(players, player_index) |> Map.get(:cur_path_char_indices)
 
     Enum.with_index(cur_char_ownership)
     # Add a boolean to the tuple indicating whether it's a valid next-char
-    |> Enum.map(&(
-      Tuple.append(&1,
+    |> Enum.map(
+      &Tuple.append(
+        &1,
         # produce true in either case:
         #   A) the current char_index on the current path is present in the current
         #      player's cur_path_char_indices.
@@ -155,9 +158,10 @@ defmodule TypoKart.GameMaster do
           player_cur_path_char_indices,
           fn pci ->
             pci == %PathCharIndex{path_index: path_index, char_index: elem(&1, 1)}
-          end) != nil
+          end
+        ) != nil
       )
-    ))
+    )
     |> Enum.reduce(
       %{
         cur_owner: nil,
@@ -196,7 +200,11 @@ defmodule TypoKart.GameMaster do
             %{
               acc
               | segments:
-                  segments ++ [{cur_owner, cur_segment_start..(index - 1), false}, {owner, index..index, is_next_char}]
+                  segments ++
+                    [
+                      {cur_owner, cur_segment_start..(index - 1), false},
+                      {owner, index..index, is_next_char}
+                    ]
             }
 
           # When we're on the last index, the owner is unchanged, and it is not a next char
@@ -219,7 +227,12 @@ defmodule TypoKart.GameMaster do
           {_owner, index, true} when index == last_index and cur_segment_start != last_index ->
             %{
               acc
-              | segments: segments ++ [{cur_owner, cur_segment_start..index-1, false}, {cur_owner, index..index, true}]
+              | segments:
+                  segments ++
+                    [
+                      {cur_owner, cur_segment_start..(index - 1), false},
+                      {cur_owner, index..index, true}
+                    ]
             }
 
           # When we're somewhere in the middle, the owner has changed, and it's not a next-char
@@ -236,16 +249,28 @@ defmodule TypoKart.GameMaster do
             %{
               acc
               | cur_owner: owner,
-                cur_segment_start: index+1, # next index starts a new segment since this one can only be one char long
-                segments: segments ++ [{cur_owner, cur_segment_start..(index - 1), false}, {owner, index..index, true}]
+                # next index starts a new segment since this one can only be one char long
+                cur_segment_start: index + 1,
+                segments:
+                  segments ++
+                    [
+                      {cur_owner, cur_segment_start..(index - 1), false},
+                      {owner, index..index, true}
+                    ]
             }
 
           # When we're somewhere in the middle, the owner is unchanged, but it is a next-char
           {owner, index, true} when owner == cur_owner ->
             %{
               acc
-              | cur_segment_start: index+1, # next index starts a new segment since this one can only be one char long
-                segments: segments ++ [{cur_owner, cur_segment_start..(index - 1), false}, {cur_owner, index..index, true}]
+              | # next index starts a new segment since this one can only be one char long
+                cur_segment_start: index + 1,
+                segments:
+                  segments ++
+                    [
+                      {cur_owner, cur_segment_start..(index - 1), false},
+                      {cur_owner, index..index, true}
+                    ]
             }
 
           # Leftover default case: When we're somewhere in the middle and the owner has not changed and it's not a next-char,
