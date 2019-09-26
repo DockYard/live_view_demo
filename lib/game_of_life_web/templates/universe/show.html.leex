@@ -37,34 +37,34 @@
     <h2>Cell Color</h2>
 
     <div>
-        <%= label :color, :red, "R", class: "inline middle" %>
+      <%= label :color, :red, "R", class: "inline middle" %>
 
-        <%= range_input :color, :red,
-          class: "slider middle",
-          min: "0", max: "255", step: "5",
-          value: @color.red %>
+      <%= range_input :color, :red,
+        class: "slider middle",
+        min: "0", max: "255", step: "5",
+        value: @color.red %>
 
-        <%= label :color, :red, @color.red, class: "inline middle" %>
+      <%= label :color, :red, @color.red, class: "inline middle" %>
     </div>
     <div>
-        <%= label :color, :green, "G", class: "inline middle" %>
+      <%= label :color, :green, "G", class: "inline middle" %>
 
-        <%= range_input :color, :green,
-          class: "slider middle",
-          min: "0", max: "255", step: "5",
-          value: @color.green %>
+      <%= range_input :color, :green,
+        class: "slider middle",
+        min: "0", max: "255", step: "5",
+        value: @color.green %>
 
-        <%= label :color, :green, @color.green, class: "inline middle" %>
+      <%= label :color, :green, @color.green, class: "inline middle" %>
     </div>
     <div>
-        <%= label :color, :blue, "B", class: "inline middle" %>
+      <%= label :color, :blue, "B", class: "inline middle" %>
 
-        <%= range_input :color, :blue,
-          class: "slider middle",
-          min: "0", max: "255", step: "5",
-          value: @color.blue %>
+      <%= range_input :color, :blue,
+        class: "slider middle",
+        min: "0", max: "255", step: "5",
+        value: @color.blue %>
 
-        <%= label :color, :blue, @color.blue, class: "inline middle" %>
+      <%= label :color, :blue, @color.blue, class: "inline middle" %>
     </div>
   <% end %>
 
