@@ -631,11 +631,17 @@ defmodule TypoKart.GameMasterTest do
   end
 
   @tag :text_segments
-  test "text_segments/2" do
+  test "text_segments/2 when current player is at a path connection point and the char on other path is unowned" do
     game = %Game{
       players: [
         %Player{
-          color: "orange"
+          color: "orange",
+          cur_path_char_indices: [
+            %PathCharIndex{
+              path_index: 0,
+              char_index: 12
+            }
+          ]
         },
         %Player{
           color: "blue"
@@ -648,6 +654,14 @@ defmodule TypoKart.GameMasterTest do
           },
           %Path{
             chars: 'A slow green turtle'
+          }
+        ],
+        path_connections: [
+          {
+            # ... from this character
+            %PathCharIndex{path_index: 0, char_index: 12},
+            # ... player can move to this character
+            %PathCharIndex{path_index: 1, char_index: 6}
           }
         ]
       },
@@ -699,14 +713,118 @@ defmodule TypoKart.GameMasterTest do
 
     assert [
       {"The quick b", "orange"},
-      {"rown ", "unowned"},
+      {"ro ", "unowned"},
+      {"w ", "unowned next-char"},
+      {"n ", "unowned"},
       {"fox", "blue"}
     ] = GameMaster.text_segments(game, 0)
 
     assert [
       {"A", "orange"},
       {" slo", "blue"},
-      {"w green tu", "unowned"},
+      {"w", "unowned"},
+      {" ", "unowned next-char"},
+      {"green tu", "unowned"},
+      {"rtl", "orange"},
+      {"e", "unowned"},
+    ] = GameMaster.text_segments(game, 1)
+  end
+
+  @tag :text_segments
+  test "text_segments/2 when current player is at a path connection point and the char on other path is owned" do
+    game = %Game{
+      players: [
+        %Player{
+          color: "orange",
+          cur_path_char_indices: [
+            %PathCharIndex{
+              path_index: 0,
+              char_index: 12
+            }
+          ]
+        },
+        %Player{
+          color: "blue"
+        }
+      ],
+      course: %Course{
+        paths: [
+          %Path{
+            chars: 'The quick brown fox'
+          },
+          %Path{
+            chars: 'A slow green turtle'
+          }
+        ],
+        path_connections: [
+          {
+            # ... from this character
+            %PathCharIndex{path_index: 0, char_index: 12},
+            # ... player can move to this character
+            %PathCharIndex{path_index: 1, char_index: 3}
+          }
+        ]
+      },
+      char_ownership: [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          1,
+          1,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          0,
+          0,
+          0,
+          nil
+        ]
+      ]
+    }
+
+    assert [
+      {"The quick b", "orange"},
+      {"ro ", "unowned"},
+      {"w ", "unowned next-char"},
+      {"n ", "unowned"},
+      {"fox", "blue"}
+    ] = GameMaster.text_segments(game, 0)
+
+    assert [
+      {"A", "orange"},
+      {" s", "blue"},
+      {"l", "blue next-char"},
+      {"ow ", "blue"},
+      {"green tu", "unowned"},
       {"rtl", "orange"},
       {"e", "unowned"},
     ] = GameMaster.text_segments(game, 1)
