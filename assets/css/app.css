@@ -15,6 +15,14 @@
   --light-grey: lightgrey;
 }
 
+.phx-hero {
+  background-color: lightgrey;
+}
+
+.browser-compat-error{
+  background-color: lightgrey;
+}
+
 #the-course {
   width: 80%;
   margin: auto;

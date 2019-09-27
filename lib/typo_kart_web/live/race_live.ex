@@ -49,7 +49,13 @@ defmodule TypoKartWeb.RaceLive do
   ]
 
   def render(assigns) do
-    TypoKartWeb.RaceView.render("index.html", assigns)
+    case assigns do
+      %{browser_incompatible: true} ->
+        TypoKartWeb.RaceView.render("incompatible.html", assigns)
+
+      _ ->
+        TypoKartWeb.RaceView.render("index.html", assigns)
+    end
   end
 
   def mount(%{game_id: game_id, player_index: player_index}, socket) do
@@ -104,6 +110,9 @@ defmodule TypoKartWeb.RaceLive do
 
   def handle_event("key", _, socket),
     do: {:noreply, assign(socket, error_status: "error")}
+
+  def handle_event("bail_out_browser_incompatible", _, socket),
+    do: {:noreply, assign(socket, browser_incompatible: true)}
 
   def handle_event(
         "load_char_data",

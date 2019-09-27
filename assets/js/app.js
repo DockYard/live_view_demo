@@ -40,10 +40,26 @@ function computeCharacterPointsAndRotations(textPaths = []){
   })
 }
 
+function isBrowserCompatible(){
+  const svg = document.createElement('SVG')
+
+  // Using "visibility: hidden; position: absolute" instead of "display: none;" because
+  // even Chrome will not report an accurate character count on the textPath if we
+  // use display: none
+  svg.innerHTML = '<svg style="visibility: hidden; position: absolute; height: 0; width: 0;"><text><textPath>test</textPath></text></svg>'
+  document.body.appendChild(svg)
+
+  return 4 == svg.querySelector('textPath').getNumberOfChars()
+}
+
 Hooks.CurrentText = {
   mounted() {
-    const textPaths = Array.from(document.querySelectorAll('textPath'))
-    this.pushEvent('load_char_data', computeCharacterPointsAndRotations(textPaths))
+    if(isBrowserCompatible()){
+      const textPaths = Array.from(document.querySelectorAll('textPath'))
+      this.pushEvent('load_char_data', computeCharacterPointsAndRotations(textPaths))
+    } else {
+      this.pushEvent('bail_out_browser_incompatible')
+    }
   }
 }
 
