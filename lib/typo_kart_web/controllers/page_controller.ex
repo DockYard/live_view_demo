@@ -28,21 +28,24 @@ defmodule TypoKartWeb.PageController do
       [] ->
         {:ok, course} = Courses.load("course2")
 
+        player_count = 2
+
+        start_positions =
+          course
+          |> Map.get(:start_positions_by_player_count)
+          |> Enum.at(player_count - 1)
+
         GameMaster.new_game(%Game{
           players: [
             %Player{
               color: "orange",
               label: "P1",
-              cur_path_char_indices: [
-                %PathCharIndex{path_index: 2, char_index: 0}
-              ]
+              cur_path_char_indices: [Enum.at(start_positions, 0)]
             },
             %Player{
               color: "blue",
               label: "P2",
-              cur_path_char_indices: [
-                %PathCharIndex{path_index: 2, char_index: 0}
-              ]
+              cur_path_char_indices: [Enum.at(start_positions, 1)]
             }
           ],
           course: course
