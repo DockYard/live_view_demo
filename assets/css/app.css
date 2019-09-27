@@ -26,6 +26,10 @@ text {
   font-family: sans-serif;
 }
 
+.hide {
+  display: none;
+}
+
 main {
   background-color: var(--dark-grey);
 }

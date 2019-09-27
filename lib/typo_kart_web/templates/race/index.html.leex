@@ -1,6 +1,6 @@
-<div id="the-course" class="<%= @error_status %>" data-current-text-path-id="<%= cur_text_path_id(@game, @player_index) %>" data-current-char-index="<%= cur_char_index(@game, @player_index) %>" phx-keyup="key" phx-target="window" phx-hook="CurrentText">
+<div id="the-course" class="<%= @error_status %>" phx-keyup="key" phx-target="window" phx-hook="CurrentText">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="<%= @game.course.view_box %>">
-    <g transform="<%= map_transform(@game.course, @cur_char_rotation) %>">
+    <g transform="<%= course_transform(@game, @view_chars, @player_index) %>">
       <%= for {path, path_index} <- Enum.with_index(@game.course.paths) do %>
         <path class="<%= path_class(@game.course, path_index) %>" id= "path-<%= path_index %>" d="<%= path.d %>"/>
         <text dy="10">
@@ -11,7 +11,7 @@
       <% end %>
 
       <%= for {player, player_index} <- Enum.with_index(@game.players) do %>
-        <g id="marker-player-<%= player_index %>" class="marker player-<%= player_index %> <%= player.color %>" transform="<%= marker_transform(@game.course, @cur_char_rotation, @cur_char_point, @marker_rotation_offset, @marker_translate_offset_x, @marker_translate_offset_y) %>">
+        <g id="marker-player-<%= player_index %>" class="<%= marker_class(@game, @view_chars, player_index) %>" transform="<%= marker_transform(@game, @view_chars, player_index, @marker_rotation_offset, @marker_translate_offset_x, @marker_translate_offset_y) %>">
           <path class="alpha" d="M416 128V32c0-17.67-14.33-32-32-32H32C14.33 0 0 14.33 0 32v96c0 17.67 14.33 32 32 32h352c17.67 0 32-14.33 32-32z"/>
           <path class="beta" d="M448 64v128c0 17.67-14.33 32-32 32H256c-35.35 0-64 28.65-64 64v32c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h64c17.67 0 32-14.33 32-32V352c0-17.67-14.33-32-32-32v-32h160c53.02 0 96-42.98 96-96v-64c0-35.35-28.65-64-64-64z"/>
         </g>

@@ -20,40 +20,30 @@ import LiveSocket from "phoenix_live_view"
 
 const Hooks = {}
 
-function getCourse(){
-  return document.getElementById('the-course')
-}
+function computeCharacterPointsAndRotations(textPaths = []){
+  return textPaths
+  .map(t => {
+    const pathChars = []
+    for(let i=0; i<t.getNumberOfChars(); i++){
+      const svgPoint = t.getStartPositionOfChar(i)
+      const rotation = t.getRotationOfChar(i)
 
-function getCurrentTextPath() {
-  return document.getElementById(
-    getCourse()
-      .getAttribute('data-current-text-path-id')
-  )
-}
-
-function getCurCharIndex(){
-  return +getCourse().getAttribute('data-current-char-index')
+      pathChars.push({
+        point: {
+          x: svgPoint.x,
+          y: svgPoint.y
+        },
+        rotation
+      })
+    }
+    return pathChars
+  })
 }
 
 Hooks.CurrentText = {
-  adjustRotation() {
-    const textPath = getCurrentTextPath()
-    const currentCharIndex = getCurCharIndex()
-    const point = textPath.getStartPositionOfChar(currentCharIndex)
-    const charRotation = textPath.getRotationOfChar(currentCharIndex)
-
-    this.pushEvent('adjust_rotation', {
-      currentCharPoint: {
-        x: point.x, y: point.y
-      },
-      currentCharRotation: charRotation
-    })
-  },
-  updated() {
-    this.adjustRotation()
-  },
   mounted() {
-    this.adjustRotation()
+    const textPaths = Array.from(document.querySelectorAll('textPath'))
+    this.pushEvent('load_char_data', computeCharacterPointsAndRotations(textPaths))
   }
 }
 

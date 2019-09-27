@@ -792,7 +792,7 @@ defmodule TypoKart.GameMasterTest do
 
     assert [
              {"f", "unowned next-char"},
-             {"ox", "orange"},
+             {"ox", "orange"}
            ] = GameMaster.text_segments(game, 0, 0)
   end
 
@@ -810,7 +810,7 @@ defmodule TypoKart.GameMasterTest do
           ]
         },
         %Player{
-          color: "blue",
+          color: "blue"
         }
       ],
       course: %Course{
@@ -832,7 +832,7 @@ defmodule TypoKart.GameMasterTest do
 
     assert [
              {"f", "blue next-char"},
-             {"ox", "unowned"},
+             {"ox", "unowned"}
            ] = GameMaster.text_segments(game, 0, 0)
   end
 
@@ -850,7 +850,7 @@ defmodule TypoKart.GameMasterTest do
           ]
         },
         %Player{
-          color: "blue",
+          color: "blue"
         }
       ],
       course: %Course{
@@ -872,7 +872,7 @@ defmodule TypoKart.GameMasterTest do
 
     assert [
              {"fo", "orange"},
-             {"x", "blue next-char"},
+             {"x", "blue next-char"}
            ] = GameMaster.text_segments(game, 0, 0)
   end
 
@@ -890,7 +890,7 @@ defmodule TypoKart.GameMasterTest do
           ]
         },
         %Player{
-          color: "blue",
+          color: "blue"
         }
       ],
       course: %Course{
@@ -912,7 +912,7 @@ defmodule TypoKart.GameMasterTest do
 
     assert [
              {"fo", "orange"},
-             {"x", "unowned next-char"},
+             {"x", "unowned next-char"}
            ] = GameMaster.text_segments(game, 0, 0)
   end
 
@@ -930,7 +930,7 @@ defmodule TypoKart.GameMasterTest do
           ]
         },
         %Player{
-          color: "blue",
+          color: "blue"
         }
       ],
       course: %Course{
@@ -952,7 +952,7 @@ defmodule TypoKart.GameMasterTest do
 
     assert [
              {"fo", "orange"},
-             {"x", "orange next-char"},
+             {"x", "orange next-char"}
            ] = GameMaster.text_segments(game, 0, 0)
   end
 
@@ -970,7 +970,7 @@ defmodule TypoKart.GameMasterTest do
           ]
         },
         %Player{
-          color: "blue",
+          color: "blue"
         }
       ],
       course: %Course{
@@ -995,7 +995,7 @@ defmodule TypoKart.GameMasterTest do
     assert [
              {"bl", "orange"},
              {"a", "blue next-char"},
-             {"st", "blue"},
+             {"st", "blue"}
            ] = GameMaster.text_segments(game, 0, 0)
   end
 end
