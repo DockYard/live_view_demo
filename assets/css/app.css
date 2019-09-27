@@ -3,16 +3,31 @@
 /* @import "./phoenix.css"; */
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
 
+:root {
+  --dark-grey: #606060;
+  --black: #000000;
+  --red: red;
+  --orange: #E69F00;
+  --blue: #E69F00;
+  --green: #E69F00;
+  --pink: #E69F00;
+  --white: #ffffff;
+  --light-grey: lightgrey;
+}
+
 #the-course {
   width: 80%;
   margin: auto;
 }
 
 text {
-  stroke: rgb(77, 71, 71);
   font-size: 24pt;
   letter-spacing: 4px;
   font-family: sans-serif;
+}
+
+main {
+  background-color: var(--dark-grey);
 }
 
 .next-char {
@@ -20,66 +35,56 @@ text {
 }
 
 tspan.next-char {
-  fill: black;
-  stroke: black;
-}
-
-.error tspan.next-char {
-  fill: red;
-  stroke: red;
-}
-
-.orange {
-  fill: orange;
-  stroke: orange;
-}
-
-.blue {
-  fill: blue;
-  stroke: blue;
-}
-
-tspan {
-  fill-opacity: 0.5;
-}
-
-.unowned {
-  fill: lightgrey;
-  stroke: darkgrey;
-  fill-opacity: 1;
-  stroke-width: 2;
-}
-
-.cur-text {
-  fill: black;
-  stroke: black;
-  stroke-width: 2;
-}
-
-.cur-text.error {
-  fill: red;
-  stroke: red;
+  fill: var(--black);
+  font-weight: bold;
 }
 
 path.course {
   fill-opacity: 0;
+  stroke-width: 70;
 }
 
-path.primary {
-  stroke: #ecf1f8;
-  stroke-width: 45;
+path.course.primary {
+  stroke: var(--white);
 }
 
-path.secondary {
-  stroke: #d3d3d3;
-  stroke-width: 50;
+.course.secondary {
+  stroke: var(--light-grey);
 }
 
-.marker.error.show {
-  display: unset;
+.error tspan.next-char {
+  fill: var(--red);
 }
 
-.marker.error {
-  display: none;
-  fill: red;
+.orange {
+  fill: var(--orange);
+}
+
+.blue {
+  fill: var(--blue);
+}
+
+.green {
+  fill: var(--green);
+}
+
+.pink {
+  fill: var(--pink);
+}
+
+.unowned {
+  fill: var(--dark-grey);
+}
+
+.cur-text {
+  fill: var(--black);
+}
+
+.cur-text.error {
+  fill: var(--red);
+}
+
+.marker .beta {
+  fill-opacity: 0.4;
+  fill: var(--black);
 }

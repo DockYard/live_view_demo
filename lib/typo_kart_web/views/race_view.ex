@@ -5,6 +5,7 @@ defmodule TypoKartWeb.RaceView do
     Course,
     Game,
     GameMaster,
+    Path,
     Player
   }
 
@@ -35,7 +36,7 @@ defmodule TypoKartWeb.RaceView do
       ) do
     "rotate(#{cur_char_rotation + marker_rotation_offset}, #{cur_char_x}, #{cur_char_y}) translate(#{
       cur_char_x - marker_center_offset_x + marker_translate_offset_x
-    }, #{cur_char_y - marker_center_offset_y + marker_translate_offset_y}) scale(0.07)"
+    }, #{cur_char_y - marker_center_offset_y + marker_translate_offset_y}) scale(0.2)"
   end
 
   def cur_text_path_id(%Game{} = game, player_index) when is_integer(player_index) do
@@ -57,6 +58,17 @@ defmodule TypoKartWeb.RaceView do
     |> Map.to_list()
     |> Enum.map(fn {key, val} -> "#{key}=#{val}" end)
     |> Enum.join(" ")
+  end
+
+  def path_class(%Course{paths: paths}, path_index) when is_integer(path_index) do
+    classes = "course path-#{path_index}"
+    with %Path{extra_attrs: extra_attrs} <- Enum.at(paths, path_index),
+      extra_classes <- Map.get(extra_attrs, "class", "") do
+      "#{classes} #{extra_classes}"
+    else
+      _ ->
+        classes
+    end
   end
 
   defdelegate text_segments(game, path_index, player_index), to: GameMaster
