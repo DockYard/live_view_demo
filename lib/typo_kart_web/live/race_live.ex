@@ -6,7 +6,8 @@ defmodule TypoKartWeb.RaceLive do
     Game,
     GameMaster,
     PathCharIndex,
-    Player
+    Player,
+    ViewChar
   }
 
   require Logger
@@ -88,11 +89,10 @@ defmodule TypoKartWeb.RaceLive do
         game: game,
         game_id: game_id,
         player_index: 0,
-        cur_char_rotation: game.course.initial_rotation,
-        cur_char_point: [0, 0],
         marker_rotation_offset: 90,
         marker_translate_offset_x: -30,
-        marker_translate_offset_y: 30
+        marker_translate_offset_y: 30,
+        view_chars: []
       )
     }
   end
@@ -128,15 +128,25 @@ defmodule TypoKartWeb.RaceLive do
     do: {:noreply, assign(socket, error_status: "error")}
 
   def handle_event(
-        "adjust_rotation",
-        %{
-          "currentCharPoint" => %{"x" => cur_char_x, "y" => cur_char_y},
-          "currentCharRotation" => cur_char_rotation
-        },
+        "load_char_data",
+        paths,
         socket
-      ) do
+      ) when is_list(paths) do
+        view_chars =
+          paths
+          |> Enum.map(fn path ->
+            path
+            |> Enum.map(fn char ->
+              %ViewChar{
+                x: get_in(char, ["point", "x"]),
+                y: get_in(char, ["point", "y"]),
+                rotation: get_in(char, ["rotation"])
+              }
+            end)
+          end)
+
     {:noreply,
-     assign(socket, cur_char_point: [cur_char_x, cur_char_y], cur_char_rotation: cur_char_rotation)}
+     assign(socket, view_chars: view_chars)}
   end
 
   def handle_event(_, _, socket), do: {:noreply, socket}
