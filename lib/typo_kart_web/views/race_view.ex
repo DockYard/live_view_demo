@@ -5,6 +5,7 @@ defmodule TypoKartWeb.RaceView do
     Course,
     Game,
     GameMaster,
+    Path,
     Player
   }
 
@@ -57,6 +58,17 @@ defmodule TypoKartWeb.RaceView do
     |> Map.to_list()
     |> Enum.map(fn {key, val} -> "#{key}=#{val}" end)
     |> Enum.join(" ")
+  end
+
+  def path_class(%Course{paths: paths}, path_index) when is_integer(path_index) do
+    classes = "course path-#{path_index}"
+    with %Path{extra_attrs: extra_attrs} <- Enum.at(paths, path_index),
+      extra_classes <- Map.get(extra_attrs, "class", "") do
+      "#{classes} #{extra_classes}"
+    else
+      _ ->
+        classes
+    end
   end
 
   defdelegate text_segments(game, path_index, player_index), to: GameMaster

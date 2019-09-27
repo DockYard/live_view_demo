@@ -2,7 +2,7 @@
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="<%= @game.course.view_box %>">
     <g transform="<%= map_transform(@game.course, @cur_char_rotation) %>">
       <%= for {path, path_index} <- Enum.with_index(@game.course.paths) do %>
-        <path class="course path-<%= path_index %>" id= "path-<%= path_index %>" d="<%= path.d %>"/>
+        <path class="<%= path_class(@game.course, path_index) %>" id= "path-<%= path_index %>" d="<%= path.d %>"/>
         <text dy="10">
           <textPath id="text-path-<%= path_index %>" href="#path-<%= path_index %>" <%= text_path_extra_attrs(@game, path_index) %>>
             <%= for {text, class} <- text_segments(@game, path_index, @player_index) do %><tspan class="<%= class %>"><%= text %></tspan><% end %>
