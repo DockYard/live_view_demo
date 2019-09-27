@@ -30,13 +30,23 @@ tspan.next-char {
 }
 
 .orange {
-  fill: orange;
-  stroke: orange;
+  fill: #E69F00;
+  stroke: #E69F00;
 }
 
 .blue {
-  fill: blue;
-  stroke: blue;
+  fill: #56B4E9;
+  stroke: #56B4E9;
+}
+
+.green {
+  fill: #009E73;
+  stroke: #009E73;
+}
+
+.pink {
+  fill: #CC79A7;
+  stroke: #CC79A7;
 }
 
 tspan {
