@@ -58,6 +58,12 @@ select {
   cursor: pointer;
 }
 
+/* CHART SPECIFIC STYLES */
+
+.chart-select {
+  width: 150px;
+}
+
 /* USED STYLES */
 
 .mainBlue {
@@ -78,14 +84,20 @@ select {
   padding: 0;
 }
 
-.blueButton:hover {
-  background-color: #6bc8d6;
-}
-
 .blueButton:hover{
+  background-color: #6bc8d6;
   opacity: 0.7;
   cursor: pointer;
 }
+
+.greyishButton {
+  background-color: #b1c6c9;
+}
+
+.blueButton:hover{
+  background-color: #bccacc;
+}
+
 
 .whiteText {
   color: #ffffff;
@@ -156,6 +168,15 @@ select {
   flex-direction: row;
 }
 
+.column {
+  flex-direction: column;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .space-around {
   justify-content: space-around;
 }
@@ -167,10 +188,25 @@ select {
   border-color:#bd97e8;
 }
 
+/* CHART STYLES */
+
+.new-chart-container {
+  margin-left: 100px;
+  margin-top: 100px;
+}
+
+.chart-form-column {
+  width: 450px;
+}
+
 /* DASHBOARD STYLES */
 
 .paragraph-container {
   max-width: 550px;
+}
+
+.extended-paragraph-container {
+  max-width: 620px;
 }
 
 .db-box {
@@ -260,8 +296,18 @@ select {
   text-align: center;
 }
 
+/* MARGINS */
+
 .little-margin-top {
   margin-top: 7px;
+}
+
+.little-margin-left {
+  margin-left: 10px;
+}
+
+.avoid-header {
+  margin-top: 60px;
 }
 
 .test-border {
@@ -333,7 +379,7 @@ header {
   width: 100%;
   background: #fdfdfd;
   border-bottom: 1px solid #eaeaea;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
   position: absolute;
   top: 0;
   left: 0;

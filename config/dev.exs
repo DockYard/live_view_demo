@@ -6,7 +6,7 @@ config :live_view_demo, LiveViewDemo.Repo,
   password: "postgres",
   database: "live_view_demo_dev",
   hostname: "localhost",
-  show_sensitive_data_on_connection_error: true,
+  show_sensitive_data_on_connection_error: false,
   pool_size: 10
 
 # For development, we disable any cache and enable

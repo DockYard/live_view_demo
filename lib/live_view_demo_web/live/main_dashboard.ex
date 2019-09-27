@@ -3,10 +3,7 @@ defmodule LiveViewDemoWeb.MainDashboard do
 
   def render(assigns) do
     ~L"""
-    <div class="mainBG flex-one centerItems">
-      <div>
-        <h1>Welcome to Visualixir</h1>
-      </div>
+    <div class="mainBG flex-one centerItems avoid-header">
       <div>
       <div class="display-flex">
         <div class="row space-around">
@@ -51,10 +48,21 @@ defmodule LiveViewDemoWeb.MainDashboard do
           </div>
         </div>
       </div>
-      <div class="final-p">
+      <div class="final-p extended-paragraph-container">
         <h2>What's next?</h2>
         <p>
           Building this was very fun and exciting. A lot of "it feels like cheating" moments.
+        </p>
+        <p>
+          Find it interesting? Check out
+          <a href="https://github.com/Ian-GL/live_view_demo" target="_blank">
+            the repo
+          </a>
+          . If you wanna contribute, ask questions, or just say hi you can drop
+          me a line at ian.gl@protonmail.com or if you prefer Twitter:
+          <a href="https://twitter.com/ian_sparky" target="_blank">
+            @ian_sparky
+          </a>
         </p>
       </div>
     </div>

@@ -6,9 +6,9 @@ defmodule LiveViewDemoWeb.Examples do
 
   def render(assigns) do
     ~L"""
-    <div class="mainBG flex-one centerItems">
+    <div class="mainBG flex-one centerItems avoid-header">
       <div>
-        <h1>Welcome to Visualixir</h1>
+        <h2>You can start building a chart by selecting the type<h2>
       </div>
       <div>
         <svg
@@ -24,11 +24,11 @@ defmodule LiveViewDemoWeb.Examples do
           </g>
           <rect x="40" y="80" width="10" height="15" fill="#53a2f2"></rect>
           <rect x="60" y="50" width="10" height="45" fill="#53a2f2"></rect>
-          <rect x="80" y="50" width="10" height="45" fill="#53a2f2"></rect>
-          <rect x="100" y="50" width="10" height="45" fill="#53a2f2"></rect>
-          <rect x="120" y="50" width="10" height="45" fill="#53a2f2"></rect>
-          <rect x="140" y="50" width="10" height="45" fill="#53a2f2"></rect>
-          <rect x="160" y="50" width="10" height="45" fill="#53a2f2"></rect>
+          <rect x="80" y="60" width="10" height="35" fill="#53a2f2"></rect>
+          <rect x="100" y="10" width="10" height="85" fill="#53a2f2"></rect>
+          <rect x="120" y="25" width="10" height="70" fill="#53a2f2"></rect>
+          <rect x="140" y="40" width="10" height="55" fill="#53a2f2"></rect>
+          <rect x="160" y="90" width="10" height="5" fill="#53a2f2"></rect>
         </svg>
       </div>
       <div>
@@ -43,18 +43,20 @@ defmodule LiveViewDemoWeb.Examples do
           <%= generate_chart_slices(@chart_data) %>
         </svg>
       </div>
-      <div>
-        <h2>What's next?</h2>
-        <p>
-          Building this was very fun and exciting. A lot of "it feels like cheating" moments.
-        </p>
-      </div>
     </div>
     """
   end
 
   def mount(_session, socket) do
+    # if connected?(socket), do: :timer.send_interval(10_000, self(), :tick)
+
+    UserQueries.get_users_w_most_orders()
+
     {:ok, put_pie_chart_data(socket)}
+  end
+
+  def handle_info(:tick, socket) do
+    {:noreply, put_user_list(socket)}
   end
 
   defp put_pie_chart_data(socket) do

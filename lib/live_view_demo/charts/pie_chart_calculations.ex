@@ -4,15 +4,6 @@ defmodule LiveViewDemo.Charts.PieChartCalculations do
   @pi :math.pi()
 
   def generate_chart_data(query_result) do
-    # query_result = [
-    #   ["first_one", 4],
-    #   ["second_one", 6],
-    #   ["third_one", 2],
-    #   ["fourth_one", 8],
-    #   ["fifth_one", 5],
-    #   ["sixth_one", 10],
-    # ]
-
     colors = Constants.default_chart_colors()
 
     total = get_total_count(query_result)

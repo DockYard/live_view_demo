@@ -103,7 +103,7 @@ defmodule LiveViewDemoWeb.SqlLab do
   end
 
   defp generate_error(error) do
-    assigns =%{error: error}
+    assigns = %{error: error}
     ~L"""
       <%= if true do %>
         <p class="sql-error">

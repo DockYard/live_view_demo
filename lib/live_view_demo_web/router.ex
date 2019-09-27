@@ -19,7 +19,7 @@ defmodule LiveViewDemoWeb.Router do
 
     live "/", MainDashboard
     live "/chart", Chart
-    live "/examples", MainDashboard
+    live "/examples", Examples
     live "/sql-lab", SqlLab
   end
 
