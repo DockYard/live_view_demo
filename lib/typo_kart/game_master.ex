@@ -32,7 +32,11 @@ defmodule TypoKart.GameMaster do
 
   def handle_call({:new_game, game}, _from, state) do
     id = UUID.uuid1()
-    game = initialize_char_ownership(game)
+    game =
+      game
+      |> initialize_char_ownership()
+      |> initialize_starting_positions()
+
     {:reply, id, put_in(state, [:games, id], game)}
   end
 
@@ -343,5 +347,21 @@ defmodule TypoKart.GameMaster do
         |> List.replace_at(char_index, player_index)
       )
     )
+  end
+
+  defp initialize_starting_positions(%Game{players: players, course: %Course{start_positions_by_player_count: start_positions}} = game) do
+    %Game{
+      game |
+      players: Enum.with_index(players)
+        |> Enum.map(fn {player, player_index} ->
+          %Player{
+            player |
+            cur_path_char_indices: [
+              Enum.at(start_positions, length(players) - 1)
+              |> Enum.at(player_index)
+            ]
+          }
+        end)
+    }
   end
 end

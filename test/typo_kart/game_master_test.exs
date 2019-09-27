@@ -51,6 +51,10 @@ defmodule TypoKart.GameMasterTest do
                  %Player{
                    label: "foo",
                    color: "orange"
+                 },
+                 %Player{
+                   label: "bar",
+                   color: "blue"
                  }
                ],
                course: %Course{
@@ -62,7 +66,11 @@ defmodule TypoKart.GameMasterTest do
                    %Path{
                      chars: 'blue'
                    }
-                 ]
+                 ],
+                 start_positions_by_player_count: [
+                   [%PathCharIndex{path_index: 0, char_index: 0}], # one player
+                   [%PathCharIndex{path_index: 0, char_index: 0}, %PathCharIndex{path_index: 1, char_index: 2}] # two players
+                 ],
                }
              })
 
@@ -72,7 +80,17 @@ defmodule TypoKart.GameMasterTest do
                  players: [
                    %Player{
                      label: "foo",
-                     color: "orange"
+                     color: "orange",
+                     cur_path_char_indices: [
+                       %PathCharIndex{path_index: 0, char_index: 0}
+                     ]
+                   },
+                   %Player{
+                     label: "bar",
+                     color: "blue",
+                     cur_path_char_indices: [
+                       %PathCharIndex{path_index: 1, char_index: 2}
+                     ]
                    }
                  ],
                  course: %Course{
