@@ -28,11 +28,11 @@ text_paths:
   - 
     chars: '52 6f 6d 65 6f 26'
     extra_attrs:
-      startOffset: 90
+      startOffset: 100 
   - 
     chars: '4a 75 6c 69 65 74'
     extra_attrs:
-      startOffset: 90
+      startOffset: 95
   - 
     chars: '
            Two households, both alike in dignity,

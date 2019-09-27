@@ -91,8 +91,8 @@ defmodule TypoKartWeb.RaceLive do
         cur_char_rotation: game.course.initial_rotation,
         cur_char_point: [0, 0],
         marker_rotation_offset: 90,
-        marker_translate_offset_x: -8,
-        marker_translate_offset_y: 24
+        marker_translate_offset_x: -30,
+        marker_translate_offset_y: 30
       )
     }
   end
