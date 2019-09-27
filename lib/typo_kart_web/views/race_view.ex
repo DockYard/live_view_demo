@@ -24,20 +24,23 @@ defmodule TypoKartWeb.RaceView do
         } = game,
         view_chars,
         player_index
-      ) when is_integer(player_index) do
+      )
+      when is_integer(player_index) do
     case length(view_chars) do
       0 ->
-        "translate(#{base_translate_x},#{base_translate_y}) rotate(0, #{
-          course_rotation_center_x
-        }, #{course_rotation_center_y})"
+        "translate(#{base_translate_x},#{base_translate_y}) rotate(0, #{course_rotation_center_x}, #{
+          course_rotation_center_y
+        })"
+
       _ ->
-        "translate(#{base_translate_x},#{base_translate_y}) rotate(#{course_rotation(game, view_chars, player_index)}, #{
-          course_rotation_center_x
-        }, #{course_rotation_center_y})"
+        "translate(#{base_translate_x},#{base_translate_y}) rotate(#{
+          course_rotation(game, view_chars, player_index)
+        }, #{course_rotation_center_x}, #{course_rotation_center_y})"
     end
   end
 
-  @spec marker_transform(Game.t(), list(ViewChar.t()), integer(), float(), float(), float()) :: binary()
+  @spec marker_transform(Game.t(), list(ViewChar.t()), integer(), float(), float(), float()) ::
+          binary()
   def marker_transform(
         %Game{
           course: %Course{
@@ -50,18 +53,22 @@ defmodule TypoKartWeb.RaceView do
         marker_rotation_offset,
         marker_translate_offset_x,
         marker_translate_offset_y
-      ) when is_list(view_chars) and is_integer(player_index) do
-      case length(view_chars) do
-        0 ->
-          "scale(#{@marker_scale})"
+      )
+      when is_list(view_chars) and is_integer(player_index) do
+    case length(view_chars) do
+      0 ->
+        "scale(#{@marker_scale})"
 
-        _ ->
-          %{ x: cur_char_x, y: cur_char_y, rotation: cur_char_rotation } =
-            cur_view_char(game, view_chars, player_index)
-          "rotate(#{cur_char_rotation + marker_rotation_offset}, #{cur_char_x}, #{cur_char_y}) translate(#{
+      _ ->
+        %{x: cur_char_x, y: cur_char_y, rotation: cur_char_rotation} =
+          cur_view_char(game, view_chars, player_index)
+
+        "rotate(#{cur_char_rotation + marker_rotation_offset}, #{cur_char_x}, #{cur_char_y}) translate(#{
           cur_char_x - marker_center_offset_x + marker_translate_offset_x
-        }, #{cur_char_y - marker_center_offset_y + marker_translate_offset_y}) scale(#{@marker_scale})"
-      end
+        }, #{cur_char_y - marker_center_offset_y + marker_translate_offset_y}) scale(#{
+          @marker_scale
+        })"
+    end
   end
 
   @spec cur_char_index(Game.t(), integer()) :: PathCharIndex.t()
@@ -72,8 +79,8 @@ defmodule TypoKartWeb.RaceView do
 
   @spec course_rotation(Game.t(), list(ViewChar.t()), integer()) :: float()
   def course_rotation(%Game{} = game, view_chars, player_index)
-    when is_list(view_chars) and is_integer(player_index),
-    do: -1 * (cur_view_char(game, view_chars, player_index) |> Map.get(:rotation))
+      when is_list(view_chars) and is_integer(player_index),
+      do: -1 * (cur_view_char(game, view_chars, player_index) |> Map.get(:rotation))
 
   @spec text_path_extra_attrs(Game.t(), integer()) :: binary()
   def text_path_extra_attrs(%Game{course: %{paths: paths}}, path_index)
@@ -89,8 +96,9 @@ defmodule TypoKartWeb.RaceView do
   @spec path_class(Course.t(), integer()) :: binary()
   def path_class(%Course{paths: paths}, path_index) when is_integer(path_index) do
     classes = "course path-#{path_index}"
+
     with %Path{extra_attrs: extra_attrs} <- Enum.at(paths, path_index),
-      extra_classes <- Map.get(extra_attrs, "class", "") do
+         extra_classes <- Map.get(extra_attrs, "class", "") do
       "#{classes} #{extra_classes}"
     else
       _ ->
@@ -107,9 +115,9 @@ defmodule TypoKartWeb.RaceView do
   end
 
   @spec cur_view_char(Game.t(), list(ViewChar.t()), integer()) :: ViewChar.t()
-  def cur_view_char(%Game{} = game, view_chars, player_index) when is_list(view_chars) and is_integer(player_index) do
-    %{path_index: path_index, char_index: char_index} =
-      cur_path_char_index(game, player_index)
+  def cur_view_char(%Game{} = game, view_chars, player_index)
+      when is_list(view_chars) and is_integer(player_index) do
+    %{path_index: path_index, char_index: char_index} = cur_path_char_index(game, player_index)
 
     view_chars
     |> Enum.at(path_index)
@@ -118,11 +126,11 @@ defmodule TypoKartWeb.RaceView do
 
   @spec marker_class(Game.t(), list(ViewChar.t()), integer()) :: binary()
   def marker_class(%Game{players: players}, view_chars, player_index) do
-    [
-      "marker",
-      "player-#{player_index}",
-      Enum.at(players, player_index) |> Map.get(:color)
-    ] ++ if(length(view_chars) == 0, do: ["hide"], else: [])
+    ([
+       "marker",
+       "player-#{player_index}",
+       Enum.at(players, player_index) |> Map.get(:color)
+     ] ++ if(length(view_chars) == 0, do: ["hide"], else: []))
     |> Enum.join(" ")
   end
 end

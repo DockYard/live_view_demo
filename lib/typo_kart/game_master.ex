@@ -247,7 +247,13 @@ defmodule TypoKart.GameMaster do
               acc
               | cur_owner: owner,
                 cur_segment_start: index,
-                segments: segments ++ [{cur_owner, cur_segment_start..if(cur_segment_start < index, do: index - 1, else: index), false}]
+                segments:
+                  segments ++
+                    [
+                      {cur_owner,
+                       cur_segment_start..if(cur_segment_start < index, do: index - 1, else: index),
+                       false}
+                    ]
             }
 
           # When we're somewhere in the middle, the owner has changed, and it is a next-char

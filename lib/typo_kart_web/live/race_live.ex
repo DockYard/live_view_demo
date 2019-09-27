@@ -131,22 +131,22 @@ defmodule TypoKartWeb.RaceLive do
         "load_char_data",
         paths,
         socket
-      ) when is_list(paths) do
-        view_chars =
-          paths
-          |> Enum.map(fn path ->
-            path
-            |> Enum.map(fn char ->
-              %ViewChar{
-                x: get_in(char, ["point", "x"]),
-                y: get_in(char, ["point", "y"]),
-                rotation: get_in(char, ["rotation"])
-              }
-            end)
-          end)
+      )
+      when is_list(paths) do
+    view_chars =
+      paths
+      |> Enum.map(fn path ->
+        path
+        |> Enum.map(fn char ->
+          %ViewChar{
+            x: get_in(char, ["point", "x"]),
+            y: get_in(char, ["point", "y"]),
+            rotation: get_in(char, ["rotation"])
+          }
+        end)
+      end)
 
-    {:noreply,
-     assign(socket, view_chars: view_chars)}
+    {:noreply, assign(socket, view_chars: view_chars)}
   end
 
   def handle_event(_, _, socket), do: {:noreply, socket}

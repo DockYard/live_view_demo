@@ -15,6 +15,7 @@ defmodule TypoKart.RaceViewTest do
 
   setup do
     GameMaster.reset_all()
+
     {
       :ok,
       %{
@@ -100,36 +101,62 @@ defmodule TypoKart.RaceViewTest do
   end
 
   test "cur_view_char/3", %{game: game, view_chars: view_chars} do
-    assert %ViewChar{x: 3, y: 4, rotation: 46} =
-      RaceView.cur_view_char(game, view_chars, 0)
+    assert %ViewChar{x: 3, y: 4, rotation: 46} = RaceView.cur_view_char(game, view_chars, 0)
   end
 
   test "cur_path_char_index/3", %{game: game} do
-    assert %PathCharIndex{path_index: 0, char_index: 2} =
-      RaceView.cur_path_char_index(game, 1)
+    assert %PathCharIndex{path_index: 0, char_index: 2} = RaceView.cur_path_char_index(game, 1)
   end
 
   test "course_rotation/3", %{game: game, view_chars: view_chars} do
     assert -47 == RaceView.course_rotation(game, view_chars, 1)
   end
 
-  test "course_transform/3", %{game: %Game{course: %{base_translate_x: btx, base_translate_y: bty, course_rotation_center_x: rcx, course_rotation_center_y: rcy}} = game, view_chars: view_chars} do
-    assert "translate(#{btx},#{bty}) rotate(-46, #{rcx}, #{rcy})" == RaceView.course_transform(game, view_chars, 0)
-    assert "translate(#{btx},#{bty}) rotate(-47, #{rcx}, #{rcy})" == RaceView.course_transform(game, view_chars, 1)
+  test "course_transform/3", %{
+    game:
+      %Game{
+        course: %{
+          base_translate_x: btx,
+          base_translate_y: bty,
+          course_rotation_center_x: rcx,
+          course_rotation_center_y: rcy
+        }
+      } = game,
+    view_chars: view_chars
+  } do
+    assert "translate(#{btx},#{bty}) rotate(-46, #{rcx}, #{rcy})" ==
+             RaceView.course_transform(game, view_chars, 0)
+
+    assert "translate(#{btx},#{bty}) rotate(-47, #{rcx}, #{rcy})" ==
+             RaceView.course_transform(game, view_chars, 1)
   end
 
-  test "course_transform/3 when view_chars is empty, as on mount", %{game: %Game{course: %{base_translate_x: btx, base_translate_y: bty, course_rotation_center_x: rcx, course_rotation_center_y: rcy}} = game} do
+  test "course_transform/3 when view_chars is empty, as on mount", %{
+    game:
+      %Game{
+        course: %{
+          base_translate_x: btx,
+          base_translate_y: bty,
+          course_rotation_center_x: rcx,
+          course_rotation_center_y: rcy
+        }
+      } = game
+  } do
     view_chars = []
-    assert "translate(#{btx},#{bty}) rotate(0, #{rcx}, #{rcy})" == RaceView.course_transform(game, view_chars, 0)
-    assert "translate(#{btx},#{bty}) rotate(0, #{rcx}, #{rcy})" == RaceView.course_transform(game, view_chars, 1)
+
+    assert "translate(#{btx},#{bty}) rotate(0, #{rcx}, #{rcy})" ==
+             RaceView.course_transform(game, view_chars, 0)
+
+    assert "translate(#{btx},#{bty}) rotate(0, #{rcx}, #{rcy})" ==
+             RaceView.course_transform(game, view_chars, 1)
   end
 
   test "marker_transform/6", %{game: game, view_chars: view_chars} do
     assert "rotate(#{46 + 91}, 3, 4) translate(#{3 - 13 + 92}, #{4 - 23 + 93}) scale(0.2)" ==
-      RaceView.marker_transform(game, view_chars, 0, 91, 92, 93)
+             RaceView.marker_transform(game, view_chars, 0, 91, 92, 93)
 
     assert "rotate(#{47 + 91}, 5, 6) translate(#{5 - 13 + 92}, #{6 - 23 + 93}) scale(0.2)" ==
-      RaceView.marker_transform(game, view_chars, 1, 91, 92, 93)
+             RaceView.marker_transform(game, view_chars, 1, 91, 92, 93)
   end
 
   test "marker_transform/6 when view_chars is empty, as on mount", %{game: game} do
