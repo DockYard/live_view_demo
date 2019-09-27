@@ -290,7 +290,7 @@ defmodule GameOfLife.Universe.Template do
       %Position{x: 17, y: 18},
       %Position{x: 18, y: 18},
       %Position{x: 19, y: 18},
-      %Position{x: 10, y: 19},
+      %Position{x: 10, y: 19}
     ]
   end
 end
