@@ -2,11 +2,7 @@ defmodule TypoKartWeb.RaceLive do
   use Phoenix.LiveView
 
   alias TypoKart.{
-    Courses,
-    Game,
     GameMaster,
-    PathCharIndex,
-    Player,
     ViewChar
   }
 
