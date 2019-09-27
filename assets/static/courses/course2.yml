@@ -80,7 +80,23 @@ path_connections:
     -
       path_index: 2
       char_index: 108 
-  
+
+start_positions:
+  # When there is one player
+  - 
+    -
+      path_index: 2
+      char_index: 0
+
+  # When two players
+  - 
+    -
+      path_index: 2
+      char_index: 0
+    -
+      path_index: 2
+      char_index: 79
+
 initial_rotation: 0
 base_translate_x: 75 
 base_translate_y: 250 

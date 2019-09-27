@@ -10,6 +10,7 @@ defmodule TypoKart.Courses do
     with {:ok, data} <-
            Path.join(File.cwd!(), "#{@course_dir}/#{name}.yml") |> YamlElixir.read_from_file(),
          paths <- paths(data),
+         start_positions_by_player_count <- start_positions(data),
          path_connections <- path_connections(data) do
       {:ok,
        %Course{
@@ -22,7 +23,8 @@ defmodule TypoKart.Courses do
          marker_center_offset_x: Map.get(data, "marker_center_offset_x"),
          marker_center_offset_y: Map.get(data, "marker_center_offset_y"),
          course_rotation_center_x: Map.get(data, "course_rotation_center_x"),
-         course_rotation_center_y: Map.get(data, "course_rotation_center_y")
+         course_rotation_center_y: Map.get(data, "course_rotation_center_y"),
+         start_positions_by_player_count: start_positions_by_player_count
        }}
     else
       bad ->
@@ -57,5 +59,18 @@ defmodule TypoKart.Courses do
         )
       }
     )
+  end
+
+  defp start_positions(%{"start_positions" => start_positions}) do
+    start_positions
+    |> Enum.map(fn positions ->
+      positions
+      |> Enum.map(&(
+        struct(PathCharIndex,
+          path_index: &1 |> Map.get("path_index"),
+          char_index: &1 |> Map.get("char_index")
+        )
+      ))
+    end)
   end
 end
