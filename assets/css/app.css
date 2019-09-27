@@ -12,6 +12,7 @@
   --green: #E69F00;
   --pink: #E69F00;
   --white: #ffffff;
+  --light-grey: lightgrey;
 }
 
 #the-course {
@@ -36,6 +37,19 @@ main {
 tspan.next-char {
   fill: var(--black);
   font-weight: bold;
+}
+
+path.course {
+  fill-opacity: 0;
+  stroke-width: 70;
+}
+
+path.course.primary {
+  stroke: var(--white);
+}
+
+.course.secondary {
+  stroke: var(--light-grey);
 }
 
 .error tspan.next-char {
@@ -68,15 +82,6 @@ tspan.next-char {
 
 .cur-text.error {
   fill: var(--red);
-}
-
-path.course {
-  fill-opacity: 0;
-}
-
-path.primary {
-  stroke: var(--white);
-  stroke-width: 70;
 }
 
 .marker .beta {
