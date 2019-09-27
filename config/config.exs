@@ -10,11 +10,11 @@ use Mix.Config
 # Configures the endpoint
 config :typo_kart, TypoKartWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "dummy_val_for_dev_env",
+  secret_key_base: "cN0uRQESKBZoizHBwtUY5dNiLUC11Dhi+lo4Ctnthz5JCbSzMfDriNi7YvFdfSBR",
   render_errors: [view: TypoKartWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: TypoKart.PubSub, adapter: Phoenix.PubSub.PG2],
   live_view: [
-    signing_salt: "another_dummy_val_for_dev_env"
+    signing_salt: "lSyzobrdc1QaMyuQFbT2TP4mV+VkAmZ3+83wqGZ6uTsEurkM9agu4SXWRIULpShO"
   ]
 
 # Configures Elixir's Logger
