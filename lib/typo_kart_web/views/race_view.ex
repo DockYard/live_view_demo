@@ -10,6 +10,8 @@ defmodule TypoKartWeb.RaceView do
     Player
   }
 
+  @marker_scale "0.2"
+
   @spec course_transform(Game.t(), list(ViewChar.t()), integer()) :: binary()
   def course_transform(
         %Game{
@@ -22,11 +24,17 @@ defmodule TypoKartWeb.RaceView do
         } = game,
         view_chars,
         player_index
-      ) when is_list(view_chars) and is_integer(player_index) do
-
-    "translate(#{base_translate_x},#{base_translate_y}) rotate(#{course_rotation(game, view_chars, player_index)}, #{
-      course_rotation_center_x
-    }, #{course_rotation_center_y})"
+      ) when is_integer(player_index) do
+    case length(view_chars) do
+      0 ->
+        "translate(#{base_translate_x},#{base_translate_y}) rotate(0, #{
+          course_rotation_center_x
+        }, #{course_rotation_center_y})"
+      _ ->
+        "translate(#{base_translate_x},#{base_translate_y}) rotate(#{course_rotation(game, view_chars, player_index)}, #{
+          course_rotation_center_x
+        }, #{course_rotation_center_y})"
+    end
   end
 
   @spec marker_transform(Game.t(), list(ViewChar.t()), integer(), float(), float(), float()) :: binary()
@@ -43,12 +51,17 @@ defmodule TypoKartWeb.RaceView do
         marker_translate_offset_x,
         marker_translate_offset_y
       ) when is_list(view_chars) and is_integer(player_index) do
-        %{ x: cur_char_x, y: cur_char_y, rotation: cur_char_rotation } =
-          cur_view_char(game, view_chars, player_index)
+      case length(view_chars) do
+        0 ->
+          "scale(#{@marker_scale})"
 
-      "rotate(#{cur_char_rotation + marker_rotation_offset}, #{cur_char_x}, #{cur_char_y}) translate(#{
-      cur_char_x - marker_center_offset_x + marker_translate_offset_x
-    }, #{cur_char_y - marker_center_offset_y + marker_translate_offset_y}) scale(0.2)"
+        _ ->
+          %{ x: cur_char_x, y: cur_char_y, rotation: cur_char_rotation } =
+            cur_view_char(game, view_chars, player_index)
+          "rotate(#{cur_char_rotation + marker_rotation_offset}, #{cur_char_x}, #{cur_char_y}) translate(#{
+          cur_char_x - marker_center_offset_x + marker_translate_offset_x
+        }, #{cur_char_y - marker_center_offset_y + marker_translate_offset_y}) scale(#{@marker_scale})"
+      end
   end
 
   @spec cur_char_index(Game.t(), integer()) :: PathCharIndex.t()

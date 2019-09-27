@@ -116,11 +116,24 @@ defmodule TypoKart.RaceViewTest do
     assert "translate(#{btx},#{bty}) rotate(-47, #{rcx}, #{rcy})" == RaceView.course_transform(game, view_chars, 1)
   end
 
-  test "marker_transform/6", %{game: %Game{} = game, view_chars: view_chars} do
+  test "course_transform/3 when view_chars is empty, as on mount", %{game: %Game{course: %{base_translate_x: btx, base_translate_y: bty, course_rotation_center_x: rcx, course_rotation_center_y: rcy}} = game} do
+    view_chars = []
+    assert "translate(#{btx},#{bty}) rotate(0, #{rcx}, #{rcy})" == RaceView.course_transform(game, view_chars, 0)
+    assert "translate(#{btx},#{bty}) rotate(0, #{rcx}, #{rcy})" == RaceView.course_transform(game, view_chars, 1)
+  end
+
+  test "marker_transform/6", %{game: game, view_chars: view_chars} do
     assert "rotate(#{46 + 91}, 3, 4) translate(#{3 - 13 + 92}, #{4 - 23 + 93}) scale(0.2)" ==
       RaceView.marker_transform(game, view_chars, 0, 91, 92, 93)
 
     assert "rotate(#{47 + 91}, 5, 6) translate(#{5 - 13 + 92}, #{6 - 23 + 93}) scale(0.2)" ==
       RaceView.marker_transform(game, view_chars, 1, 91, 92, 93)
+  end
+
+  test "marker_transform/6 when view_chars is empty, as on mount", %{game: game} do
+    view_chars = []
+    assert "scale(0.2)" == RaceView.marker_transform(game, view_chars, 0, 91, 92, 93)
+
+    assert "scale(0.2)" == RaceView.marker_transform(game, view_chars, 1, 91, 92, 93)
   end
 end
