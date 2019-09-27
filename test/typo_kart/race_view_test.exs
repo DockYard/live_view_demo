@@ -36,6 +36,7 @@ defmodule TypoKart.RaceViewTest do
         game: %Game{
           players: [
             %Player{
+              color: "orange",
               cur_path_char_indices: [
                 %PathCharIndex{
                   path_index: 0,
@@ -44,6 +45,7 @@ defmodule TypoKart.RaceViewTest do
               ]
             },
             %Player{
+              color: "blue",
               cur_path_char_indices: [
                 %PathCharIndex{
                   path_index: 0,
@@ -135,5 +137,17 @@ defmodule TypoKart.RaceViewTest do
     assert "scale(0.2)" == RaceView.marker_transform(game, view_chars, 0, 91, 92, 93)
 
     assert "scale(0.2)" == RaceView.marker_transform(game, view_chars, 1, 91, 92, 93)
+  end
+
+  test "marker_class/3 when view_chars is empty", %{game: game} do
+    view_chars = []
+
+    assert "marker player-0 orange hide" == RaceView.marker_class(game, view_chars, 0)
+  end
+
+  test "marker_class/3 when view_chars is not empty", %{game: game} do
+    view_chars = [0]
+
+    assert "marker player-0 orange" == RaceView.marker_class(game, view_chars, 0)
   end
 end

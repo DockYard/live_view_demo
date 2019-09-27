@@ -115,4 +115,14 @@ defmodule TypoKartWeb.RaceView do
     |> Enum.at(path_index)
     |> Enum.at(char_index)
   end
+
+  @spec marker_class(Game.t(), list(ViewChar.t()), integer()) :: binary()
+  def marker_class(%Game{players: players}, view_chars, player_index) do
+    [
+      "marker",
+      "player-#{player_index}",
+      Enum.at(players, player_index) |> Map.get(:color)
+    ] ++ if(length(view_chars) == 0, do: ["hide"], else: [])
+    |> Enum.join(" ")
+  end
 end
