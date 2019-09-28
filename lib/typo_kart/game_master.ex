@@ -9,6 +9,10 @@ defmodule TypoKart.GameMaster do
     Player
   }
 
+  @player_count_limit 3
+
+  @player_colors ["orange", "blue", "green"]
+
   def start_link(_init \\ nil) do
     GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
@@ -65,6 +69,22 @@ defmodule TypoKart.GameMaster do
     end
   end
 
+  def handle_call({:add_player, game_id, %Player{} = player}, _from, state) do
+    case Kernel.get_in(state, [:games, game_id]) do
+      %Game{players: players} when length(players) >= @player_count_limit ->
+        {:reply, {:error, "This game has already reached the maximum of players allowed: #{@player_count_limit}."}, state}
+
+      %Game{players: players} = game ->
+        with player = assign_player_color(game, player),
+          game <- Map.put(game, :players, players ++ [player]),
+          new_state <- put_in(state, [:games, game_id], game),
+          do: {:reply, {:ok, game, player}, new_state}
+
+      _ ->
+        {:reply, {:error, "game not found"}, state}
+    end
+  end
+
   @spec reset_all() :: :ok
   def reset_all do
     GenServer.call(__MODULE__, :reset_all)
@@ -98,6 +118,11 @@ defmodule TypoKart.GameMaster do
   def advance(game_id, player_index, key_code)
       when is_binary(game_id) and is_integer(player_index) and is_integer(key_code) do
     GenServer.call(__MODULE__, {:advance_game, game_id, player_index, key_code})
+  end
+
+  @spec add_player(binary, Player.t()) :: {:ok, Game.t(), Player.t()} | {:error, binary()}
+  def add_player(game_id, player \\ %Player{}) when is_binary(game_id) do
+    GenServer.call(__MODULE__, {:add_player, game_id, player})
   end
 
   @spec next_chars(Course.t(), PathCharIndex.t()) :: list(PathCharIndex.t())
@@ -363,5 +388,13 @@ defmodule TypoKart.GameMaster do
           }
         end)
     }
+  end
+
+  defp assign_player_color(%Game{players: players}, %Player{} = player) do
+    with used_colors <- Enum.map(players, &(&1.color)),
+      available_colors <- Enum.reject(@player_colors, fn possible_color ->
+          Enum.any?(used_colors, &(&1 == possible_color))
+        end),
+        do: Map.put(player, :color, Enum.random(available_colors))
   end
 end

@@ -992,23 +992,25 @@ defmodule TypoKart.GameMasterTest do
            ] = GameMaster.text_segments(game, 0, 0)
   end
 
-  @tag :skip
   @tag :add_player
   test "add_player/2" do
     game_id = GameMaster.new_game()
 
-    assert {:ok, game} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, _game, _player} = GameMaster.add_player(game_id, %Player{})
   end
 
-  @tag :skip
   @tag :add_player
   test "add_player/2 will not add more than three players (for now)" do
     game_id = GameMaster.new_game()
 
-    assert {:ok, game} = GameMaster.add_player(game_id, %Player{})
-    assert {:ok, game} = GameMaster.add_player(game_id, %Player{})
-    assert {:ok, game} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, _game, %Player{color: player1_color}} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, _game, %Player{color: player2_color}} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, _game, %Player{color: player3_color}} = GameMaster.add_player(game_id, %Player{})
     assert {:error, "This game has already reached the maximum of players allowed: 3."} =
       GameMaster.add_player(game_id, %Player{})
+
+    refute player1_color == player2_color
+    refute player1_color == player3_color
+    refute player2_color == player3_color
   end
 end
