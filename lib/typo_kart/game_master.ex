@@ -102,7 +102,7 @@ defmodule TypoKart.GameMaster do
   def handle_call({:advance_game, game_id, player_index, key_code}, _from, state) do
     # If key_code fits one of the characters (we'll take the first one found) indexed by the player's
     # cur_path_char_indices, then we can advance.
-    with %Game{course: course, players: players} = game <-
+    with %Game{state: :running, course: course, players: players} = game <-
            Kernel.get_in(state, [:games, game_id]),
          %Player{cur_path_char_indices: cur_path_char_indices} = player <-
            Enum.at(players, player_index),
@@ -119,6 +119,9 @@ defmodule TypoKart.GameMaster do
       # 2. Accumulate any relevant points as a result of this action
       {:reply, {:ok, updated_game}, updated_state}
     else
+      %Game{state: game_state} ->
+        {:reply, {:error, "game is not running"}, state}
+
       _bad ->
         {:reply, {:error, "bad key_code"}, state}
     end

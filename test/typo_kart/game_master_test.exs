@@ -267,6 +267,7 @@ defmodule TypoKart.GameMasterTest do
     }
 
     assert game_id = GameMaster.new_game(game)
+    assert {:ok, _} = GameMaster.start_game(game_id)
 
     assert {:ok, game} = GameMaster.advance(game_id, 0, hd('q'))
 
@@ -351,6 +352,7 @@ defmodule TypoKart.GameMasterTest do
     }
 
     assert game_id = GameMaster.new_game(game)
+    assert {:ok, _} = GameMaster.start_game(game_id)
 
     assert {:ok, _} = GameMaster.advance(game_id, 0, hd('f'))
     assert {:ok, _} = GameMaster.advance(game_id, 0, hd('o'))
@@ -429,6 +431,8 @@ defmodule TypoKart.GameMasterTest do
     }
 
     assert game_id = GameMaster.new_game(game)
+
+    assert {:ok, _} = GameMaster.start_game(game_id)
 
     assert {:ok, game} = GameMaster.advance(game_id, 0, hd('b'))
 
@@ -563,6 +567,29 @@ defmodule TypoKart.GameMasterTest do
     assert game_id = GameMaster.new_game(game)
 
     assert {:error, _} = GameMaster.advance(game_id, 0, hd('s'))
+  end
+
+  @tag :advance
+  test "advance/3 fails when game is not running" do
+    game = %Game{
+      players: [
+        %Player{}
+      ],
+      course: %Course{
+        paths: [
+          %Path{
+            chars: 'fox'
+          }
+        ],
+        start_positions_by_player_count: [
+          [%PathCharIndex{path_index: 0, char_index: 0}]
+        ]
+      }
+    }
+
+    assert game_id = GameMaster.new_game(game)
+
+    assert {:error, "game is not running"} = GameMaster.advance(game_id, 0, hd('f'))
   end
 
   @tag :text_segments
