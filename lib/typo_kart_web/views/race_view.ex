@@ -135,4 +135,15 @@ defmodule TypoKartWeb.RaceView do
      ] ++ if(length(view_chars) == 0, do: ["hide"], else: []))
     |> Enum.join(" ")
   end
+
+  @spec game_timer_formatted(Game.t()) :: binary()
+  def game_timer_formatted(%Game{} = game) do
+    with total_seconds <- GameMaster.time_remaining(game),
+      minutes <- Integer.floor_div(total_seconds, 60),
+      seconds <- Integer.mod(total_seconds, 60),
+      do: Enum.join([
+        String.pad_leading("#{minutes}", 2, "0"),
+        String.pad_leading("#{seconds}", 2, "0")
+      ], ":")
+  end
 end
