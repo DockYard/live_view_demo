@@ -38,9 +38,8 @@ defmodule TypoKart.GameMaster do
 
   def handle_call({:new_game, game}, _from, state) do
     with game_id <- UUID.uuid1(),
-      game = %Game{} <- initialize_game(game),
-      %{} = updated_state <- put_in(state, [:games, game_id], game)
-    do
+         game = %Game{} <- initialize_game(game),
+         %{} = updated_state <- put_in(state, [:games, game_id], game) do
       {:reply, game_id, updated_state}
     else
       {:error, :invalid_player_color} ->
@@ -56,11 +55,10 @@ defmodule TypoKart.GameMaster do
 
   def handle_call({:start_game, game_id}, _from, state) do
     with %Game{} = game <- Kernel.get_in(state, [:games, game_id]),
-      now <- DateTime.utc_now() |> DateTime.truncate(:second),
-      end_time <- DateTime.add(now, @game_run_duration_seconds, :second),
-      updated_game <- game |> Map.put(:state, :running) |> Map.put(:end_time, end_time),
-      updated_state <- put_in(state, [:games, game_id], updated_game)
-    do
+         now <- DateTime.utc_now() |> DateTime.truncate(:second),
+         end_time <- DateTime.add(now, @game_run_duration_seconds, :second),
+         updated_game <- game |> Map.put(:state, :running) |> Map.put(:end_time, end_time),
+         updated_state <- put_in(state, [:games, game_id], updated_game) do
       # TODO: schedule an end_game @game_run_duration_seconds from now
       {:reply, {:ok, updated_game}, updated_state}
     else
@@ -109,8 +107,7 @@ defmodule TypoKart.GameMaster do
         with %Player{} = player <- player_color(game, player),
              %Player{} = player <- player_id(player, players),
              game <- Map.put(game, :players, players ++ [player]),
-             new_state <- put_in(state, [:games, game_id], game)
-        do
+             new_state <- put_in(state, [:games, game_id], game) do
           {:reply, {:ok, game, player}, new_state}
         else
           {:error, :invalid_player_color} ->
@@ -465,11 +462,11 @@ defmodule TypoKart.GameMaster do
   end
 
   defp player_color(%Game{}, %Player{color: color})
-    when color != "" and color not in @player_colors, do: {:error, :invalid_player_color}
+       when color != "" and color not in @player_colors,
+       do: {:error, :invalid_player_color}
 
   defp player_color(%Game{players: players}, %Player{color: color} = player)
-    when color != "" do
-
+       when color != "" do
     other_players = Enum.filter(players, &(&1 != player))
 
     if Enum.any?(other_players, &(&1.color == color)) do
@@ -492,12 +489,12 @@ defmodule TypoKart.GameMaster do
 
   # When a player_id has already been assigned
   defp player_id(%Player{id: id} = player, players)
-    when is_list(players) and id != "" do
-      if Enum.any?(players, &(&1.id == id)) do
-        {:error, :duplicate_player_id}
-      else
-        player
-      end
+       when is_list(players) and id != "" do
+    if Enum.any?(players, &(&1.id == id)) do
+      {:error, :duplicate_player_id}
+    else
+      player
+    end
   end
 
   defp player_id(%Player{} = player, _), do: Map.put(player, :id, UUID.uuid1())

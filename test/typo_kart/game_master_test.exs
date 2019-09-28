@@ -84,34 +84,39 @@ defmodule TypoKart.GameMasterTest do
       {:error, _} = game_id
     end
 
-    assert %Game{state: :pending, end_time: %DateTime{}, players: players, course: course, char_ownership: char_ownership} = get_in(GameMaster.state(), [:games, game_id])
+    assert %Game{
+             state: :pending,
+             end_time: %DateTime{},
+             players: players,
+             course: course,
+             char_ownership: char_ownership
+           } = get_in(GameMaster.state(), [:games, game_id])
 
     assert [
-                    %Player{
-                      id: player1_id,
-                      label: "foo",
-                      color: "orange",
-                      cur_path_char_indices: [
-                        %PathCharIndex{path_index: 0, char_index: 0}
-                      ]
-                    },
-                    %Player{
-                      id: player2_id,
-                      label: "bar",
-                      color: "blue",
-                      cur_path_char_indices: [
-                        %PathCharIndex{path_index: 1, char_index: 2}
-                      ]
-                    }
-                  ] = players
-
+             %Player{
+               id: player1_id,
+               label: "foo",
+               color: "orange",
+               cur_path_char_indices: [
+                 %PathCharIndex{path_index: 0, char_index: 0}
+               ]
+             },
+             %Player{
+               id: player2_id,
+               label: "bar",
+               color: "blue",
+               cur_path_char_indices: [
+                 %PathCharIndex{path_index: 1, char_index: 2}
+               ]
+             }
+           ] = players
 
     assert "0 0 800 800" == course.view_box
 
     assert [
-                    [nil, nil, nil],
-                    [nil, nil, nil, nil]
-                  ] = char_ownership
+             [nil, nil, nil],
+             [nil, nil, nil, nil]
+           ] = char_ownership
 
     refute player1_id == player2_id
   end
@@ -1007,7 +1012,8 @@ defmodule TypoKart.GameMasterTest do
   test "add_player/2 assigns id and color if not given" do
     game_id = GameMaster.new_game()
 
-    assert {:ok, %Game{}, %Player{id: id, color: color}} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, %Game{}, %Player{id: id, color: color}} =
+             GameMaster.add_player(game_id, %Player{})
 
     refute id == ""
     assert true == Enum.any?(["orange", "blue", "green"], &(&1 == color))
@@ -1017,7 +1023,8 @@ defmodule TypoKart.GameMasterTest do
   test "add_player/2 respects id and color if given" do
     game_id = GameMaster.new_game()
 
-    assert {:ok, %Game{}, %Player{id: "123", color: "orange"}} = GameMaster.add_player(game_id, %Player{id: "123", color: "orange"})
+    assert {:ok, %Game{}, %Player{id: "123", color: "orange"}} =
+             GameMaster.add_player(game_id, %Player{id: "123", color: "orange"})
   end
 
   @tag :add_player
@@ -1032,7 +1039,9 @@ defmodule TypoKart.GameMasterTest do
   test "add_player/2 rejects duplicate color" do
     game_id = GameMaster.new_game()
 
-    assert {:ok, %Game{}, %Player{color: "orange"}} = GameMaster.add_player(game_id, %Player{color: "orange"})
+    assert {:ok, %Game{}, %Player{color: "orange"}} =
+             GameMaster.add_player(game_id, %Player{color: "orange"})
+
     assert {:error, _} = GameMaster.add_player(game_id, %Player{color: "orange"})
   end
 
