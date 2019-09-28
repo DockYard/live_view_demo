@@ -1148,4 +1148,23 @@ defmodule TypoKart.GameMasterTest do
     # we'll call it good enough for now.
     assert 3 == GameMaster.time_remaining(%Game{end_time: DateTime.add(now, 3, :second)})
   end
+
+  @tag :end_game
+  test "end_game/1" do
+    game_id = GameMaster.new_game()
+    assert {:ok, _game, _player} = GameMaster.add_player(game_id)
+    assert {:ok, _game} = GameMaster.start_game(game_id)
+
+    assert {:ok, %Game{}} = GameMaster.end_game(game_id)
+  end
+
+  @tag :end_game
+  test "end_game/1 when it's not running" do
+    game_id = GameMaster.new_game()
+    assert {:ok, _game, _player} = GameMaster.add_player(game_id)
+    assert {:error, _} = GameMaster.end_game(game_id)
+    assert {:ok, _game} = GameMaster.start_game(game_id)
+    assert {:ok, _} = GameMaster.end_game(game_id)
+    assert {:error, _} = GameMaster.end_game(game_id)
+  end
 end

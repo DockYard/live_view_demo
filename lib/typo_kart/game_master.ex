@@ -82,6 +82,23 @@ defmodule TypoKart.GameMaster do
     end
   end
 
+  def handle_call({:end_game, game_id}, _from, state) do
+    with %Game{state: :running} = game <- Kernel.get_in(state, [:games, game_id]),
+      updated_game <- Map.put(game, :state, :ended),
+      updated_state <- put_in(state, [:games, game_id], updated_game) do
+      {:reply, {:ok, updated_game}, updated_state}
+    else
+      nil ->
+        {:reply, {:error, "game not found"}, state}
+
+      %Game{state: game_state} ->
+        {:reply, {:error, "game is #{game_state}, not running"}, state}
+
+      _ ->
+        {:reply, {:error, "unknown error"}, state}
+    end
+  end
+
   def handle_call({:advance_game, game_id, player_index, key_code}, _from, state) do
     # If key_code fits one of the characters (we'll take the first one found) indexed by the player's
     # cur_path_char_indices, then we can advance.
@@ -170,6 +187,11 @@ defmodule TypoKart.GameMaster do
   @spec start_game(binary()) :: {:ok, Game.t()} | {:error, binary()}
   def start_game(game_id) when is_binary(game_id) do
     GenServer.call(__MODULE__, {:start_game, game_id})
+  end
+
+  @spec end_game(binary()) :: {:ok, Game.t()} | {:error, binary()}
+  def end_game(game_id) when is_binary(game_id) do
+    GenServer.call(__MODULE__, {:end_game, game_id})
   end
 
   @spec char_from_course(Course.t(), PathCharIndex.t()) :: char() | nil
@@ -538,7 +560,7 @@ defmodule TypoKart.GameMaster do
       {:error, e} = e ->
         e
 
-      players ->
+      _ ->
         Map.put(game, :players, initialized_players)
     end
   end
