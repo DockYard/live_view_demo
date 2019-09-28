@@ -36,6 +36,7 @@ defmodule TypoKart.GameMaster do
 
   def handle_call({:new_game, game}, _from, state) do
     id = UUID.uuid1()
+
     game =
       game
       |> initialize_char_ownership()
@@ -72,13 +73,16 @@ defmodule TypoKart.GameMaster do
   def handle_call({:add_player, game_id, %Player{} = player}, _from, state) do
     case Kernel.get_in(state, [:games, game_id]) do
       %Game{players: players} when length(players) >= @player_count_limit ->
-        {:reply, {:error, "This game has already reached the maximum of players allowed: #{@player_count_limit}."}, state}
+        {:reply,
+         {:error,
+          "This game has already reached the maximum of players allowed: #{@player_count_limit}."},
+         state}
 
       %Game{players: players} = game ->
         with player <- assign_player_color(game, player) |> Map.put(:id, UUID.uuid1()),
-          game <- Map.put(game, :players, players ++ [player]),
-          new_state <- put_in(state, [:games, game_id], game),
-          do: {:reply, {:ok, game, player}, new_state}
+             game <- Map.put(game, :players, players ++ [player]),
+             new_state <- put_in(state, [:games, game_id], game),
+             do: {:reply, {:ok, game, player}, new_state}
 
       _ ->
         {:reply, {:error, "game not found"}, state}
@@ -87,10 +91,10 @@ defmodule TypoKart.GameMaster do
 
   def handle_call({:remove_player, game_id, player_id}, _from, state) do
     with %Game{players: players} = game <- Kernel.get_in(state, [:games, game_id]),
-      updated_players <- Enum.reject(players, &(&1.id == player_id)),
-      updated_game <- Map.put(game, :players, updated_players),
-      updated_state <- put_in(state, [:games, game_id], updated_game) do
-        {:reply, {:ok, updated_game}, updated_state}
+         updated_players <- Enum.reject(players, &(&1.id == player_id)),
+         updated_game <- Map.put(game, :players, updated_players),
+         updated_state <- put_in(state, [:games, game_id], updated_game) do
+      {:reply, {:ok, updated_game}, updated_state}
     else
       nil ->
         {:reply, {:error, "game not found"}, state}
@@ -394,27 +398,34 @@ defmodule TypoKart.GameMaster do
     )
   end
 
-  defp initialize_starting_positions(%Game{players: players, course: %Course{start_positions_by_player_count: start_positions}} = game) do
+  defp initialize_starting_positions(
+         %Game{
+           players: players,
+           course: %Course{start_positions_by_player_count: start_positions}
+         } = game
+       ) do
     %Game{
-      game |
-      players: Enum.with_index(players)
-        |> Enum.map(fn {player, player_index} ->
-          %Player{
-            player |
-            cur_path_char_indices: [
-              Enum.at(start_positions, length(players) - 1)
-              |> Enum.at(player_index)
-            ]
-          }
-        end)
+      game
+      | players:
+          Enum.with_index(players)
+          |> Enum.map(fn {player, player_index} ->
+            %Player{
+              player
+              | cur_path_char_indices: [
+                  Enum.at(start_positions, length(players) - 1)
+                  |> Enum.at(player_index)
+                ]
+            }
+          end)
     }
   end
 
   defp assign_player_color(%Game{players: players}, %Player{} = player) do
-    with used_colors <- Enum.map(players, &(&1.color)),
-      available_colors <- Enum.reject(@player_colors, fn possible_color ->
-          Enum.any?(used_colors, &(&1 == possible_color))
-        end),
-        do: Map.put(player, :color, Enum.random(available_colors))
+    with used_colors <- Enum.map(players, & &1.color),
+         available_colors <-
+           Enum.reject(@player_colors, fn possible_color ->
+             Enum.any?(used_colors, &(&1 == possible_color))
+           end),
+         do: Map.put(player, :color, Enum.random(available_colors))
   end
 end

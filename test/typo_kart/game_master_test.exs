@@ -68,9 +68,14 @@ defmodule TypoKart.GameMasterTest do
                    }
                  ],
                  start_positions_by_player_count: [
-                   [%PathCharIndex{path_index: 0, char_index: 0}], # one player
-                   [%PathCharIndex{path_index: 0, char_index: 0}, %PathCharIndex{path_index: 1, char_index: 2}] # two players
-                 ],
+                   # one player
+                   [%PathCharIndex{path_index: 0, char_index: 0}],
+                   # two players
+                   [
+                     %PathCharIndex{path_index: 0, char_index: 0},
+                     %PathCharIndex{path_index: 1, char_index: 2}
+                   ]
+                 ]
                }
              })
 
@@ -241,7 +246,7 @@ defmodule TypoKart.GameMasterTest do
         ],
         start_positions_by_player_count: [
           [%PathCharIndex{path_index: 0, char_index: 4}]
-        ],
+        ]
       }
     }
 
@@ -351,7 +356,7 @@ defmodule TypoKart.GameMasterTest do
                [
                  0,
                  0,
-                 nil,
+                 nil
                ],
                [
                  0,
@@ -1003,11 +1008,17 @@ defmodule TypoKart.GameMasterTest do
   test "add_player/2 will not add more than three players (for now)" do
     game_id = GameMaster.new_game()
 
-    assert {:ok, %Game{}, %Player{id: player1_id, color: player1_color}} = GameMaster.add_player(game_id, %Player{})
-    assert {:ok, %Game{}, %Player{id: player2_id, color: player2_color}} = GameMaster.add_player(game_id, %Player{})
-    assert {:ok, %Game{}, %Player{id: player3_id, color: player3_color}} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, %Game{}, %Player{id: player1_id, color: player1_color}} =
+             GameMaster.add_player(game_id, %Player{})
+
+    assert {:ok, %Game{}, %Player{id: player2_id, color: player2_color}} =
+             GameMaster.add_player(game_id, %Player{})
+
+    assert {:ok, %Game{}, %Player{id: player3_id, color: player3_color}} =
+             GameMaster.add_player(game_id, %Player{})
+
     assert {:error, "This game has already reached the maximum of players allowed: 3."} =
-      GameMaster.add_player(game_id, %Player{})
+             GameMaster.add_player(game_id, %Player{})
 
     refute player1_color == player2_color
     refute player1_color == player3_color
@@ -1033,6 +1044,7 @@ defmodule TypoKart.GameMasterTest do
 
     assert {:ok, _game, %Player{id: player1_id}} = GameMaster.add_player(game_id, %Player{})
 
-    assert {:ok, %Game{players: [%Player{id: ^player1_id}]}} = GameMaster.remove_player(game_id, "x#{player1_id}")
+    assert {:ok, %Game{players: [%Player{id: ^player1_id}]}} =
+             GameMaster.remove_player(game_id, "x#{player1_id}")
   end
 end

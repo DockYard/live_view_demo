@@ -65,12 +65,12 @@ defmodule TypoKart.Courses do
     start_positions
     |> Enum.map(fn positions ->
       positions
-      |> Enum.map(&(
-        struct(PathCharIndex,
+      |> Enum.map(
+        &struct(PathCharIndex,
           path_index: &1 |> Map.get("path_index"),
           char_index: &1 |> Map.get("char_index")
         )
-      ))
+      )
     end)
   end
 end

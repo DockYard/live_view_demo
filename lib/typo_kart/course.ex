@@ -12,8 +12,10 @@ defmodule TypoKart.Course do
             course_rotation_center_x: 0,
             course_rotation_center_y: 0,
             start_positions_by_player_count: [
-              [%PathCharIndex{}], # one player
-              [%PathCharIndex{}, %PathCharIndex{}] # two players
+              # one player
+              [%PathCharIndex{}],
+              # two players
+              [%PathCharIndex{}, %PathCharIndex{}]
             ],
             view_box: "",
             paths: [],
