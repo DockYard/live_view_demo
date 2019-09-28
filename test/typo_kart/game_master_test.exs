@@ -231,21 +231,17 @@ defmodule TypoKart.GameMasterTest do
   test "advance/3 with valid single path inputs and single current path_char index for given player" do
     game = %Game{
       players: [
-        %Player{
-          cur_path_char_indices: [
-            %PathCharIndex{
-              path_index: 0,
-              char_index: 4
-            }
-          ]
-        }
+        %Player{}
       ],
       course: %Course{
         paths: [
           %Path{
             chars: 'The quick brown fox'
           }
-        ]
+        ],
+        start_positions_by_player_count: [
+          [%PathCharIndex{path_index: 0, char_index: 4}]
+        ],
       }
     }
 
@@ -296,16 +292,19 @@ defmodule TypoKart.GameMasterTest do
     course = %Course{
       paths: [
         %Path{
-          chars: String.to_charlist("The quick brown fox")
+          chars: 'fox'
         },
         %Path{
-          chars: String.to_charlist("A slow green turtle")
+          chars: 'turtle'
         }
+      ],
+      start_positions_by_player_count: [
+        [%PathCharIndex{path_index: 0, char_index: 0}]
       ],
       path_connections: [
         {
           # A player can advance directly from this point...
-          %PathCharIndex{path_index: 0, char_index: 9},
+          %PathCharIndex{path_index: 0, char_index: 1},
           # ...to this point.
           %PathCharIndex{path_index: 1, char_index: 0}
         }
@@ -332,7 +331,9 @@ defmodule TypoKart.GameMasterTest do
 
     assert game_id = GameMaster.new_game(game)
 
-    assert {:ok, game} = GameMaster.advance(game_id, 0, hd('A'))
+    assert {:ok, _} = GameMaster.advance(game_id, 0, hd('f'))
+    assert {:ok, _} = GameMaster.advance(game_id, 0, hd('o'))
+    assert {:ok, game} = GameMaster.advance(game_id, 0, hd('t'))
 
     assert %Game{
              players: [
@@ -348,41 +349,12 @@ defmodule TypoKart.GameMasterTest do
              ],
              char_ownership: [
                [
+                 0,
+                 0,
                  nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil
                ],
                [
                  0,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
-                 nil,
                  nil,
                  nil,
                  nil,
@@ -411,6 +383,9 @@ defmodule TypoKart.GameMasterTest do
           # ...to this point.
           %PathCharIndex{path_index: 1, char_index: 0}
         }
+      ],
+      start_positions_by_player_count: [
+        [%PathCharIndex{path_index: 0, char_index: 10}]
       ]
     }
 
