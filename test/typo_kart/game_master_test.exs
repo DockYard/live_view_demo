@@ -1104,4 +1104,30 @@ defmodule TypoKart.GameMasterTest do
 
     assert {:ok, %Game{state: :running, end_time: %DateTime{}}} = GameMaster.start_game(game_id)
   end
+
+  @tag :start_game
+  test "start_game/1 with invalid game_id" do
+    game_id = GameMaster.new_game()
+
+    assert {:ok, _game, _player} = GameMaster.add_player(game_id)
+
+    assert {:error, _} = GameMaster.start_game("#{game_id}x")
+  end
+
+  @tag :start_game
+  test "start_game/1 when game is not :pending" do
+    game_id = GameMaster.new_game()
+
+    assert {:ok, _game, _player} = GameMaster.add_player(game_id)
+
+    assert {:ok, %Game{} = game} = GameMaster.start_game(game_id)
+    assert {:error, _} = GameMaster.start_game(game_id)
+  end
+
+  @tag :start_game
+  test "start_game/1 with no players" do
+    game_id = GameMaster.new_game()
+
+    assert {:error, _} = GameMaster.start_game(game_id)
+  end
 end
