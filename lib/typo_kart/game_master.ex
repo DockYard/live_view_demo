@@ -59,20 +59,20 @@ defmodule TypoKart.GameMaster do
          end_time <- DateTime.add(now, @game_run_duration_seconds, :second),
          updated_game <- game |> Map.put(:state, :running) |> Map.put(:end_time, end_time),
          updated_state <- put_in(state, [:games, game_id], updated_game) do
-          case {game.state, length(players)} do
-            {:pending, player_count} when player_count > 0 ->
-              # TODO: schedule an end_game @game_run_duration_seconds from now
-              {:reply, {:ok, updated_game}, updated_state}
+      case {game.state, length(players)} do
+        {:pending, player_count} when player_count > 0 ->
+          # TODO: schedule an end_game @game_run_duration_seconds from now
+          {:reply, {:ok, updated_game}, updated_state}
 
-            {_, 0} ->
-              {:reply, {:error, "game has no players"}, state}
+        {_, 0} ->
+          {:reply, {:error, "game has no players"}, state}
 
-            {:running, _} ->
-              {:reply, {:error, "game already running"}, state}
+        {:running, _} ->
+          {:reply, {:error, "game already running"}, state}
 
-            {:ended, _} ->
-              {:reply, {:error, "game already ended"}, state}
-          end
+        {:ended, _} ->
+          {:reply, {:error, "game already ended"}, state}
+      end
     else
       nil ->
         {:reply, {:error, "game not found"}, state}
@@ -84,8 +84,8 @@ defmodule TypoKart.GameMaster do
 
   def handle_call({:end_game, game_id}, _from, state) do
     with %Game{state: :running} = game <- Kernel.get_in(state, [:games, game_id]),
-      updated_game <- Map.put(game, :state, :ended),
-      updated_state <- put_in(state, [:games, game_id], updated_game) do
+         updated_game <- Map.put(game, :state, :ended),
+         updated_state <- put_in(state, [:games, game_id], updated_game) do
       {:reply, {:ok, updated_game}, updated_state}
     else
       nil ->
@@ -447,7 +447,8 @@ defmodule TypoKart.GameMaster do
   def time_remaining(%Game{state: :ended}), do: 0
 
   def time_remaining(%Game{end_time: end_time}) do
-    DateTime.to_unix(end_time) - DateTime.to_unix(DateTime.utc_now() |> DateTime.truncate(:second))
+    DateTime.to_unix(end_time) -
+      DateTime.to_unix(DateTime.utc_now() |> DateTime.truncate(:second))
   end
 
   defp unowned_class, do: "unowned"

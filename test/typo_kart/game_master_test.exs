@@ -13,9 +13,10 @@ defmodule TypoKart.GameMasterTest do
   setup do
     GameMaster.reset_all()
 
-    {:ok, %{
-      now: DateTime.utc_now() |> DateTime.truncate(:second)
-    }}
+    {:ok,
+     %{
+       now: DateTime.utc_now() |> DateTime.truncate(:second)
+     }}
   end
 
   test "initializes" do
