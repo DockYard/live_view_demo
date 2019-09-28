@@ -44,8 +44,9 @@ defmodule TypoKart.GameMasterTest do
     assert initial_state == GameMaster.state()
   end
 
+  @tag :new_game
   test "creates a game with some initialization" do
-    assert id =
+    assert game_id =
              GameMaster.new_game(%Game{
                players: [
                  %Player{
@@ -79,37 +80,40 @@ defmodule TypoKart.GameMasterTest do
                }
              })
 
-    assert %{
-             games: %{
-               ^id => %Game{
-                 state: :pending,
-                 end_time: nil,
-                 players: [
-                   %Player{
-                     label: "foo",
-                     color: "orange",
-                     cur_path_char_indices: [
-                       %PathCharIndex{path_index: 0, char_index: 0}
-                     ]
-                   },
-                   %Player{
-                     label: "bar",
-                     color: "blue",
-                     cur_path_char_indices: [
-                       %PathCharIndex{path_index: 1, char_index: 2}
-                     ]
-                   }
-                 ],
-                 course: %Course{
-                   view_box: "0 0 800 800"
-                 },
-                 char_ownership: [
-                   [nil, nil, nil],
-                   [nil, nil, nil, nil]
-                 ]
-               }
-             }
-           } = GameMaster.state()
+    assert_raise MatchError, ~r/.*/, fn ->
+      {:error, _} = game_id
+    end
+
+    assert %Game{state: :pending, end_time: %DateTime{}, players: players, course: course, char_ownership: char_ownership} = get_in(GameMaster.state(), [:games, game_id])
+
+    assert [
+                    %Player{
+                      id: player1_id,
+                      label: "foo",
+                      color: "orange",
+                      cur_path_char_indices: [
+                        %PathCharIndex{path_index: 0, char_index: 0}
+                      ]
+                    },
+                    %Player{
+                      id: player2_id,
+                      label: "bar",
+                      color: "blue",
+                      cur_path_char_indices: [
+                        %PathCharIndex{path_index: 1, char_index: 2}
+                      ]
+                    }
+                  ] = players
+
+
+    assert "0 0 800 800" == course.view_box
+
+    assert [
+                    [nil, nil, nil],
+                    [nil, nil, nil, nil]
+                  ] = char_ownership
+
+    refute player1_id == player2_id
   end
 
   test "char_from_course/2 when given a valid index" do

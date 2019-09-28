@@ -37,14 +37,21 @@ defmodule TypoKart.GameMaster do
   end
 
   def handle_call({:new_game, game}, _from, state) do
-    id = UUID.uuid1()
+    with game_id <- UUID.uuid1(),
+      game = %Game{} <- initialize_game(game),
+      %{} = updated_state <- put_in(state, [:games, game_id], game)
+    do
+      {:reply, game_id, updated_state}
+    else
+      {:error, :invalid_player_color} ->
+        {:reply, {:error, "invalid player color"}, state}
 
-    game =
-      game
-      |> initialize_char_ownership()
-      |> initialize_starting_positions()
+      {:error, :duplicate_player_id} ->
+        {:reply, {:error, "duplicate player id"}, state}
 
-    {:reply, id, put_in(state, [:games, id], game)}
+      {:error, :duplicate_player_color} ->
+        {:reply, {:error, "duplicate player color"}, state}
+    end
   end
 
   def handle_call({:start_game, game_id}, _from, state) do
@@ -462,7 +469,10 @@ defmodule TypoKart.GameMaster do
 
   defp player_color(%Game{players: players}, %Player{color: color} = player)
     when color != "" do
-    if Enum.any?(players, &(&1.color == color)) do
+
+    other_players = Enum.filter(players, &(&1 != player))
+
+    if Enum.any?(other_players, &(&1.color == color)) do
       {:error, :duplicate_player_color}
     else
       player
@@ -478,6 +488,8 @@ defmodule TypoKart.GameMaster do
          do: Map.put(player, :color, Enum.random(available_colors))
   end
 
+  defp player_color(_, {:error, _} = e), do: e
+
   # When a player_id has already been assigned
   defp player_id(%Player{id: id} = player, players)
     when is_list(players) and id != "" do
@@ -489,4 +501,35 @@ defmodule TypoKart.GameMaster do
   end
 
   defp player_id(%Player{} = player, _), do: Map.put(player, :id, UUID.uuid1())
+
+  defp player_id({:error, _} = e, _), do: e
+
+  defp initialize_players_id_color(%Game{players: players} = game) do
+    initialized_players =
+      players
+      |> Enum.reduce_while([], fn player, acc ->
+        case player_color(game, player) |> player_id(players) do
+          {:error, _} = e ->
+            {:halt, e}
+
+          good ->
+            {:cont, acc ++ [good]}
+        end
+      end)
+
+    case initialized_players do
+      {:error, e} = e ->
+        e
+
+      players ->
+        Map.put(game, :players, initialized_players)
+    end
+  end
+
+  defp initialize_game(%Game{} = game) do
+    game
+    |> initialize_char_ownership()
+    |> initialize_starting_positions()
+    |> initialize_players_id_color()
+  end
 end
