@@ -85,6 +85,21 @@ defmodule TypoKart.GameMaster do
     end
   end
 
+  def handle_call({:remove_player, game_id, player_id}, _from, state) do
+    with %Game{players: players} = game <- Kernel.get_in(state, [:games, game_id]),
+      updated_players <- Enum.reject(players, &(&1.id == player_id)),
+      updated_game <- Map.put(game, :players, updated_players),
+      updated_state <- put_in(state, [:games, game_id], updated_game) do
+        {:reply, {:ok, updated_game}, updated_state}
+    else
+      nil ->
+        {:reply, {:error, "game not found"}, state}
+
+      _ ->
+        {:reply, {:error, "unknown error"}, state}
+    end
+  end
+
   @spec reset_all() :: :ok
   def reset_all do
     GenServer.call(__MODULE__, :reset_all)
@@ -123,6 +138,11 @@ defmodule TypoKart.GameMaster do
   @spec add_player(binary, Player.t()) :: {:ok, Game.t(), Player.t()} | {:error, binary()}
   def add_player(game_id, player \\ %Player{}) when is_binary(game_id) do
     GenServer.call(__MODULE__, {:add_player, game_id, player})
+  end
+
+  @spec remove_player(binary, binary()) :: {:ok, Game.t()} | {:error, binary()}
+  def remove_player(game_id, player_id) when is_binary(game_id) and is_binary(player_id) do
+    GenServer.call(__MODULE__, {:remove_player, game_id, player_id})
   end
 
   @spec next_chars(Course.t(), PathCharIndex.t()) :: list(PathCharIndex.t())
