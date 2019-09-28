@@ -18,7 +18,7 @@ defmodule TypoKartWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    post "/game", PageController, :start_game
+    get "/game/:player_index", PageController, :start_game
   end
 
   # Other scopes may use custom stacks.

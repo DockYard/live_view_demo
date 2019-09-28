@@ -1,4 +1,5 @@
 <section class="phx-hero">
-  <h1>My Phrenzy Entry</h1>
-  <p><%= link "demo game", to: "/game", method: :post %>.</p>
+  <h1>Join Demo Game</h1>
+  <p><%= link "Player 1", to: "/game/0" %></p>
+  <p><%= link "Player 2", to: "/game/1" %></p>
 </section>
