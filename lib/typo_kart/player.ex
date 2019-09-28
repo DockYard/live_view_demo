@@ -1,12 +1,14 @@
 defmodule TypoKart.Player do
   alias TypoKart.PathCharIndex
 
-  defstruct color: "black",
+  defstruct id: UUID.uuid1(),
+            color: "black",
             label: "",
             points: 0,
             cur_path_char_indices: [%PathCharIndex{}]
 
   @type t :: %__MODULE__{
+          id: binary(),
           color: binary(),
           label: binary(),
           points: integer(),
