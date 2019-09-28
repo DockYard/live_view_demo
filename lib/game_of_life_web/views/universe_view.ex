@@ -8,14 +8,14 @@ defmodule GameOfLifeWeb.UniverseView do
   alias GameOfLife.Universe.Template
   alias GameOfLife.Cell.Position
 
-  def render_universe(%Universe{generation: generation, dimensions: %Dimensions{width: width, height: height} = dimensions}) do
+  def render_universe(%Universe{generation: generation, dimensions: %Dimensions{width: width, height: height} = dimensions}, opts) do
     content_tag(:section, class: universe_class(dimensions)) do
       Enum.map(0..(height - 1), fn y ->
         content_tag(:div, class: "cell-row") do
           Enum.map(0..(width - 1), fn x ->
             generation
             |> Generation.get_cell(%Position{x: x, y: y})
-            |> GameOfLifeWeb.CellView.render_cell()
+            |> GameOfLifeWeb.CellView.render_cell(opts)
           end)
         end
       end)

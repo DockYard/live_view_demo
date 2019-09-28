@@ -1,7 +1,6 @@
 defmodule GameOfLifeWeb.UniverseLive do
   use Phoenix.LiveView
 
-  alias GameOfLife.Color
   alias GameOfLife.Universe
   alias GameOfLife.Universe.Template
   alias GameOfLife.Universe.Dimensions
@@ -24,12 +23,16 @@ defmodule GameOfLifeWeb.UniverseLive do
     {:noreply, assign(socket, speed: String.to_integer(speed))}
   end
 
-  def handle_event("update_color", %{"color" => %{"red" => red, "green" => green, "blue" => blue}}, socket) do
-    {:noreply, assign(socket, color: %Color{red: red, green: green, blue: blue})}
+  def handle_event("update_color", %{"universe" => %{"color" => color}}, socket) do
+    {:noreply, assign(socket, color: color)}
   end
 
   def handle_event("toggle_playing", _params, socket) do
     {:noreply, toggle_playing(socket)}
+  end
+
+  def handle_event("toggle_party", _params, socket) do
+    {:noreply, toggle_party(socket)}
   end
 
   def handle_event("reset", _params, socket) do
@@ -64,9 +67,16 @@ defmodule GameOfLifeWeb.UniverseLive do
     |> schedule_tick()
   end
 
+  defp toggle_party(socket) do
+    socket
+    |> assign(party: !socket.assigns.party)
+    |> schedule_tick()
+  end
+
   defp reset_universe(socket) do
     load_universe(socket, %{
       playing: false,
+      party: false,
       speed: socket.assigns.speed,
       template: socket.assigns.template,
       dimensions: socket.assigns.dimensions,
@@ -93,6 +103,7 @@ defmodule GameOfLifeWeb.UniverseLive do
 
     assign(
       socket,
+      party: party(opts),
       color: color(opts),
       playing: playing(opts),
       speed: speed(opts),
@@ -112,8 +123,12 @@ defmodule GameOfLifeWeb.UniverseLive do
   defp playing(%{"playing" => 1}), do: true
   defp playing(_opts), do: false
 
-  defp color(%{"color" => %{"red" => red, "green" => green, "blue" => blue}}), do: %Color{red: red, green: green, blue: blue}
-  defp color(_opts), do: %Color{red: "255", green: "68", blue: "0"}
+  defp party(%{"playing" => "1"}), do: true
+  defp party(%{"playing" => 1}), do: true
+  defp party(_opts), do: false
+
+  defp color(%{"color" => color}), do: color
+  defp color(_opts), do: "#FF4400"
 
   defp dimensions("random", %{"width" => width, "height" => height}) when is_bitstring(width), do: %Dimensions{width: String.to_integer(width), height: String.to_integer(height)}
   defp dimensions(template, _opts), do: Template.dimensions(template)
