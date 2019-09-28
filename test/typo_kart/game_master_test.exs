@@ -83,6 +83,7 @@ defmodule TypoKart.GameMasterTest do
              games: %{
                ^id => %Game{
                  state: :pending,
+                 end_time: nil,
                  players: [
                    %Player{
                      label: "foo",
@@ -1034,7 +1035,7 @@ defmodule TypoKart.GameMasterTest do
   test "remove_player/2" do
     game_id = GameMaster.new_game()
 
-    assert {:ok, _game, %Player{id: player1_id}} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, _game, %Player{id: player1_id}} = GameMaster.add_player(game_id)
 
     assert {:ok, %Game{players: []}} = GameMaster.remove_player(game_id, player1_id)
   end
@@ -1043,9 +1044,18 @@ defmodule TypoKart.GameMasterTest do
   test "remove_player/2 when the player is not found" do
     game_id = GameMaster.new_game()
 
-    assert {:ok, _game, %Player{id: player1_id}} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, _game, %Player{id: player1_id}} = GameMaster.add_player(game_id)
 
     assert {:ok, %Game{players: [%Player{id: ^player1_id}]}} =
              GameMaster.remove_player(game_id, "x#{player1_id}")
+  end
+
+  @tag :start_game
+  test "start_game/1" do
+    game_id = GameMaster.new_game()
+
+    assert {:ok, _game, _player} = GameMaster.add_player(game_id)
+
+    assert {:ok, %Game{state: :running, end_time: %DateTime{}}} = GameMaster.start_game(game_id)
   end
 end

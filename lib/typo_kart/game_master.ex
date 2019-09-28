@@ -13,6 +13,8 @@ defmodule TypoKart.GameMaster do
 
   @player_colors ["orange", "blue", "green"]
 
+  @game_run_duration_seconds 180
+
   def start_link(_init \\ nil) do
     GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
@@ -43,6 +45,24 @@ defmodule TypoKart.GameMaster do
       |> initialize_starting_positions()
 
     {:reply, id, put_in(state, [:games, id], game)}
+  end
+
+  def handle_call({:start_game, game_id}, _from, state) do
+    with %Game{} = game <- Kernel.get_in(state, [:games, game_id]),
+      now <- DateTime.utc_now() |> DateTime.truncate(:second),
+      end_time <- DateTime.add(now, @game_run_duration_seconds, :second),
+      updated_game <- game |> Map.put(:state, :running) |> Map.put(:end_time, end_time),
+      updated_state <- put_in(state, [:games, game_id], updated_game)
+    do
+      # TODO: schedule an end_game @game_run_duration_seconds from now
+      {:reply, {:ok, updated_game}, updated_state}
+    else
+      nil ->
+        {:reply, {:error, "game not found"}, state}
+
+      _ ->
+        {:reply, {:error, "unknown error"}, state}
+    end
   end
 
   def handle_call({:advance_game, game_id, player_index, key_code}, _from, state) do
@@ -117,6 +137,11 @@ defmodule TypoKart.GameMaster do
   @spec new_game(Game.t()) :: binary()
   def new_game(%Game{} = game \\ %Game{}) do
     GenServer.call(__MODULE__, {:new_game, game})
+  end
+
+  @spec start_game(binary()) :: {:ok, Game.t()} | {:error, binary()}
+  def start_game(game_id) when is_binary(game_id) do
+    GenServer.call(__MODULE__, {:start_game, game_id})
   end
 
   @spec char_from_course(Course.t(), PathCharIndex.t()) :: char() | nil
