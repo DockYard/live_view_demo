@@ -12,6 +12,10 @@ defmodule TypoKart.GameMasterTest do
 
   setup do
     GameMaster.reset_all()
+
+    {:ok, %{
+      now: DateTime.utc_now() |> DateTime.truncate(:second)
+    }}
   end
 
   test "initializes" do
@@ -1129,5 +1133,19 @@ defmodule TypoKart.GameMasterTest do
     game_id = GameMaster.new_game()
 
     assert {:error, _} = GameMaster.start_game(game_id)
+  end
+
+  @tag :time_remaining
+  test "time_remaining/1 when game has ended" do
+    assert 0 == GameMaster.time_remaining(%Game{state: :ended})
+  end
+
+  @tag :time_remaining
+  test "time_remaining/1", %{now: now} do
+    # It's possible that this could result in a false negative some some actual time is passing
+    # between the time we invoke the function to the time when it takes it's snapshot of the "now"
+    # time. We could get fancier about how we test for this. But as long it's passing,
+    # we'll call it good enough for now.
+    assert 3 == GameMaster.time_remaining(%Game{end_time: DateTime.add(now, 3, :second)})
   end
 end

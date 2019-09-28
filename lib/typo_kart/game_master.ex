@@ -420,6 +420,14 @@ defmodule TypoKart.GameMaster do
     )
   end
 
+  @doc "Seconds until game ends. 0 if the game has ended."
+  @spec time_remaining(Game.t()) :: integer()
+  def time_remaining(%Game{state: :ended}), do: 0
+
+  def time_remaining(%Game{end_time: end_time}) do
+    DateTime.to_unix(end_time) - DateTime.to_unix(DateTime.utc_now() |> DateTime.truncate(:second))
+  end
+
   defp unowned_class, do: "unowned"
 
   defp next_char_class, do: "next-char"
