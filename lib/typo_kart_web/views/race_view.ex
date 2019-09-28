@@ -78,6 +78,8 @@ defmodule TypoKartWeb.RaceView do
   end
 
   @spec course_rotation(Game.t(), list(ViewChar.t()), integer()) :: float()
+  def course_rotation(_, [], _), do: 0
+
   def course_rotation(%Game{} = game, view_chars, player_index)
       when is_list(view_chars) and is_integer(player_index),
       do: -1 * (cur_view_char(game, view_chars, player_index) |> Map.get(:rotation))

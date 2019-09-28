@@ -112,6 +112,11 @@ defmodule TypoKart.RaceViewTest do
     assert -47 == RaceView.course_rotation(game, view_chars, 1)
   end
 
+  test "course_rotation/3 when view_chars is empty", %{game: game} do
+    view_chars = []
+    assert 0 == RaceView.course_rotation(game, view_chars, 1)
+  end
+
   test "course_transform/3", %{
     game:
       %Game{
