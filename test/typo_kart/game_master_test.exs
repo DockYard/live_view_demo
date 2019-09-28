@@ -1003,14 +1003,18 @@ defmodule TypoKart.GameMasterTest do
   test "add_player/2 will not add more than three players (for now)" do
     game_id = GameMaster.new_game()
 
-    assert {:ok, _game, %Player{color: player1_color}} = GameMaster.add_player(game_id, %Player{})
-    assert {:ok, _game, %Player{color: player2_color}} = GameMaster.add_player(game_id, %Player{})
-    assert {:ok, _game, %Player{color: player3_color}} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, _game, %Player{id: player1_id, color: player1_color}} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, _game, %Player{id: player2_id, color: player2_color}} = GameMaster.add_player(game_id, %Player{})
+    assert {:ok, _game, %Player{id: player3_id, color: player3_color}} = GameMaster.add_player(game_id, %Player{})
     assert {:error, "This game has already reached the maximum of players allowed: 3."} =
       GameMaster.add_player(game_id, %Player{})
 
     refute player1_color == player2_color
     refute player1_color == player3_color
     refute player2_color == player3_color
+
+    refute player1_id == player2_id
+    refute player1_id == player3_id
+    refute player2_id == player3_id
   end
 end

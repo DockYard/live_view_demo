@@ -1,7 +1,7 @@
 defmodule TypoKart.Player do
   alias TypoKart.PathCharIndex
 
-  defstruct id: UUID.uuid1(),
+  defstruct id: "",
             color: "black",
             label: "",
             points: 0,

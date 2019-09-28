@@ -75,7 +75,7 @@ defmodule TypoKart.GameMaster do
         {:reply, {:error, "This game has already reached the maximum of players allowed: #{@player_count_limit}."}, state}
 
       %Game{players: players} = game ->
-        with player = assign_player_color(game, player),
+        with player <- assign_player_color(game, player) |> Map.put(:id, UUID.uuid1()),
           game <- Map.put(game, :players, players ++ [player]),
           new_state <- put_in(state, [:games, game_id], game),
           do: {:reply, {:ok, game, player}, new_state}
