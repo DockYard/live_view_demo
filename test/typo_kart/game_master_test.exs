@@ -82,6 +82,7 @@ defmodule TypoKart.GameMasterTest do
     assert %{
              games: %{
                ^id => %Game{
+                 state: :pending,
                  players: [
                    %Player{
                      label: "foo",
