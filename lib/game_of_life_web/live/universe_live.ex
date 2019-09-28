@@ -67,11 +67,7 @@ defmodule GameOfLifeWeb.UniverseLive do
     |> schedule_tick()
   end
 
-  defp toggle_party(socket) do
-    socket
-    |> assign(party: !socket.assigns.party)
-    |> schedule_tick()
-  end
+  defp toggle_party(socket), do: assign(socket, party: !socket.assigns.party)
 
   defp reset_universe(socket) do
     load_universe(socket, %{
