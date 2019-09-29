@@ -1,8 +1,8 @@
 # (App Name Here)
 
-This is my entry in [Phoenix Phrenzy](https://phoenixphrenzy.com), showing off what [Phoenix](https://phoenixframework.org/) and [LiveView](https://github.com/phoenixframework/phoenix_live_view) can do.
+This is [Rocket Insights'](https:/rocketinsights.com) entry in [Phoenix Phrenzy](https://phoenixphrenzy.com), showing off what [Phoenix](https://phoenixframework.org/) and [LiveView](https://github.com/phoenixframework/phoenix_live_view) can do.
 
-![App Name Here preview](assets/static/images/preview.gif "App Name Here")
+![Flame of Life](assets/static/images/logo.gif "Flame of Life")
 
 # Phrenzy Instructions
 
@@ -13,12 +13,24 @@ Note: for development, you'll need Elixir, Erlang and Node.js. If you use the [a
 
 ## Deployment
 
-How you deploy your app is up to you. A couple of the easiest options are:
+The app is hosted on  [Gigalixir](https://gigalixir.com/): [Flame of
+Life](https://flame-of-life.gigalixirapp.com/)
 
-- Heroku ([instructions](https://hexdocs.pm/phoenix/heroku.html))
-- [Gigalixir](https://gigalixir.com/) (doesn't limit number of connections)
+## Conway's Game of Life
+This is the Phoenix implementation of [Conway's Game of
+Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life), a cellular
+automation game where the evolution is set based on the initial state and
+doesn't require input from the viewer.
 
-## The Usual README Content
+This implementation of Game of Life offers some features that highlight
+LiveView's technology, none needing page reloads, any javascript, or even resetting
+of the template:
+
+* selecting a template, or using the default random template
+* selecting the speed that the cells will move
+* cell color by RGB values
+* pausing of the game
+* resetting the game
 
 To start your Phoenix server:
 
@@ -27,8 +39,6 @@ To start your Phoenix server:
   * Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
 ## Learn more
 
