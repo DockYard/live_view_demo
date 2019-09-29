@@ -69,19 +69,23 @@ path.course.primary {
 }
 
 .orange {
+  color: var(--orange);
   fill: var(--orange);
 }
 
 .blue {
   fill: var(--blue);
+  color: var(--blue);
 }
 
 .green {
   fill: var(--green);
+  color: var(--green);
 }
 
 .pink {
   fill: var(--pink);
+  color: var(--pink);
 }
 
 .unowned {

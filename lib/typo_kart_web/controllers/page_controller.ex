@@ -30,19 +30,24 @@ defmodule TypoKartWeb.PageController do
       [] ->
         {:ok, course} = Courses.load("course2")
 
-        GameMaster.new_game(%Game{
-          players: [
-            %Player{
-              color: "orange",
-              label: "P1"
-            },
-            %Player{
-              color: "blue",
-              label: "P2"
-            }
-          ],
-          course: course
-        })
+        game_id =
+          GameMaster.new_game(%Game{
+            players: [
+              %Player{
+                color: "orange",
+                label: "P1"
+              },
+              %Player{
+                color: "blue",
+                label: "P2"
+              }
+            ],
+            course: course
+          })
+
+        {:ok, _} = GameMaster.start_game(game_id)
+
+        game_id
 
       [{game_id, _game} | _] ->
         game_id
