@@ -38,6 +38,31 @@ div[data-phx-view="GameOfLifeWeb.UniverseLive"] {
     height: 100%;
 }
 
+.button {
+    margin-right: .5em;
+}
+
 .form-check-label {
     margin-left: .5em;
+}
+
+.universe.party {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+}
+
+.universe.party.playing {
+    animation: gradientBG 1s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
