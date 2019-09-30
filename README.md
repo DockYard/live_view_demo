@@ -1,4 +1,4 @@
-# (App Name Here)
+# Flame of Life
 
 This is [Rocket Insights'](https:/rocketinsights.com) entry in [Phoenix Phrenzy](https://phoenixphrenzy.com), showing off what [Phoenix](https://phoenixframework.org/) and [LiveView](https://github.com/phoenixframework/phoenix_live_view) can do.
 
