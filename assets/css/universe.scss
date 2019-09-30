@@ -38,12 +38,5 @@
 .cell {
     border: 1px solid #000;
     box-sizing: content-box;
-
-    &.alive {
-        background: rgb(255, 68, 0);
-    }
-
-    &.dead {
-        background: rgb(50, 50, 50);
-    }
+    background: rgb(50, 50, 50);
 }

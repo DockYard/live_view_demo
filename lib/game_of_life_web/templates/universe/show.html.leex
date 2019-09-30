@@ -1,13 +1,7 @@
 <!-- Wrapped in div[data-phx-view="GameOfLifeWeb.UniverseLive"] -->
-<style>
-.cell.alive {
-  background: <%= Color.rgb_string(@color) %>;
-}
-</style>
-
 <section class="universe-sidebar">
   <div class="sidebar-title-wrapper">
-    <img class="flame-of-life-logo" src="/images/logo.gif" alt="Game of Life Logo"/>
+    <%= img_tag(Routes.static_path(GameOfLifeWeb.Endpoint, logo_path(@party)), class: "flame-of-life-logo", alt: "Game of Life Logo") %>
     <h1 class="sidebar-title">
       <span class="title-word flame">flame</span>
       <span class="title-word of">of</span>
@@ -34,38 +28,11 @@
   <% end %>
 
   <%= form_tag "#", phx_change: "update_color" do %>
-    <h2>Cell Color</h2>
-
-    <div>
-      <%= label :color, :red, "R", class: "inline middle" %>
-
-      <%= range_input :color, :red,
-        class: "slider middle",
-        min: "0", max: "255", step: "5",
-        value: @color.red %>
-
-      <%= label :color, :red, @color.red, class: "inline middle" %>
-    </div>
-    <div>
-      <%= label :color, :green, "G", class: "inline middle" %>
-
-      <%= range_input :color, :green,
-        class: "slider middle",
-        min: "0", max: "255", step: "5",
-        value: @color.green %>
-
-      <%= label :color, :green, @color.green, class: "inline middle" %>
-    </div>
-    <div>
-      <%= label :color, :blue, "B", class: "inline middle" %>
-
-      <%= range_input :color, :blue,
-        class: "slider middle",
-        min: "0", max: "255", step: "5",
-        value: @color.blue %>
-
-      <%= label :color, :blue, @color.blue, class: "inline middle" %>
-    </div>
+    <h2>
+      Cell Color
+      <%= color_input :universe, :color, value: @color %>
+    </h2>
+    
   <% end %>
 
   <div>
@@ -73,12 +40,18 @@
     <%= link "Reset", to: "#", phx_click: "reset", class: "inline button" %>
   </div>
 
+  <%= form_tag "#", phx_change: "toggle_party" do %>
+    <h5>
+      <%= checkbox :universe, :party, value: @party %> Party Time?
+    </h5>
+  <% end %>
+
   <div>
     <div class="fancy">Powered by</div>
     <a href="https://phoenixframework.org" target="_blank">
-      <img class="phoenix-logo" src="/images/phoenix-white.png" alt="Phoenix Framework"/>
+      <%= img_tag(Routes.static_path(GameOfLifeWeb.Endpoint, "/images/phoenix-white.png"), class: "phoenix-logo", alt: "Phoenix Framework") %>
     </a>
   </div>
 </section>
 
-<%= render_universe(@universe) %>
+<%= render_universe(@universe, %{color: @color, party: @party}) %>

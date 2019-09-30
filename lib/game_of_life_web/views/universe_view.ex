@@ -1,21 +1,20 @@
 defmodule GameOfLifeWeb.UniverseView do
   use GameOfLifeWeb, :view
 
-  alias GameOfLife.Color
   alias GameOfLife.Universe
   alias GameOfLife.Universe.Generation
   alias GameOfLife.Universe.Dimensions
   alias GameOfLife.Universe.Template
   alias GameOfLife.Cell.Position
 
-  def render_universe(%Universe{generation: generation, dimensions: %Dimensions{width: width, height: height} = dimensions}) do
+  def render_universe(%Universe{generation: generation, dimensions: %Dimensions{width: width, height: height} = dimensions}, opts) do
     content_tag(:section, class: universe_class(dimensions)) do
       Enum.map(0..(height - 1), fn y ->
         content_tag(:div, class: "cell-row") do
           Enum.map(0..(width - 1), fn x ->
             generation
             |> Generation.get_cell(%Position{x: x, y: y})
-            |> GameOfLifeWeb.CellView.render_cell()
+            |> GameOfLifeWeb.CellView.render_cell(opts)
           end)
         end
       end)
@@ -24,6 +23,9 @@ defmodule GameOfLifeWeb.UniverseView do
 
   def play_text(false), do: "Play"
   def play_text(true), do: "Pause"
+
+  def logo_path(true), do: "/images/logo.gif"
+  def logo_path(false), do: "/images/logo.png"
 
   def template_names(), do: Template.names()
 
