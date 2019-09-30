@@ -42,7 +42,8 @@
 
   <%= form_tag "#", phx_change: "toggle_party" do %>
     <h5>
-      <%= checkbox :universe, :party, value: @party %> Party Time?
+      <%= checkbox :universe, :party, value: @party %>
+      <%= label :universe, :party, "Party Time?", class: "form-check-label" %>
     </h5>
   <% end %>
 
