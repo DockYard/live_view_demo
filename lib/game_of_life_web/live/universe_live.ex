@@ -141,15 +141,30 @@ defmodule GameOfLifeWeb.UniverseLive do
   defp color(%{"color" => color}), do: color
   defp color(_opts), do: "#FF4400"
 
-  defp dimensions("random", %{"width" => width, "height" => height}) when is_bitstring(width) and is_bitstring(height) do
-    dims = Template.dimensions("random")
+  defp dimensions("random" = template, %{"width" => width, "height" => height}) when is_bitstring(width) and is_bitstring(height) do
+    dimensions = Template.dimensions("random")
 
-    # Even with `min = 1` the user can clear the input field via backspace, so check each field
-    # individually and use the default dimension for either if it's empty
-    %Dimensions{ dims |
-      width: (if bit_size(width) > 0, do: String.to_integer(width), else: dims.width),
-      height: (if bit_size(height) > 0, do: String.to_integer(height), else: dims.height)
+    width_value =
+      case Integer.parse(width) do
+        :error -> dimensions.width
+        {value, _} -> value
+      end
+
+    height_value =
+      case Integer.parse(height) do
+        :error -> dimensions.height
+        {value, _} -> value
+      end
+
+    dimensions(template, %{"width" => width_value, "height" => height_value})
+  end
+
+  defp dimensions("random", %{"width" => width, "height" => height}) do
+    %Dimensions{
+      width: Enum.min([width, 200]),
+      height: Enum.min([height, 200])
     }
   end
+
   defp dimensions(template, _opts), do: Template.dimensions(template)
 end
