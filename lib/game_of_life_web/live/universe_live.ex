@@ -146,7 +146,7 @@ defmodule GameOfLifeWeb.UniverseLive do
   defp color(%{"color" => color}), do: color
   defp color(_opts), do: "#FF4400"
 
-  defp dimensions("random", %{"width" => width, "height" => height}) when is_bitstring(width) and is_bitstring(width) do
+  defp dimensions("random", %{"width" => width, "height" => height}) when is_bitstring(width) and is_bitstring(height) do
     dims = Template.dimensions("random")
 
     # Even with `min = 1` the user can clear the input field via backspace, so check each field
