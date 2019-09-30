@@ -7,8 +7,7 @@ defmodule GameOfLife.Application do
 
   def start(_type, _args) do
     children = [
-      GameOfLifeWeb.Endpoint,
-      {Registry, [keys: :unique, name: :gol_registry]}
+      GameOfLifeWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
