@@ -47,16 +47,8 @@ defmodule GameOfLifeWeb.UniverseLive do
     {:noreply, set_template(socket, template)}
   end
 
-  def handle_event("set_dimensions", %{"dimensions" => %{"height" => height, "width" => width}}, socket) do
-    {:noreply, set_dimensions(socket, height, width)}
-  end
-
   defp set_template(socket, template) do
     load_universe(socket, %{"template" => template})
-  end
-
-  defp set_dimensions(socket, height, width) do
-    load_universe(socket, %{dimensions: %Dimensions{width: String.to_integer(width), height: String.to_integer(height)}})
   end
 
   defp tick(socket) do
