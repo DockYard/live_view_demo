@@ -9,11 +9,11 @@
   </div>
 
   <%= form_tag "#", phx_submit: "setup_universe", phx_change: "set_template" do %>
-    <h2>Custom Dimensions</h2>
+    <h2>Template and Dimensions</h2>
 
     <%= select :universe, :template, template_names(), selected: @template %><br>
-    <%= number_input :universe, :height, max: 200, value: @dimensions.height, readonly: @template != "random", class: "dimension" %>
-    <%= number_input :universe, :width, max: 200, value: @dimensions.width, readonly: @template != "random", class: "dimension" %><br>
+    X: <%= number_input :universe, :width, max: 200, value: @dimensions.width, readonly: @template != "random", class: "dimension" %>
+    Y: <%= number_input :universe, :height, max: 200, value: @dimensions.height, readonly: @template != "random", class: "dimension" %><br>
     <%= submit "Submit", class: "button" %>
   <% end %>
 
