@@ -54,4 +54,6 @@
   </div>
 </section>
 
-<%= render_universe(@universe, %{color: @color, party: @party}) %>
+<%= if @universe do %>
+  <%= render_universe(@universe, %{color: @color, party: @party}) %>
+<% end %>

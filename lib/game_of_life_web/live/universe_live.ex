@@ -70,19 +70,13 @@ defmodule GameOfLifeWeb.UniverseLive do
   defp toggle_party(socket) do
     socket = assign(socket, party: !socket.assigns.party)
 
-    cond do
-      socket.assigns.party -> start_the_party(socket)
-      true -> socket
-    end
+    if socket.assigns.party, do: start_the_party(socket), else: socket
   end
 
   defp start_the_party(socket) do
     socket = assign(socket, :speed, 20)
 
-    cond do
-      !socket.assigns.playing -> toggle_playing(socket)
-      true -> socket
-    end
+    if socket.assigns.playing, do: socket, else: toggle_playing(socket)
   end
 
   defp reset_universe(socket) do
@@ -97,9 +91,9 @@ defmodule GameOfLifeWeb.UniverseLive do
   end
 
   defp load_universe(socket, opts) do
-    socket
-    |> setup_universe(opts)
-    |> start_universe()
+    socket = setup_universe(socket, opts)
+
+    if connected?(socket), do: start_universe(socket), else: socket
   end
 
   defp start_universe(socket) do
@@ -120,7 +114,8 @@ defmodule GameOfLifeWeb.UniverseLive do
       playing: playing(opts),
       speed: speed(opts),
       template: template,
-      dimensions: dimensions(template, opts)
+      dimensions: dimensions(template, opts),
+      universe: nil
     )
   end
 
