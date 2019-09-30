@@ -8,10 +8,31 @@
       <span class="title-word life">life</span>
   </div>
 
-  <%= form_tag "#", phx_change: "set_template" do %>
-    <h2>Template</h2>
+  <%= form_tag "#", phx_change: "setup_universe" do %>
+    <h2>Template and Dimensions</h2>
 
-    <%= select :universe, :template, template_names(), selected: @template %>
+    <div>
+      <%= select :universe, :template, template_names(), selected: @template %>
+    </div>
+    <div>
+      <%= label :universe, :width, "X: " %>
+      <%= number_input :universe, :width,
+        class: "dimension",
+        disabled: @template != "random",
+        value: @dimensions.width,
+        min: 1,
+        max: 200
+        %>
+
+      <%= label :universe, :height, "Y: " %>
+      <%= number_input :universe, :height,
+        class: "dimension",
+        disabled: @template != "random",
+        value: @dimensions.height,
+        min: 1,
+        max: 200
+        %>
+    </div>
   <% end %>
 
   <%= form_tag "#", phx_change: "update_speed" do %>

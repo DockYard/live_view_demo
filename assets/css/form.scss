@@ -40,3 +40,16 @@ a {
 .middle {
     vertical-align: middle;
 }
+
+input:read-only {
+  background-color: #A0A0A0;
+  border: none;
+}
+
+.dimension {
+  font: 95% Arial, Helvetica, sans-serif;
+  max-width: 70px;
+  margin: 10px auto;
+  padding: 10px 10px 10px 15px;
+  background: #F7F7F7;
+}
