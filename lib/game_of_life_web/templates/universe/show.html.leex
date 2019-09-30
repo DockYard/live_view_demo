@@ -11,9 +11,28 @@
   <%= form_tag "#", phx_submit: "setup_universe", phx_change: "set_template" do %>
     <h2>Template and Dimensions</h2>
 
-    <%= select :universe, :template, template_names(), selected: @template %><br>
-    X: <%= number_input :universe, :width, max: 200, value: @dimensions.width, readonly: @template != "random", class: "dimension" %>
-    Y: <%= number_input :universe, :height, max: 200, value: @dimensions.height, readonly: @template != "random", class: "dimension" %><br>
+    <div>
+      <%= select :universe, :template, template_names(), selected: @template %>
+    </div>
+    <div>
+      <%= label :universe, :width, "X: " %>
+      <%= number_input :universe, :width,
+        class: "dimension",
+        disabled: @template != "random",
+        value: @dimensions.width,
+        min: 1,
+        max: 200
+        %>
+
+      <%= label :universe, :height, "Y: " %>
+      <%= number_input :universe, :height,
+        class: "dimension",
+        disabled: @template != "random",
+        value: @dimensions.height,
+        min: 1,
+        max: 200
+        %>
+    </div>
     <%= submit "Submit", class: "button" %>
   <% end %>
 
